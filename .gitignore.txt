@@ -1,0 +1,45 @@
+# Complied class files
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# User defined
+HolidayReservationSystem/HolidayReservationSystem-nbproject/private
+HolidayReservationSystem/HolidayReservationSystem-build/
+HolidayReservationSystem/HolidayReservationSystem-dist/
+
+HolidayReservationSystem/HolidayReservationSystem-ejb/nbproject/private
+HolidayReservationSystem/HolidayReservationSystem-ejb/build
+HolidayReservationSystem/HolidayReservationSystem-ejb/dist
+
+externalManagementClient/nbproject/private
+externalManagementClient/build
+externalManagementClient/dist
+
+ManagementClient/nbproject/private
+ManagementClient/build
+ManagementClient/dist
+
+ReservationClient/nbproject/private
+ReservationClient/build
+ReservationClient/dist
+
+HolidayReservationSystemLibrary/nbproject/private
+HolidayReservationSystemLibrary/build
+HolidayReservationSystemLibrary/dist
