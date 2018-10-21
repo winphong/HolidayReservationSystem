@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
  * @author twp10
  */
 @Entity
-public class RoomType implements Serializable {
+public class RoomTypeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -35,20 +36,22 @@ public class RoomType implements Serializable {
     private String amenities;
     private Integer tier;
     private Boolean isDisabled;
+    private Integer totalNumOfRoom;
+    private Integer numOfRoomAvailable;
     
     @OneToMany(mappedBy="roomType")
-    private Room room;
+    private List<RoomEntity> room;
     
     @OneToMany(mappedBy="roomType")
-    private RoomRate roomRate;
+    private List<RoomRateEntity> roomRate;
     
     @ManyToMany(mappedBy="roomType")
-    private Reservation reservation;
+    private List<ReservationEntity> reservation;
 
-    public RoomType() {
+    public RoomTypeEntity() {
     }
 
-    public RoomType(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier, Boolean isDisabled) {
+    public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier, Boolean isDisabled) {
         this.name = name;
         this.description = description;
         this.size = size;
@@ -65,10 +68,6 @@ public class RoomType implements Serializable {
         return roomTypeId;
     }
 
-    public void setRoomTypeId(Long roomTypeId) {
-        this.roomTypeId = roomTypeId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -79,10 +78,10 @@ public class RoomType implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the roomTypeId fields are not set
-        if (!(object instanceof RoomType)) {
+        if (!(object instanceof RoomTypeEntity)) {
             return false;
         }
-        RoomType other = (RoomType) object;
+        RoomTypeEntity other = (RoomTypeEntity) object;
         if ((this.roomTypeId == null && other.roomTypeId != null) || (this.roomTypeId != null && !this.roomTypeId.equals(other.roomTypeId))) {
             return false;
         }
@@ -209,43 +208,72 @@ public class RoomType implements Serializable {
     /**
      * @return the room
      */
-    public Room getRoom() {
+    public List<RoomEntity> getRoom() {
         return room;
     }
 
     /**
      * @param room the room to set
      */
-    public void setRoom(Room room) {
+    public void setRoom(List<RoomEntity> room) {
         this.room = room;
     }
 
     /**
      * @return the roomRate
      */
-    public RoomRate getRoomRate() {
+    public List<RoomRateEntity> getRoomRate() {
         return roomRate;
     }
 
     /**
      * @param roomRate the roomRate to set
      */
-    public void setRoomRate(RoomRate roomRate) {
+    public void setRoomRate(List<RoomRateEntity> roomRate) {
         this.roomRate = roomRate;
     }
 
     /**
      * @return the reservation
      */
-    public Reservation getReservation() {
+    public List<ReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(Reservation reservation) {
+    public void setReservation(List<ReservationEntity> reservation) {
         this.reservation = reservation;
     }
+
+    /**
+     * @return the totalNumOfRoom
+     */
+    public Integer getTotalNumOfRoom() {
+        return totalNumOfRoom;
+    }
+
+    /**
+     * @param totalNumOfRoom the totalNumOfRoom to set
+     */
+    public void setTotalNumOfRoom(Integer totalNumOfRoom) {
+        this.totalNumOfRoom = totalNumOfRoom;
+    }
+
+    /**
+     * @return the numOfRoomAvailable
+     */
+    public Integer getNumOfRoomAvailable() {
+        return numOfRoomAvailable;
+    }
+
+    /**
+     * @param numOfRoomAvailable the numOfRoomAvailable to set
+     */
+    public void setNumOfRoomAvailable(Integer numOfRoomAvailable) {
+        this.numOfRoomAvailable = numOfRoomAvailable;
+    }
+    
     
 }

@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author twp10
  */
 @Local
-public interface HotelOperationModuleLocal {
+public interface RoomEntityControllerLocal {
     
 }

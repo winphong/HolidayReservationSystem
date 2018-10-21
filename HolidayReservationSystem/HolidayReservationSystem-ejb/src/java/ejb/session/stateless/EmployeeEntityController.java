@@ -5,7 +5,8 @@
  */
 package ejb.session.stateless;
 
-import entity.Employee;
+import entity.EmployeeEntity;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -28,9 +29,9 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
     
-    private Employee employee;    
+    private EmployeeEntity employee;    
     
-    public Employee employeeLogin(String username, String password) {
+    public EmployeeEntity employeeLogin(String username, String password) {
         
         Query query = em.createQuery("SELECT e FROM Employee e WHERE e.userName = :inUsername AND e.password = :inPassword");
         query.setParameter("inUsername", username);
@@ -38,7 +39,7 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
         
         try {
             
-            employee = (Employee) query.getSingleResult();
+            employee = (EmployeeEntity) query.getSingleResult();
             
             if (employee.getIsLoggedIn().equals(Boolean.TRUE)) {
                 
@@ -71,6 +72,21 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
             employee.setIsLoggedIn(Boolean.FALSE);
             System.out.println("Succesfully logged out!");
         }
+    }
+    
+    public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee) {
+        
+        em.persist(newEmployee);
+        em.flush();
+        
+        return newEmployee;
+    }
+    
+    public List<EmployeeEntity> viewAllEmployee() {
+        
+        Query query = em.createQuery("SELECT e FROM Employee e");
+        
+        return (List<EmployeeEntity>) query.getResultList(); 
     }
     
     

@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author twp10
  */
 @Remote
-public interface HotelOperationModuleRemote {
+public interface GuestEntityControllerRemote {
     
 }

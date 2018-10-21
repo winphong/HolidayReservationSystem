@@ -13,71 +13,69 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import util.enumeration.EmployeeAccessRight;
 
 /**
  *
  * @author twp10
  */
 @Entity
-public class Employee extends Client implements Serializable {
+public class GuestEntity extends Client implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long employeeId;
+    private Long guestId;
     private String firstName;
     private String lastName;
     private String userName;
     private String password;
-    private EmployeeAccessRight accessRight;
-    private Boolean isLoggedIn;
+    private Long phoneNumber;
+    private String email;
     
     @OneToMany(mappedBy="client")
-    private List <Reservation> reservation;
+    private List <ReservationEntity> reservation;
 
-    public Employee() {
+    public GuestEntity() {
         this.reservation = new ArrayList<>();
-        this.isLoggedIn = false;
     }
 
-    public Employee(Long employeeId, String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight) {
+    public GuestEntity(String firstName, String lastName, String userName, String password, Long phoneNumber, String email) {
         
         this();
         
-        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
-        this.accessRight = accessRight;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
     
     
-    
-    public Long getEmployeeId() {
-        return employeeId;
+
+    public Long getGuestId() {
+        return guestId;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setGuestId(Long guestId) {
+        this.guestId = guestId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (employeeId != null ? employeeId.hashCode() : 0);
+        hash += (guestId != null ? guestId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the employeeId fields are not set
-        if (!(object instanceof Employee)) {
+        // TODO: Warning - this method won't work in the case the guestId fields are not set
+        if (!(object instanceof GuestEntity)) {
             return false;
         }
-        Employee other = (Employee) object;
-        if ((this.employeeId == null && other.employeeId != null) || (this.employeeId != null && !this.employeeId.equals(other.employeeId))) {
+        GuestEntity other = (GuestEntity) object;
+        if ((this.guestId == null && other.guestId != null) || (this.guestId != null && !this.guestId.equals(other.guestId))) {
             return false;
         }
         return true;
@@ -85,7 +83,7 @@ public class Employee extends Client implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Employee[ id=" + employeeId + " ]";
+        return "entity.Guest[ id=" + guestId + " ]";
     }
 
     /**
@@ -145,45 +143,45 @@ public class Employee extends Client implements Serializable {
     }
 
     /**
-     * @return the accessRight
+     * @return the phoneNumber
      */
-    public EmployeeAccessRight getAccessRight() {
-        return accessRight;
+    public Long getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
-     * @param accessRight the accessRight to set
+     * @param phoneNumber the phoneNumber to set
      */
-    public void setAccessRight(EmployeeAccessRight accessRight) {
-        this.accessRight = accessRight;
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
      * @return the reservation
      */
-    public List <Reservation> getReservation() {
+    public List <ReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(List <Reservation> reservation) {
+    public void setReservation(List <ReservationEntity> reservation) {
         this.reservation = reservation;
-    }
-
-    /**
-     * @return the isLoggedIn
-     */
-    public Boolean getIsLoggedIn() {
-        return isLoggedIn;
-    }
-
-    /**
-     * @param isLoggedIn the isLoggedIn to set
-     */
-    public void setIsLoggedIn(Boolean isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
     }
     
 }

@@ -5,10 +5,13 @@
  */
 package ejb.session.stateless;
 
+import javax.ejb.Local;
+
 /**
  *
  * @author twp10
  */
-public interface SystemAdministrationModuleLocal {
+@Local
+public interface PartnerEntityControllerLocal {
     
 }

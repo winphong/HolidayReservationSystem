@@ -7,48 +7,48 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import util.enumeration.RoomStatus;
+import static util.enumeration.RoomStatus.VACANT;
 
 /**
  *
  * @author twp10
  */
 @Entity
-public class Room implements Serializable {
+public class RoomEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomId;
     private String roomNumber;
-    private String roomStatus;
+    @Enumerated(EnumType.STRING)
+    private RoomStatus roomStatus;
     private String guest;
     private Boolean isDisabled;
     
     @ManyToOne
-    private RoomType roomType;
+    private RoomTypeEntity roomType;
 
-    public Room() {
-        isDisabled = false;
+    public RoomEntity() {
+        this.isDisabled = Boolean.FALSE;
+        this.roomStatus = VACANT;
     }
 
-    public Room(String roomNumber, String roomStatus, String guest) {
+    public RoomEntity(String roomNumber, String guest) {
         this.roomNumber = roomNumber;
-        this.roomStatus = roomStatus;
         this.guest = guest;
     }
     
     
-    
     public Long getRoomId() {
         return roomId;
-    }
-
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
     }
 
     @Override
@@ -61,10 +61,10 @@ public class Room implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the roomId fields are not set
-        if (!(object instanceof Room)) {
+        if (!(object instanceof RoomEntity)) {
             return false;
         }
-        Room other = (Room) object;
+        RoomEntity other = (RoomEntity) object;
         if ((this.roomId == null && other.roomId != null) || (this.roomId != null && !this.roomId.equals(other.roomId))) {
             return false;
         }
@@ -93,14 +93,14 @@ public class Room implements Serializable {
     /**
      * @return the roomStatus
      */
-    public String getRoomStatus() {
+    public RoomStatus getRoomStatus() {
         return roomStatus;
     }
 
     /**
      * @param roomStatus the roomStatus to set
      */
-    public void setRoomStatus(String roomStatus) {
+    public void setRoomStatus(RoomStatus roomStatus) {
         this.roomStatus = roomStatus;
     }
 
@@ -121,14 +121,14 @@ public class Room implements Serializable {
     /**
      * @return the roomType
      */
-    public RoomType getRoomType() {
+    public RoomTypeEntity getRoomType() {
         return roomType;
     }
 
     /**
      * @param roomType the roomType to set
      */
-    public void setRoomType(RoomType roomType) {
+    public void setRoomType(RoomTypeEntity roomType) {
         this.roomType = roomType;
     }
 

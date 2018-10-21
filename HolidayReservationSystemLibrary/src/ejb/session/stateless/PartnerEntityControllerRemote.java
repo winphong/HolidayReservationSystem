@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package ejb.session.stateless;
+
+import javax.ejb.Remote;
 
 /**
  *
  * @author twp10
  */
-public class Client {
-    
-    private Client client;
-    
-    // Need to do inheritance but idk how
-    
+@Remote
+public interface PartnerEntityControllerRemote {
     
 }

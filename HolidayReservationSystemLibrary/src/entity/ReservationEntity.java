@@ -24,7 +24,7 @@ import util.enumeration.ReservationType;
  * @author twp10
  */
 @Entity
-public class Reservation implements Serializable {
+public class ReservationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,17 +37,18 @@ public class Reservation implements Serializable {
     @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
     
+    // Client that uses the system to make reservation: Employee/Guest/Partner
     @ManyToOne
-    private Client client;
+    private Client client; 
     
     @ManyToMany(mappedBy="reservation")
-    private List <RoomType> roomType;
+    private List <RoomTypeEntity> roomType;
 
-    public Reservation() {
+    public ReservationEntity() {
         this.roomType = new ArrayList<>();
     }
 
-    public Reservation(Integer numOfRoom, Date startDate, Date endDate, Boolean isCheckedIn, ReservationType reservationType) {
+    public ReservationEntity(Integer numOfRoom, Date startDate, Date endDate, Boolean isCheckedIn, ReservationType reservationType) {
         
         this();
         
@@ -77,10 +78,10 @@ public class Reservation implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reservation)) {
+        if (!(object instanceof ReservationEntity)) {
             return false;
         }
-        Reservation other = (Reservation) object;
+        ReservationEntity other = (ReservationEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -179,14 +180,14 @@ public class Reservation implements Serializable {
     /**
      * @return the roomType
      */
-    public List <RoomType> getRoomType() {
+    public List <RoomTypeEntity> getRoomType() {
         return roomType;
     }
 
     /**
      * @param roomType the roomType to set
      */
-    public void setRoomType(List <RoomType> roomType) {
+    public void setRoomType(List <RoomTypeEntity> roomType) {
         this.roomType = roomType;
     }
     

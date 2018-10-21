@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
  * @author twp10
  */
 @Entity
-public class Partner extends Client implements Serializable {
+public class PartnerEntity extends Client implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,13 +34,13 @@ public class Partner extends Client implements Serializable {
     private String email;
     
     @OneToMany(mappedBy="client")
-    private List <Reservation> reservation;
+    private List <ReservationEntity> reservation;
 
-    public Partner() {
+    public PartnerEntity() {
         this.reservation = new ArrayList<>();
     }
 
-    public Partner(String firstName, String lastName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
+    public PartnerEntity(String firstName, String lastName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
         
         this();
         
@@ -72,10 +72,10 @@ public class Partner extends Client implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the partnerId fields are not set
-        if (!(object instanceof Partner)) {
+        if (!(object instanceof PartnerEntity)) {
             return false;
         }
-        Partner other = (Partner) object;
+        PartnerEntity other = (PartnerEntity) object;
         if ((this.partnerId == null && other.partnerId != null) || (this.partnerId != null && !this.partnerId.equals(other.partnerId))) {
             return false;
         }
@@ -188,14 +188,14 @@ public class Partner extends Client implements Serializable {
     /**
      * @return the reservation
      */
-    public List <Reservation> getReservation() {
+    public List <ReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(List <Reservation> reservation) {
+    public void setReservation(List <ReservationEntity> reservation) {
         this.reservation = reservation;
     }
     

@@ -22,7 +22,7 @@ import util.enumeration.ReservationType;
  * @author twp10
  */
 @Entity
-public class RoomRate implements Serializable {
+public class RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -32,22 +32,20 @@ public class RoomRate implements Serializable {
     @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
     private BigDecimal ratePerNight;
-    private String bed;
     private Date validFrom;
     private Date validTill;
     private Boolean isDisabled;
     
     @ManyToOne
-    private RoomType roomType;
+    private RoomTypeEntity roomType;
 
-    public RoomRate() {
+    public RoomRateEntity() {
     }
 
-    public RoomRate(String name, ReservationType reservationType, BigDecimal ratePerNight, String bed, Date validFrom, Date validTill, Boolean isDisabled) {
+    public RoomRateEntity(String name, ReservationType reservationType, BigDecimal ratePerNight, Date validFrom, Date validTill, Boolean isDisabled) {
         this.name = name;
         this.reservationType = reservationType;
         this.ratePerNight = ratePerNight;
-        this.bed = bed;
         this.validFrom = validFrom;
         this.validTill = validTill;
         this.isDisabled = isDisabled;
@@ -73,10 +71,10 @@ public class RoomRate implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the roomRateId fields are not set
-        if (!(object instanceof RoomRate)) {
+        if (!(object instanceof RoomRateEntity)) {
             return false;
         }
-        RoomRate other = (RoomRate) object;
+        RoomRateEntity other = (RoomRateEntity) object;
         if ((this.roomRateId == null && other.roomRateId != null) || (this.roomRateId != null && !this.roomRateId.equals(other.roomRateId))) {
             return false;
         }
@@ -131,20 +129,6 @@ public class RoomRate implements Serializable {
     }
 
     /**
-     * @return the bed
-     */
-    public String getBed() {
-        return bed;
-    }
-
-    /**
-     * @param bed the bed to set
-     */
-    public void setBed(String bed) {
-        this.bed = bed;
-    }
-
-    /**
      * @return the validFrom
      */
     public Date getValidFrom() {
@@ -189,14 +173,14 @@ public class RoomRate implements Serializable {
     /**
      * @return the roomType
      */
-    public RoomType getRoomType() {
+    public RoomTypeEntity getRoomType() {
         return roomType;
     }
 
     /**
      * @param roomType the roomType to set
      */
-    public void setRoomType(RoomType roomType) {
+    public void setRoomType(RoomTypeEntity roomType) {
         this.roomType = roomType;
     }
     
