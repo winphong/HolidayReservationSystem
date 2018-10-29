@@ -5,9 +5,13 @@
  */
 package ejb.session.stateless;
 
-import entity.ReservationEntity;
+import entity.Inventory;
 import entity.RoomTypeEntity;
+import java.time.LocalDate;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,10 +24,16 @@ import javax.persistence.Query;
  * @author twp10
  */
 @Stateless
+@Local (RoomTypeEntityControllerLocal.class)
+@Remote (RoomTypeEntityControllerRemote.class)
+
 public class RoomTypeEntityController implements RoomTypeEntityControllerRemote, RoomTypeEntityControllerLocal {
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
+    
+    @EJB
+    private InventoryControllerLocal inventoryControllerLocal;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -70,15 +80,18 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         roomTypeToUpdate.setIsDisabled(roomType.getIsDisabled()); 
     }
     
+    // If roomType.getReservation != null || roomType.getRoom != null 
+    public void disableRoomType(RoomTypeEntity roomType) {
+        
+        roomType.setIsDisabled(Boolean.TRUE);
+    }
+    
+    // If roomType.getReservation == null && roomType.getRoom == null && roomType.getRoomRate == null, delete
+    
     public void deleteRoomType(RoomTypeEntity roomType) {
         
-        if ( roomType.getIsDisabled().equals(Boolean.FALSE) ) {
-            
-            
-            
-        } else {
-            
-        }
+        em.remove(roomType);
+        em.flush();
     }
     
     public void viewAllRoomType() {
@@ -92,4 +105,15 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             System.out.println("Room type: " + roomType.getName());
         }
     }
+    
+    public List<RoomTypeEntity> retrieveAllRoomType() {
+        
+        Query query = em.createQuery("SELECT rt FROM RoomType rt WHERE isDisable = FALSE");
+            
+        List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
+        
+        return roomTypes;
+    }
+    
+    
 }

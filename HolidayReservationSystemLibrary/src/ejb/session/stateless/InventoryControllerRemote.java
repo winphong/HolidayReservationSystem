@@ -9,6 +9,6 @@ package ejb.session.stateless;
  *
  * @author twp10
  */
-public interface RoomEntityControllerLocal {
+public interface InventoryControllerRemote {
     
 }

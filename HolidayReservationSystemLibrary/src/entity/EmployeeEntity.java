@@ -28,7 +28,7 @@ public class EmployeeEntity extends Client implements Serializable {
     private Long employeeId;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private EmployeeAccessRight accessRight;
     private Boolean isLoggedIn;
@@ -48,7 +48,7 @@ public class EmployeeEntity extends Client implements Serializable {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.accessRight = accessRight;
     }
@@ -117,17 +117,17 @@ public class EmployeeEntity extends Client implements Serializable {
     }
 
     /**
-     * @return the userName
+     * @return the username
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * @param userName the userName to set
+     * @param username the username to set
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**

@@ -27,7 +27,7 @@ public class GuestEntity extends Client implements Serializable {
     private Long guestId;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private Long phoneNumber;
     private String email;
@@ -45,7 +45,7 @@ public class GuestEntity extends Client implements Serializable {
         
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -115,17 +115,17 @@ public class GuestEntity extends Client implements Serializable {
     }
 
     /**
-     * @return the userName
+     * @return the username
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * @param userName the userName to set
+     * @param username the username to set
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**

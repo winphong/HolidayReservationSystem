@@ -31,10 +31,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     
     public void reserveRoom(RoomTypeEntity roomType, ReservationEntity reservation) {
         
-        if ( reservation.getNumOfRoom() <= roomType.getNumOfRoomAvailable() ) {
-            
-            
-        }
+        
         
     }
 }

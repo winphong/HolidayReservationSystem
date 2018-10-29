@@ -37,7 +37,6 @@ public class RoomTypeEntity implements Serializable {
     private Integer tier;
     private Boolean isDisabled;
     private Integer totalNumOfRoom;
-    private Integer numOfRoomAvailable;
     
     @OneToMany(mappedBy="roomType")
     private List<RoomEntity> room;
@@ -49,6 +48,7 @@ public class RoomTypeEntity implements Serializable {
     private List<ReservationEntity> reservation;
 
     public RoomTypeEntity() {
+        totalNumOfRoom = 0;
     }
 
     public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier, Boolean isDisabled) {
@@ -260,20 +260,5 @@ public class RoomTypeEntity implements Serializable {
     public void setTotalNumOfRoom(Integer totalNumOfRoom) {
         this.totalNumOfRoom = totalNumOfRoom;
     }
-
-    /**
-     * @return the numOfRoomAvailable
-     */
-    public Integer getNumOfRoomAvailable() {
-        return numOfRoomAvailable;
-    }
-
-    /**
-     * @param numOfRoomAvailable the numOfRoomAvailable to set
-     */
-    public void setNumOfRoomAvailable(Integer numOfRoomAvailable) {
-        this.numOfRoomAvailable = numOfRoomAvailable;
-    }
-    
     
 }

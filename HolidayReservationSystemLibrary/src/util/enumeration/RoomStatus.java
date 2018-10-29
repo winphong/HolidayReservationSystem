@@ -11,5 +11,6 @@ package util.enumeration;
  */
 public enum RoomStatus {
     VACANT,
+    BOOKED,
     OCCUPIED;
 }

@@ -5,13 +5,10 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Remote;
-
 /**
  *
  * @author twp10
  */
-@Remote
 public interface RoomEntityControllerRemote {
     
 }

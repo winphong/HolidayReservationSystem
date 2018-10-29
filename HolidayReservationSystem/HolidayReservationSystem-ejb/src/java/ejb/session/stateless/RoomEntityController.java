@@ -5,9 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.Inventory;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,10 +24,16 @@ import javax.persistence.Query;
  * @author twp10
  */
 @Stateless
+@Local (RoomEntityControllerLocal.class)
+@Remote (RoomEntityControllerRemote.class)
+
 public class RoomEntityController implements RoomEntityControllerRemote, RoomEntityControllerLocal {
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
+    
+    @EJB
+    private InventoryControllerLocal inventoryControllerLocal;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -33,6 +43,10 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         
         roomType.getRoom().add(newRoom);
         newRoom.setRoomType(roomType);
+        
+        // Need to update inventory from the day of update to the last available inventory object
+        
+        inventoryControllerLocal.updateInventory();
         
         em.flush();
         
@@ -58,13 +72,15 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         
     }
     
-    // If room occupied, disable the room
+    // If OCCUPIED, disable the room
     public void disableRoom(RoomEntity room) {
         
         room.setIsDisabled(Boolean.TRUE);
+        
+        inventoryControllerLocal.updateInventory();
     }
     
-    // If room not occupied and disabled, delete the room
+    // If VACANT, delete the room
     public void deleteRoom(RoomEntity room) {
         
         RoomTypeEntity roomType = room.getRoomType();
@@ -72,7 +88,14 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         roomType.getRoom().remove(room);
         room.setRoomType(null);
         
+        roomType.setTotalNumOfRoom(roomType.getTotalNumOfRoom() - 1);
+        
         em.remove(room);
+        
+        if ( room.getIsDisabled().equals(Boolean.FALSE) ) {
+            inventoryControllerLocal.updateInventory();
+        }
+        
         em.flush();
     }
     
@@ -104,9 +127,5 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             /* + " || RoomEntity type: " + room.getRoomType().getName()
                                 + " || RoomEntity status: " + room.getRoomStatus() + " || Guest: " + room.getGuest()); */
         }
-    }
-
-    public void persist(Object object) {
-        em.persist(object);
     }
 }

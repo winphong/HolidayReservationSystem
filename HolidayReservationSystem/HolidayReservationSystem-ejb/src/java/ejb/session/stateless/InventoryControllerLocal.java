@@ -5,10 +5,17 @@
  */
 package ejb.session.stateless;
 
+import entity.Inventory;
+import java.time.LocalDate;
+
 /**
  *
  * @author twp10
  */
-public interface RoomEntityControllerLocal {
+public interface InventoryControllerLocal {
+
+    void updateInventory();
+
+    public Inventory getInventoryByDate(LocalDate date);
     
 }

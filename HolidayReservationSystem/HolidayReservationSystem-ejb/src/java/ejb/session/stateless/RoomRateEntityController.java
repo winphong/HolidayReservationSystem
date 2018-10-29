@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,6 +22,9 @@ import javax.persistence.Query;
  * @author twp10
  */
 @Stateless
+@Local (RoomRateEntityControllerLocal.class)
+@Remote (RoomRateEntityControllerRemote.class)
+
 public class RoomRateEntityController implements RoomRateEntityControllerRemote, RoomRateEntityControllerLocal {
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
@@ -75,13 +80,13 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
         }
     }
     
-    // If OCCUPIED, disable
+    // If roomRate.getRoomType.getReservation != null, disable
     public void disableRoomRate(RoomRateEntity roomRate) {
         
         roomRate.setIsDisabled(Boolean.TRUE);
     }
     
-    // If VACANT
+    // If roomRate.getRoomType.getReservation == null, delete
     public void deleteRoomRate(RoomRateEntity roomRate) {
         
         RoomTypeEntity roomType = roomRate.getRoomType();

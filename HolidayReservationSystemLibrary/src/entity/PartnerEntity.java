@@ -27,7 +27,7 @@ public class PartnerEntity extends Client implements Serializable {
     private Long partnerId;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private Long phoneNumber;
     private String companyRegistrationId;
@@ -46,7 +46,7 @@ public class PartnerEntity extends Client implements Serializable {
         
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.companyRegistrationId = companyRegistrationId;
@@ -119,14 +119,14 @@ public class PartnerEntity extends Client implements Serializable {
      * @return the userName
      */
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     /**
      * @param userName the userName to set
      */
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     /**

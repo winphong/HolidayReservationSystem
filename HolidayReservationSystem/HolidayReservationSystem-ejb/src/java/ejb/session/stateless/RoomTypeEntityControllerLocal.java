@@ -5,13 +5,16 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Local;
+import entity.RoomTypeEntity;
+import java.util.List;
 
 /**
  *
  * @author twp10
  */
-@Local
+
 public interface RoomTypeEntityControllerLocal {
+
+    public List<RoomTypeEntity> retrieveAllRoomType();
     
 }

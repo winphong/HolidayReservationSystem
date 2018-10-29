@@ -5,13 +5,10 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Local;
-
 /**
  *
  * @author twp10
  */
-@Local
 public interface GuestEntityControllerLocal {
     
 }
