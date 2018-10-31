@@ -49,7 +49,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
     
     public RoomRateEntity retrieveRoomRateByName(String name) {
         
-        Query query = em.createQuery("SELECT rr FROM RoomRate rr WHERE rr.name=:inName");
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name=:inName");
         query.setParameter("inName", name);
         
         try {
@@ -100,7 +100,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
     
     public void viewAllRoomRate() {
         
-        Query query = em.createQuery("SELECT rr FROM RoomRate rr");
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr");
         
         List<RoomRateEntity> roomRates = (List<RoomRateEntity>) query.getResultList();
         

@@ -5,12 +5,16 @@
  */
 package ejb.session.stateless;
 
+import entity.EmployeeEntity;
 import entity.GuestEntity;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,8 +31,22 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public GuestEntity guestLogin() {
+    
+    public GuestEntity guestLogin(String username, String password) {
         
+        Query query = em.createQuery("SELECT g FROM GuestEntity g WHERE g.username = :inUsername AND g.password = :inPassword");
+        query.setParameter("inUsername", username);
+        query.setParameter("inPassword", password);
+        
+        try {
+            
+            return (GuestEntity) query.getSingleResult();
+            
+        } catch ( NoResultException | NonUniqueResultException ex ) {
+            
+            System.out.println("Invalid credential!");
+            
+        }
         return null;
     }
     
@@ -39,6 +57,4 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
         
         return newGuest;
     }
-    
-    
 }

@@ -33,7 +33,7 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
     
     public EmployeeEntity employeeLogin(String username, String password) {
         
-        Query query = em.createQuery("SELECT e FROM Employee e WHERE e.userName = :inUsername AND e.password = :inPassword");
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername AND e.password = :inPassword");
         query.setParameter("inUsername", username);
         query.setParameter("inPassword", password);
         
@@ -84,7 +84,7 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
     
     public List<EmployeeEntity> viewAllEmployee() {
         
-        Query query = em.createQuery("SELECT e FROM Employee e");
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e");
         
         return (List<EmployeeEntity>) query.getResultList(); 
     }

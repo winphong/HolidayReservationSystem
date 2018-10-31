@@ -83,7 +83,8 @@ public class Inventory implements Serializable {
     // Everytime a room / roomType is disable / deleted, inventory must be updated from the current system date to the latest available booking date
     public void updateInventory() {
         
-        Query query = em.createQuery("SELECT rt FROM RoomType rt WHERE isDisabled = FALSE");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :Boolean");
+        query.setParameter("Boolean", Boolean.FALSE);
         
         // Get a list of roomTypes that is not disabled
         roomTypes = query.getResultList();

@@ -37,7 +37,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    
+    // Need to be tracked
     @Override
     public void reserveRoom(ReservationEntity newReservation) {
         

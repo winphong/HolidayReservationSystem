@@ -32,7 +32,7 @@ public class PartnerEntityController implements PartnerEntityControllerRemote, P
     
     public List<PartnerEntity> viewAllPartner() {
         
-        Query query = em.createQuery("SELECT p FROM Partner p");
+        Query query = em.createQuery("SELECT p FROM PartnerEntity p");
         
         return (List<PartnerEntity>) query.getResultList(); 
     }

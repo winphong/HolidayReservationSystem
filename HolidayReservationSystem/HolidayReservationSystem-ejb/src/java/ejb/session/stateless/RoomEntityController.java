@@ -88,8 +88,6 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         roomType.getRoom().remove(room);
         room.setRoomType(null);
         
-        roomType.setTotalNumOfRoom(roomType.getTotalNumOfRoom() - 1);
-        
         em.remove(room);
         
         if ( room.getIsDisabled().equals(Boolean.FALSE) ) {

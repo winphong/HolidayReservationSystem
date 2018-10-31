@@ -106,6 +106,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         }
     }
     
+    @Override
     public List<RoomTypeEntity> retrieveAllRoomType() {
         
         Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = FALSE");

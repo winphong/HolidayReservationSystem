@@ -38,23 +38,26 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
+    @Override
     public void updateInventory() {
         
         LocalDate currentDate = LocalDate.now();
         
-        Query query = em.createQuery("SELECT i FROM Inventory i WHERE date >= currentDate");
+        Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.date >= :currentDate");
+        query.setParameter("currentDate", currentDate);
         
         List<Inventory> inventories = query.getResultList();
         
         for(Inventory inventory : inventories) {
-            
             inventory.updateInventory();
         }
     }
     
+    @Override
     public Inventory getInventoryByDate(LocalDate inputDate) {
         
-        Query query = em.createQuery("SELECT i FROM Inventory i WHERE date = inputDate");
+        Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.date = :inputDate");
+        query.setParameter("inputDate", inputDate);
         
         try {
             
