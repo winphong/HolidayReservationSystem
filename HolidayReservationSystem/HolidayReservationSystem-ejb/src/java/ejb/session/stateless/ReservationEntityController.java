@@ -34,58 +34,32 @@ public class ReservationEntityController implements ReservationEntityControllerR
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
     
-    @EJB
-    private InventoryControllerLocal inventoryControllerLocal;
-
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    // Set the room to BOOKED, don't need to assign yet
-    public void reserveRoom(RoomTypeEntity roomType, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) {
+    
+    @Override
+    public void reserveRoom(ReservationEntity newReservation) {
         
-        Inventory inventory = inventoryControllerLocal.getInventoryByDate(startDate);
+        em.persist(newReservation);
         
-        Integer roomTypeIndex = inventory.getRoomTypes().indexOf(roomType);
+        List<RoomTypeEntity> listOfRoomTypes = newReservation.getRoomType();
         
-        List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom();
-        
-        List<RoomEntity> rooms = listOfRoomsForDifferentRoomTypes.get(roomTypeIndex);
-        
-        Boolean availableThroughout;
-        Integer countOfRoomAvailableThroughout = 0;
-        
-        // Loop through each room of a given roomType
-        for(RoomEntity room : rooms) {
+        for(RoomTypeEntity roomType : listOfRoomTypes) {
             
-            availableThroughout = Boolean.TRUE;
-            
-            // Loop through the booking date
-            for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate) ; date.plusDays(1)) {
-
-                if (inventoryControllerLocal.roomExist(room, date, roomTypeIndex)) { 
-                    continue;
-                } else {
-                    availableThroughout = Boolean.FALSE;
-                    break;
-                }
-            }
-
-            /* Pre-condition: There are atleast n number of room that satisfy the numOfRoomRequired
-            ------------  Calculate how many rooms are there that satisfy the requirement --------------
-            */
-            if ( availableThroughout.equals(Boolean.TRUE) ) {
-                countOfRoomAvailableThroughout++;
-            }
+            roomType.getReservation().add(newReservation);
+            newReservation.getRoomType().add(roomType);
         }
         
-        List<ReservationEntity> listOfReservations = retrieveReservationByStartAndEndDate(startDate, endDate);
+        em.flush();
     }
     
-    public List<ReservationEntity> retrieveReservationByStartAndEndDate(LocalDate inputStartDate, LocalDate inputEndDate) {
+    @Override
+    public List<ReservationEntity> retrieveReservationByStartAndEndDate(LocalDate bookingStartDate, LocalDate bookingEndDate) {
         
-        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.startDate = :inputStartDate AND r.endDate = :inputEndDate");
-        query.setParameter("inputStartDate", inputStartDate);
-        query.setParameter("inputEndDate", inputEndDate);
+        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE (r.startDate < :bookingStartDate AND r.startDate <= :bookingEndDate) OR (:bookingStartDate >= r.startDate AND :bookingStartDate > r.endDate AND :bookingEndDate >= r.startDate)");
+        query.setParameter("bookingStartDate", bookingStartDate);
+        query.setParameter("bookingEndDate", bookingEndDate);
 
         try {
             

@@ -5,11 +5,15 @@
  */
 package ejb.session.stateless;
 
+import entity.ReservationEntity;
+
 /**
  *
  * @author twp10
  */
 
 public interface ReservationEntityControllerRemote {
+
+    public void reserveRoom(ReservationEntity newReservation);
     
 }

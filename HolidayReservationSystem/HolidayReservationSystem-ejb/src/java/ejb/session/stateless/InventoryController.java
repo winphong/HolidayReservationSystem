@@ -33,6 +33,8 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
     
+    @EJB 
+    private ReservationEntityControllerLocal reservationEntityControllerLocal;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
@@ -81,6 +83,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         Integer roomTypeIndex = 0;
         Boolean availableThroughout;
         Integer countOfRoomAvailableThroughout;
+        Integer numOfReservationThatOverlapWithBooking = reservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate).size();
 
         // Loop through each room type
         for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
@@ -104,17 +107,17 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 }
                 
                 // As long there is enough room that is available throughout to fulfill the numOfRoomRequired
+                // Need to check with reservation also, if reservation 
                 if ( availableThroughout.equals(Boolean.TRUE) ) {
                     
                     countOfRoomAvailableThroughout++; 
                     
-                    if ( countOfRoomAvailableThroughout.equals(numOfRoomRequired) ) {
+                    if ( (countOfRoomAvailableThroughout - numOfReservationThatOverlapWithBooking) >= numOfRoomRequired ) {
                         availableRoomType.add(room.getRoomType());
                         break;
                     }
                 }
             }
-            
             roomTypeIndex++;
         }
         return availableRoomType;
