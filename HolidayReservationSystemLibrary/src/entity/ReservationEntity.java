@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +32,8 @@ public class ReservationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer numOfRoom;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Boolean isCheckedIn;
     @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
@@ -48,7 +49,7 @@ public class ReservationEntity implements Serializable {
         this.roomType = new ArrayList<>();
     }
 
-    public ReservationEntity(Integer numOfRoom, Date startDate, Date endDate, Boolean isCheckedIn, ReservationType reservationType) {
+    public ReservationEntity(Integer numOfRoom, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn, ReservationType reservationType) {
         
         this();
         
@@ -110,28 +111,28 @@ public class ReservationEntity implements Serializable {
     /**
      * @return the startDate
      */
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
     /**
      * @param startDate the startDate to set
      */
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
     /**
      * @return the endDate
      */
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
     /**
      * @param endDate the endDate to set
      */
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

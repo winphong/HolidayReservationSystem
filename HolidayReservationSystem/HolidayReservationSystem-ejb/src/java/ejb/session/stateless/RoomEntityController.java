@@ -101,7 +101,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     
     public RoomEntity retrieveRoomByRoomNumber(String roomNumber) {
         
-        Query query = em.createQuery("SELECT r FROM Room r WHERE r.roomNumber=:inRoomNumber");
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomNumber=:inRoomNumber");
         query.setParameter("inRoomNumber", roomNumber);
         
         try {
@@ -118,7 +118,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     
     public void viewAllRoom() {
         
-        Query query = em.createQuery("SELECT r FROM Room r");
+        Query query = em.createQuery("SELECT r FROM RoomEntity r");
 
         List<RoomEntity> rooms = (List<RoomEntity>) query.getResultList();
         

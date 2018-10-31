@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Inventory;
+import entity.RoomEntity;
 import java.time.LocalDate;
 
 /**
@@ -17,5 +18,7 @@ public interface InventoryControllerLocal {
     void updateInventory();
 
     public Inventory getInventoryByDate(LocalDate date);
+
+    public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex);
     
 }

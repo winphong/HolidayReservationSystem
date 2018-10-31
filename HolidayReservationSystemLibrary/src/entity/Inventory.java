@@ -7,7 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -16,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.RoomStatus;
 
 /**
  *
@@ -34,7 +34,7 @@ public class Inventory implements Serializable {
     private LocalDate date;
     private List<RoomTypeEntity> roomTypes;
     private Integer totalNumOfRoomAvailable;
-    private List<Integer> numOfRoomForEachRoomType;
+    private List<List<RoomEntity>> availableRoom;
 
     
     public Inventory() {
@@ -80,34 +80,33 @@ public class Inventory implements Serializable {
         return "entity.Inventory[ id=" + inventoryId + " ]";
     }
     
+    // Everytime a room / roomType is disable / deleted, inventory must be updated from the current system date to the latest available booking date
     public void updateInventory() {
         
         Query query = em.createQuery("SELECT rt FROM RoomType rt WHERE isDisabled = FALSE");
-            
+        
+        // Get a list of roomTypes that is not disabled
         roomTypes = query.getResultList();
         
         totalNumOfRoomAvailable = 0;
-        
-        Integer count;
-        
-        List<Integer> numOfRoom = null;
-        
+
+        // For each room type
         for(RoomTypeEntity roomType : roomTypes) {
             
-            List<RoomEntity> rooms = roomType.getRoom();
-            
-            count = 0;
+            List<RoomEntity> roomForEachRoomType = null;
+            // Get the list of room
+            List<RoomEntity> rooms = roomType.getRoom();           
+            // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
             for(RoomEntity room : rooms) {
                 
-                if ( room.getIsDisabled().equals(Boolean.FALSE) ) {
-                    totalNumOfRoomAvailable += 1;
-                    count++;
+                if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus() == RoomStatus.VACANT ) {
+                    roomForEachRoomType.add(room);
+                    totalNumOfRoomAvailable++;
                 }   
             }
-            numOfRoom.add(count);
+            // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
+            getAvailableRoom().add(roomForEachRoomType);        
         }
-        
-        numOfRoomForEachRoomType = numOfRoom;
     }
 
     /**
@@ -152,12 +151,18 @@ public class Inventory implements Serializable {
         this.totalNumOfRoomAvailable = totalNumOfRoomAvailable;
     }
     
-    public List<Integer> getNumOfRoomForEachRoomType() {
-        return numOfRoomForEachRoomType;
+    /**
+     * @return the availableRoom
+     */
+    public List<List<RoomEntity>> getAvailableRoom() {
+        return availableRoom;
     }
 
-    public void setNumOfRoomForEachRoomType(List<Integer> numOfRoomForEachRoomType) {
-        this.numOfRoomForEachRoomType = numOfRoomForEachRoomType;
+    /**
+     * @param availableRoom the availableRoom to set
+     */
+    public void setAvailableRoom(List<List<RoomEntity>> availableRoom) {
+        this.availableRoom = availableRoom;
     }
     
 }

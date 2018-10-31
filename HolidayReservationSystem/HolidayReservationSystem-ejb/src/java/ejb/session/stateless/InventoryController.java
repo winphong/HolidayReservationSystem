@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Inventory;
+import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,8 +33,6 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
     
-    @EJB
-    private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
@@ -51,9 +50,9 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         }
     }
     
-    public Inventory getInventoryByDate(LocalDate thisDate) {
+    public Inventory getInventoryByDate(LocalDate inputDate) {
         
-        Query query = em.createQuery("SELECT i FROM Inventory i WHERE date = thisDate");
+        Query query = em.createQuery("SELECT i FROM Inventory i WHERE date = inputDate");
         
         try {
             
@@ -61,7 +60,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         
         } catch (NoResultException | NonUniqueResultException ex) {
             
-            System.out.println("Inventory for " + thisDate + " does not exist!");
+            System.out.println("Inventory for " + inputDate + " does not exist!");
         }
         
         return null;
@@ -71,54 +70,68 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // Check each room and each date and make sure there is atleast one that is 
     public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) {
         
+        List<RoomTypeEntity> availableRoomType = null;
         
+        Inventory inventory = getInventoryByDate(startDate);
         
-        List<RoomTypeEntity> availableRoomTypes = null;
+         // Get using getAvailableRoom will return room that is not disabled
+        // If use getRoomTypes.get(index).getRoom() will return all room, including those that has been disabled
+        List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom();
         
-        List<Boolean> roomIsAvailable = null;
-        
-        // Get the inventories specified by the start and end date
-        List<Inventory> inventories = null;
-        
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+        Integer roomTypeIndex = 0;
+        Boolean availableThroughout;
+        Integer countOfRoomAvailableThroughout;
+
+        // Loop through each room type
+        for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
             
-            inventories.add(getInventoryByDate(date));
-        }
-        
-        // Inirialize roomIsAvailable to true
-        Integer numOfRoomType = inventories.get(0).getRoomTypes().size();
-        
-        for(int i = 0; i < numOfRoomType; i++) {
+            countOfRoomAvailableThroughout = 0;
             
-            roomIsAvailable.add(Boolean.TRUE);
-        }
-        
-        // For each day specified by the start and end date
-        for(Inventory inventory : inventories) {
-            
-            List<Integer> numOfRoomForEachRoomType = inventory.getNumOfRoomForEachRoomType();
-            
-            int index = 0;
-            
-            for(Integer numOfRoomForARoomType : numOfRoomForEachRoomType ) {
+            // Loop through each room of a particular room type
+            for(RoomEntity room : listOfRooms) {
                 
-                if (numOfRoomForARoomType < numOfRoomRequired) {
+                availableThroughout = Boolean.TRUE;
+                
+                // Loop through the booking date
+                for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate) ; date.plusDays(1)) {
                     
-                    roomIsAvailable.set(index, Boolean.FALSE);
+                    if (roomExist(room, date, roomTypeIndex)) {
+                        continue;
+                    } else {
+                        availableThroughout = Boolean.FALSE;
+                        break;
+                    }
                 }
                 
-                index++;
+                // As long there is enough room that is available throughout to fulfill the numOfRoomRequired
+                if ( availableThroughout.equals(Boolean.TRUE) ) {
+                    
+                    countOfRoomAvailableThroughout++; 
+                    
+                    if ( countOfRoomAvailableThroughout.equals(numOfRoomRequired) ) {
+                        availableRoomType.add(room.getRoomType());
+                        break;
+                    }
+                }
             }
-        }
-
-        
-        for(int index = 0; index < numOfRoomType; index++) {
             
-            if ( roomIsAvailable.get(index).equals(Boolean.TRUE) ) {
-                availableRoomTypes.add(inventories.get(0).getRoomTypes().get(index));
-            }
+            roomTypeIndex++;
         }
+        return availableRoomType;
+    }
+    
+    // Helper method
+    // roomTypeIndex - indicate which roomType we are searching from
+    public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex) {
         
-        return availableRoomTypes;
+        Inventory inventory = getInventoryByDate(date);
+        
+        List<List<RoomEntity>> listOfRoomEntity = inventory.getAvailableRoom();
+        
+        if ( listOfRoomEntity.get(roomTypeIndex).indexOf(room) != -1 ) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        } 
     }
 }

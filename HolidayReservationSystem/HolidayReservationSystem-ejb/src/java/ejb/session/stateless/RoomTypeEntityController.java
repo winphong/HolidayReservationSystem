@@ -47,7 +47,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     
     public RoomTypeEntity retrieveRoomTypeByName(String name) {
         
-        Query query = em.createQuery("SELECT rt FROM RoomType rt WHERE rt.name=:inName");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.name=:inName");
         query.setParameter("inName", name);
         
         try {
@@ -96,7 +96,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     
     public void viewAllRoomType() {
         
-        Query query = em.createQuery("SELECT rt FROM RoomType rt");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt");
             
         List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
         
@@ -108,7 +108,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     
     public List<RoomTypeEntity> retrieveAllRoomType() {
         
-        Query query = em.createQuery("SELECT rt FROM RoomType rt WHERE isDisable = FALSE");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = FALSE");
             
         List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
         
