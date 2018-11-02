@@ -5,10 +5,10 @@
  */
 package managementclient;
 
+import ejb.session.stateful.ReservationEntityControllerRemote;
 import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
-import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;

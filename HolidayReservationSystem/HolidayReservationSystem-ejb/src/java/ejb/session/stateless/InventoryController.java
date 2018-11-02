@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import ejb.session.stateful.ReservationEntityControllerLocal;
 import entity.Inventory;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
@@ -38,6 +39,8 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
+    
+    //need to modify this 
     @Override
     public void updateInventory() {
         

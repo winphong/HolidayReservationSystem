@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,9 +29,12 @@ public class RoomRateEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomRateId;
+    @Column(unique = true, nullable = false)
     private String name;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ReservationType reservationType;
+    @Column(nullable = false)
     private BigDecimal ratePerNight;
     private Date validFrom;
     private Date validTill;

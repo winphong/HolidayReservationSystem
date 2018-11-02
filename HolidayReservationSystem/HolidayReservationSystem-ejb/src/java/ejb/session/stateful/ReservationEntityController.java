@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateless;
+package ejb.session.stateful;
 
-import entity.Inventory;
 import entity.ReservationEntity;
-import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -23,9 +20,9 @@ import javax.persistence.Query;
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
-@Stateless
+@Stateful
 @Local (ReservationEntityControllerLocal.class)
 @Remote (ReservationEntityControllerRemote.class)
 

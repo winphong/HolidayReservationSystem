@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,10 +28,12 @@ public class RoomEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomId;
-    private String roomNumber;
+    @Column(length = 4, nullable = false, unique = true)
+    private Long roomNumber;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RoomStatus roomStatus;
-    private String guest;
+    private Long guest;
     private Boolean isDisabled;
     
     @ManyToOne
@@ -41,9 +44,9 @@ public class RoomEntity implements Serializable {
         this.roomStatus = VACANT;
     }
 
-    public RoomEntity(String roomNumber, String guest) {
+    public RoomEntity(Long roomNumber) {
+        this();
         this.roomNumber = roomNumber;
-        this.guest = guest;
     }
     
     
@@ -79,14 +82,14 @@ public class RoomEntity implements Serializable {
     /**
      * @return the roomNumber
      */
-    public String getRoomNumber() {
+    public Long getRoomNumber() {
         return roomNumber;
     }
 
     /**
      * @param roomNumber the roomNumber to set
      */
-    public void setRoomNumber(String roomNumber) {
+    public void setRoomNumber(Long roomNumber) {
         this.roomNumber = roomNumber;
     }
 
@@ -107,14 +110,14 @@ public class RoomEntity implements Serializable {
     /**
      * @return the guest
      */
-    public String getGuest() {
+    public Long getGuest() {
         return guest;
     }
 
     /**
      * @param guest the guest to set
      */
-    public void setGuest(String guest) {
+    public void setGuest(Long guest) {
         this.guest = guest;
     }
 

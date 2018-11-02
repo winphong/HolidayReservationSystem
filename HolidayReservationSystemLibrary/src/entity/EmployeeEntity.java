@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,21 +27,25 @@ public class EmployeeEntity extends Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long employeeId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(unique = true, nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private EmployeeAccessRight accessRight;
+    @Column(length = 8, unique = true, nullable = false)
     private String phoneNumber;
+    @Column(unique = true)
     private String email;
-    private Boolean isLoggedIn;
     
     @OneToMany(mappedBy="client")
     private List <ReservationEntity> reservation;
 
     public EmployeeEntity() {
-        this.reservation = new ArrayList<>();
-        this.isLoggedIn = false;
     }
 
     public EmployeeEntity(String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
@@ -53,6 +58,7 @@ public class EmployeeEntity extends Client implements Serializable {
         this.accessRight = accessRight;
         this.phoneNumber = phoneNum;
         this.email = emailAddress;
+        this.reservation = new ArrayList<>();
     }
     
     
@@ -172,20 +178,6 @@ public class EmployeeEntity extends Client implements Serializable {
      */
     public void setReservation(List <ReservationEntity> reservation) {
         this.reservation = reservation;
-    }
-
-    /**
-     * @return the isLoggedIn
-     */
-    public Boolean getIsLoggedIn() {
-        return isLoggedIn;
-    }
-
-    /**
-     * @param isLoggedIn the isLoggedIn to set
-     */
-    public void setIsLoggedIn(Boolean isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
     }
 
     /**

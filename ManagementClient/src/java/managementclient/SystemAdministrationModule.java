@@ -53,6 +53,7 @@ public class SystemAdministrationModule {
             System.out.println("4: View All Partners");
             System.out.println("-----------------------");
             System.out.println("5: Back\n");
+            System.out.println();
             response = 0;
 
             while (response < 1 || response > 5) {
@@ -94,6 +95,7 @@ public class SystemAdministrationModule {
             System.out.println("2: Operation Manager");
             System.out.println("3. Sales Manager");
             System.out.println("4. Guest Relation Officer");
+            System.out.println();
             System.out.print("Select Access Right: ");
             Integer accessRightInt = scanner.nextInt();
 
@@ -126,7 +128,7 @@ public class SystemAdministrationModule {
         
         for (EmployeeEntity employeeEntity: employeeEntities)
         {
-            System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n",employeeEntity.getEmployeeId(),employeeEntity.getFirstName(),employeeEntity.getLastName(),employeeEntity.getAccessRight(),employeeEntity.getUserName(),employeeEntity.getPassword(),employeeEntity.getPhoneNumber(),employeeEntity.getEmail());
+            System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n",employeeEntity.getEmployeeId(),employeeEntity.getFirstName(),employeeEntity.getLastName(),employeeEntity.getAccessRight(),employeeEntity.getUsername(),employeeEntity.getPassword(),employeeEntity.getPhoneNumber(),employeeEntity.getEmail());
         }
         System.out.print("Press any key to continue...: ");
         scanner.nextLine();

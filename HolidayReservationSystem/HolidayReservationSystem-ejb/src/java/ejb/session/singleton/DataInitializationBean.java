@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util.enumeration;
+package ejb.session.singleton;
+
+import javax.ejb.Singleton;
+import javax.ejb.LocalBean;
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
-public enum RoomStatus {
-    VACANT,
-    BOOKED,
-    OCCUPIED,
-    MAINTENANCE,
-    HOUSEKEEPING;
+@Singleton
+@LocalBean
+public class DataInitializationBean {
+
+    
 }

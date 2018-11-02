@@ -5,10 +5,10 @@
  */
 package managementclient;
 
+import ejb.session.stateful.ReservationEntityControllerRemote;
 import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
-import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
@@ -59,6 +59,7 @@ public class MainApp {
             System.out.println("*** Welcome to Merlion Hotel HoRS Management Client ***\n");
             System.out.println("1: Login");
             System.out.println("2: Exit\n");
+            System.out.println();
             response = 0;
 
             while (response < 1 || response > 2) {
@@ -120,6 +121,7 @@ public class MainApp {
             System.out.println("2: Hotel Operation");
             System.out.println("3: Front Office");
             System.out.println("4: Logout\n");
+            System.out.println();
             response = 0;
 
             while (response < 1 || response > 4) {
@@ -147,7 +149,7 @@ public class MainApp {
                     }
                 } else if (response == 3) {
                     try {
-                        hotelOperationModule.menuFrontOffice();
+                        frontOfficeModule.menuFrontOffice();
                     } catch (InvalidAccessRightException ex) {
                         System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
                     }

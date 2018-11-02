@@ -80,7 +80,8 @@ public class Inventory implements Serializable {
         return "entity.Inventory[ id=" + inventoryId + " ]";
     }
     
-    // Everytime a room / roomType is disable / deleted, inventory must be updated from the current system date to the latest available booking date
+    // Everytime a room / roomType is created/ updated / deleted, inventory must be updated from the current system date to the latest available booking date
+    // need to modify to include use case for create and update
     public void updateInventory() {
         
         Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :Boolean");

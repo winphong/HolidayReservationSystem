@@ -27,13 +27,17 @@ public class RoomTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomTypeId;
-    @Column(unique=true)
+    @Column(unique = true, nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
     private BigDecimal size;
+    @Column(nullable = false)
     private String bed;
+    @Column(nullable = false)
     private Integer capacity;
     private String amenities;
+    @Column(unique = true, nullable = false)
     private Integer tier;
     private Boolean isDisabled;
     

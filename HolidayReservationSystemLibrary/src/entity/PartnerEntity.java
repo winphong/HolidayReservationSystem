@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,19 +26,25 @@ public class PartnerEntity extends Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long partnerId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(length = 8, nullable = false, unique = true)
     private Long phoneNumber;
+    @Column(length = 10, nullable = false, unique = true)
     private String companyRegistrationId;
+    @Column(unique = true)
     private String email;
     
     @OneToMany(mappedBy="client")
     private List <ReservationEntity> reservation;
 
     public PartnerEntity() {
-        this.reservation = new ArrayList<>();
     }
 
     public PartnerEntity(String firstName, String lastName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
@@ -51,6 +58,7 @@ public class PartnerEntity extends Client implements Serializable {
         this.phoneNumber = phoneNumber;
         this.companyRegistrationId = companyRegistrationId;
         this.email = email;
+        this.reservation = new ArrayList<>();
     }
     
     
