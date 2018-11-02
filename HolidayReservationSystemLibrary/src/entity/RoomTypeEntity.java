@@ -49,7 +49,7 @@ public class RoomTypeEntity implements Serializable {
     public RoomTypeEntity() {
     }
 
-    public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier, Boolean isDisabled) {
+    public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier) {
         this.name = name;
         this.description = description;
         this.size = size;
@@ -57,7 +57,7 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
         this.amenities = amenities;
         this.tier = tier;
-        this.isDisabled = isDisabled;
+        this.isDisabled = false;
     }
     
     
