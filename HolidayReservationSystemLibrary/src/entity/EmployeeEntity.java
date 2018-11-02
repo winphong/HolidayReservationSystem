@@ -31,6 +31,8 @@ public class EmployeeEntity extends Client implements Serializable {
     private String userName;
     private String password;
     private EmployeeAccessRight accessRight;
+    private String phoneNumber;
+    private String email;
     private Boolean isLoggedIn;
     
     @OneToMany(mappedBy="client")
@@ -41,16 +43,16 @@ public class EmployeeEntity extends Client implements Serializable {
         this.isLoggedIn = false;
     }
 
-    public EmployeeEntity(Long employeeId, String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight) {
+    public EmployeeEntity(String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
         
         this();
-        
-        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
         this.accessRight = accessRight;
+        this.phoneNumber = phoneNum;
+        this.email = emailAddress;
     }
     
     
@@ -184,6 +186,34 @@ public class EmployeeEntity extends Client implements Serializable {
      */
     public void setIsLoggedIn(Boolean isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
+    }
+
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * @param phoneNumber the phoneNumber to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }

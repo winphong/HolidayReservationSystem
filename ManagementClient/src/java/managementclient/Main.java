@@ -5,17 +5,46 @@
  */
 package managementclient;
 
+import ejb.session.stateless.EmployeeEntityControllerRemote;
+import ejb.session.stateless.GuestEntityControllerRemote;
+import ejb.session.stateless.PartnerEntityControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
+import ejb.session.stateless.RoomEntityControllerRemote;
+import ejb.session.stateless.RoomRateEntityControllerRemote;
+import ejb.session.stateless.RoomTypeEntityControllerRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author twp10
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
+    @EJB
+    private static GuestEntityControllerRemote guestEntityControllerRemote;
+
+    @EJB
+    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
+
+    @EJB
+    private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
+
+    @EJB
+    private static RoomEntityControllerRemote roomEntityControllerRemote;
+
+    @EJB
+    private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
+
+    @EJB
+    private static PartnerEntityControllerRemote partnerEntityControllerRemote;
+
+    @EJB
+    private static EmployeeEntityControllerRemote employeeEntityControllerRemote;
+
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainApp mainApp = new MainApp();
+        mainApp.runApp();
     }
     
 }
