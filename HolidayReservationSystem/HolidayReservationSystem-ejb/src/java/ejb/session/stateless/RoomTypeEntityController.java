@@ -5,9 +5,7 @@
  */
 package ejb.session.stateless;
 
-import entity.Inventory;
 import entity.RoomTypeEntity;
-import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -92,7 +90,6 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             roomTypeToUpdate.setBed(roomType.getBed());
             roomTypeToUpdate.setAmenities(roomType.getAmenities());
             roomTypeToUpdate.setTier(roomType.getTier());
-            roomTypeToUpdate.setReservation(roomType.getReservation());
             roomTypeToUpdate.setRoom(roomType.getRoom());
             roomTypeToUpdate.setRoomRate(roomType.getRoomRate());
             roomTypeToUpdate.setIsDisabled(roomType.getIsDisabled());

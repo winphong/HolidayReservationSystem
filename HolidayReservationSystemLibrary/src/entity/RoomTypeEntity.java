@@ -13,8 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -47,8 +47,8 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy="roomType")
     private List<RoomRateEntity> roomRate;
     
-    @ManyToMany(mappedBy="roomType")
-    private List<ReservationEntity> reservation;
+    @OneToOne(mappedBy="roomType")
+    private ReservationLineItemEntity reservationItem;
 
     public RoomTypeEntity() {
     }
@@ -236,16 +236,17 @@ public class RoomTypeEntity implements Serializable {
     }
 
     /**
-     * @return the reservation
+     * @return the reservationItem
      */
-    public List<ReservationEntity> getReservation() {
-        return reservation;
+    public ReservationLineItemEntity getReservationItem() {
+        return reservationItem;
     }
 
     /**
-     * @param reservation the reservation to set
+     * @param reservationItem the reservationItem to set
      */
-    public void setReservation(List<ReservationEntity> reservation) {
-        this.reservation = reservation;
-    }   
+    public void setReservationItem(ReservationLineItemEntity reservationItem) {
+        this.reservationItem = reservationItem;
+    }
+ 
 }

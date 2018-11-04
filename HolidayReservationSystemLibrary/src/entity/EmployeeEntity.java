@@ -21,7 +21,7 @@ import util.enumeration.EmployeeAccessRight;
  * @author twp10
  */
 @Entity
-public class EmployeeEntity extends Client implements Serializable {
+public class EmployeeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,7 +42,7 @@ public class EmployeeEntity extends Client implements Serializable {
     @Column(unique = true)
     private String email;
     
-    @OneToMany(mappedBy="client")
+    @OneToMany(mappedBy="employee")
     private List <ReservationEntity> reservation;
 
     public EmployeeEntity() {
@@ -58,7 +58,7 @@ public class EmployeeEntity extends Client implements Serializable {
         this.accessRight = accessRight;
         this.phoneNumber = phoneNum;
         this.email = emailAddress;
-        this.reservation = new ArrayList<>();
+        this.reservation = new ArrayList<ReservationEntity>();
     }
     
     

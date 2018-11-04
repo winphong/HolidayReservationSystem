@@ -6,57 +6,53 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import util.enumeration.ReservationType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author twp10
  */
 @Entity
-public class ReservationEntity implements Serializable {
+@Inheritance (strategy=InheritanceType.JOINED)
+public abstract class ReservationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer numOfRoom;
+    @Column (nullable = false)
     private LocalDate startDate;
+    @Column (nullable = false)
     private LocalDate endDate;
-    private Boolean isCheckedIn;
-    @Enumerated(EnumType.STRING)
-    private ReservationType reservationType;
+    private Boolean isCheckedIn = false;
+    private Boolean isAllocated = false;
+    @Column (scale = 2)
+    private BigDecimal totalAmount;
     
-    // Client that uses the system to make reservation: Employee/Guest/Partner
-    @ManyToOne
-    private Client client; 
-    
-    @ManyToMany(mappedBy="reservation")
-    private List <RoomTypeEntity> roomType;
+    @OneToMany(mappedBy = "reservation")
+    private List<ReservationLineItemEntity> reservationLineItemEntities;
 
     public ReservationEntity() {
-        this.roomType = new ArrayList<>();
+        this.reservationLineItemEntities = new ArrayList<ReservationLineItemEntity>();
     }
 
-    public ReservationEntity(Integer numOfRoom, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn, ReservationType reservationType) {
+    public ReservationEntity(LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
         
         this();
-        
-        this.numOfRoom = numOfRoom;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isCheckedIn = isCheckedIn;
-        this.reservationType = reservationType;
     }
     
     
@@ -91,20 +87,6 @@ public class ReservationEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.Reservation[ id=" + id + " ]";
-    }
-
-    /**
-     * @return the numOfRoom
-     */
-    public Integer getNumOfRoom() {
-        return numOfRoom;
-    }
-
-    /**
-     * @param numOfRoom the numOfRoom to set
-     */
-    public void setNumOfRoom(Integer numOfRoom) {
-        this.numOfRoom = numOfRoom;
     }
 
     /**
@@ -150,45 +132,45 @@ public class ReservationEntity implements Serializable {
     }
 
     /**
-     * @return the reservationType
+     * @return the totalAmount
      */
-    public ReservationType getReservationType() {
-        return reservationType;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
     /**
-     * @param reservationType the reservationType to set
+     * @param totalAmount the totalAmount to set
      */
-    public void setReservationType(ReservationType reservationType) {
-        this.reservationType = reservationType;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     /**
-     * @return the client
+     * @return the reservationLineItemEntities
      */
-    public Client getClient() {
-        return client;
+    public List<ReservationLineItemEntity> getReservationLineItemEntities() {
+        return reservationLineItemEntities;
     }
 
     /**
-     * @param client the client to set
+     * @param reservationLineItemEntities the reservationLineItemEntities to set
      */
-    public void setClient(Client client) {
-        this.client = client;
+    public void setReservationLineItemEntities(List<ReservationLineItemEntity> reservationLineItemEntities) {
+        this.reservationLineItemEntities = reservationLineItemEntities;
     }
 
     /**
-     * @return the roomType
+     * @return the isAllocated
      */
-    public List <RoomTypeEntity> getRoomType() {
-        return roomType;
+    public Boolean getIsAllocated() {
+        return isAllocated;
     }
 
     /**
-     * @param roomType the roomType to set
+     * @param isAllocated the isAllocated to set
      */
-    public void setRoomType(List <RoomTypeEntity> roomType) {
-        this.roomType = roomType;
+    public void setIsAllocated(Boolean isAllocated) {
+        this.isAllocated = isAllocated;
     }
     
 }

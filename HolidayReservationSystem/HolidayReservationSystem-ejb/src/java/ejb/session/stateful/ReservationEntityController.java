@@ -39,14 +39,14 @@ public class ReservationEntityController implements ReservationEntityControllerR
     public void reserveRoom(ReservationEntity newReservation) {
         
         em.persist(newReservation);
-        
-        List<RoomTypeEntity> listOfRoomTypes = newReservation.getRoomType();
-        
-        for(RoomTypeEntity roomType : listOfRoomTypes) {
-            
-            roomType.getReservation().add(newReservation);
-            newReservation.getRoomType().add(roomType);
-        }
+//        
+//        List<RoomTypeEntity> listOfRoomTypes = newReservation.getRoomType();
+//        
+//        for(RoomTypeEntity roomType : listOfRoomTypes) {
+//            
+//            roomType.getReservation().add(newReservation);
+//            newReservation.getRoomType().add(roomType);
+//        }
         
         em.flush();
     }

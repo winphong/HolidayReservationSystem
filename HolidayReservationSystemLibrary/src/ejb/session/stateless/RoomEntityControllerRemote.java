@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.RoomEntity;
+import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.util.List;
 import util.exception.RoomNotFoundException;
@@ -24,7 +25,7 @@ public interface RoomEntityControllerRemote {
 
     public void deleteRoom(RoomEntity room);
 
-    public RoomEntity retrieveRoomByRoomNumber(Long roomNumber) throws RoomNotFoundException;
+    public RoomEntity retrieveRoomByRoomNumber(RoomNumber roomNumber) throws RoomNotFoundException;
 
     public List<RoomEntity> viewAllRoom();
     

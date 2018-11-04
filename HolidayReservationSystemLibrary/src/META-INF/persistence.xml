@@ -10,6 +10,15 @@
     <class>entity.RoomRateEntity</class>
     <class>entity.RoomTypeEntity</class>
     <class>entity.ReservationLineItemEntity</class>
+    <class>entity.WalkinReservationEntity</class>
+    <class>entity.OnlineReservationEntity</class>
+    <class>entity.PartnerReservationEntity</class>
+    <class>entity.PublishedRateEntity</class>
+    <class>entity.NormalRateEntity</class>
+    <class>entity.PeakRateEntity</class>
+    <class>entity.PromotionRateEntity</class>
+    <class>entity.RoomRatePerNightEntity</class>
+    <class>entity.CustomerEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/holidayreservationsystem?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

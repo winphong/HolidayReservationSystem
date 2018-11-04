@@ -20,16 +20,14 @@ import javax.persistence.OneToMany;
  * @author twp10
  */
 @Entity
-public class PartnerEntity extends Client implements Serializable {
+public class PartnerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long partnerId;
     @Column(nullable = false)
-    private String firstName;
-    @Column(nullable = false)
-    private String lastName;
+    private String companyName;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -41,24 +39,25 @@ public class PartnerEntity extends Client implements Serializable {
     @Column(unique = true)
     private String email;
     
-    @OneToMany(mappedBy="client")
+    @OneToMany(mappedBy="partner")
     private List <ReservationEntity> reservation;
+    @OneToMany(mappedBy = "partner")
+    private List <CustomerEntity> customers;
 
     public PartnerEntity() {
     }
 
-    public PartnerEntity(String firstName, String lastName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
+    public PartnerEntity(String companyName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
         
         this();
-        
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.companyName = companyName;
         this.username = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.companyRegistrationId = companyRegistrationId;
         this.email = email;
-        this.reservation = new ArrayList<>();
+        this.reservation = new ArrayList<ReservationEntity>();
+        this.customers = new ArrayList<CustomerEntity>();
     }
     
     
@@ -93,34 +92,6 @@ public class PartnerEntity extends Client implements Serializable {
     @Override
     public String toString() {
         return "entity.Partner[ id=" + partnerId + " ]";
-    }
-
-    /**
-     * @return the firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * @param firstName the firstName to set
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
-     * @return the lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * @param lastName the lastName to set
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     /**
@@ -205,6 +176,34 @@ public class PartnerEntity extends Client implements Serializable {
      */
     public void setReservation(List <ReservationEntity> reservation) {
         this.reservation = reservation;
+    }
+
+    /**
+     * @return the companyName
+     */
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    /**
+     * @param companyName the companyName to set
+     */
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    /**
+     * @return the customers
+     */
+    public List <CustomerEntity> getCustomers() {
+        return customers;
+    }
+
+    /**
+     * @param customers the customers to set
+     */
+    public void setCustomers(List <CustomerEntity> customers) {
+        this.customers = customers;
     }
     
 }

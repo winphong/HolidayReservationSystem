@@ -10,13 +10,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import util.enumeration.ReservationType;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -31,32 +29,34 @@ public class RoomRateEntity implements Serializable {
     private Long roomRateId;
     @Column(unique = true, nullable = false)
     private String name;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ReservationType reservationType;
-    @Column(nullable = false)
+    private Boolean isDisabled;
+    @Column(scale=2)
     private BigDecimal ratePerNight;
     private Date validFrom;
     private Date validTill;
-    private Boolean isDisabled;
     
+    @OneToOne
+    private RoomRatePerNightEntity roomRatePerNightEntity;
     @ManyToOne
     private RoomTypeEntity roomType;
 
     public RoomRateEntity() {
     }
 
-    public RoomRateEntity(String name, ReservationType reservationType, BigDecimal ratePerNight, Date validFrom, Date validTill, Boolean isDisabled) {
+    public RoomRateEntity(String name, BigDecimal ratePerNight) {
         this.name = name;
-        this.reservationType = reservationType;
+        this.ratePerNight = ratePerNight;
+        this.isDisabled = false;
+    }
+    
+    public RoomRateEntity(String name, BigDecimal ratePerNight, Date validFrom, Date validTill) {
+        this.name = name;
         this.ratePerNight = ratePerNight;
         this.validFrom = validFrom;
         this.validTill = validTill;
-        this.isDisabled = isDisabled;
+        this.isDisabled = false;
     }
     
-    
-
     public Long getRoomRateId() {
         return roomRateId;
     }
@@ -105,17 +105,45 @@ public class RoomRateEntity implements Serializable {
     }
 
     /**
-     * @return the reservationType
+     * @return the isDisabled
      */
-    public ReservationType getReservationType() {
-        return reservationType;
+    public Boolean getIsDisabled() {
+        return isDisabled;
     }
 
     /**
-     * @param reservationType the reservationType to set
+     * @param isDisabled the isDisabled to set
      */
-    public void setReservationType(ReservationType reservationType) {
-        this.reservationType = reservationType;
+    public void setIsDisabled(Boolean isDisabled) {
+        this.isDisabled = isDisabled;
+    }
+
+    /**
+     * @return the roomType
+     */
+    public RoomTypeEntity getRoomType() {
+        return roomType;
+    }
+
+    /**
+     * @param roomType the roomType to set
+     */
+    public void setRoomType(RoomTypeEntity roomType) {
+        this.roomType = roomType;
+    }
+
+    /**
+     * @return the roomRatePerNightEntity
+     */
+    public RoomRatePerNightEntity getRoomRatePerNightEntity() {
+        return roomRatePerNightEntity;
+    }
+
+    /**
+     * @param roomRatePerNightEntity the roomRatePerNightEntity to set
+     */
+    public void setRoomRatePerNightEntity(RoomRatePerNightEntity roomRatePerNightEntity) {
+        this.roomRatePerNightEntity = roomRatePerNightEntity;
     }
 
     /**
@@ -158,34 +186,6 @@ public class RoomRateEntity implements Serializable {
      */
     public void setValidTill(Date validTill) {
         this.validTill = validTill;
-    }
-
-    /**
-     * @return the isDisabled
-     */
-    public Boolean getIsDisabled() {
-        return isDisabled;
-    }
-
-    /**
-     * @param isDisabled the isDisabled to set
-     */
-    public void setIsDisabled(Boolean isDisabled) {
-        this.isDisabled = isDisabled;
-    }
-
-    /**
-     * @return the roomType
-     */
-    public RoomTypeEntity getRoomType() {
-        return roomType;
-    }
-
-    /**
-     * @param roomType the roomType to set
-     */
-    public void setRoomType(RoomTypeEntity roomType) {
-        this.roomType = roomType;
     }
     
 }

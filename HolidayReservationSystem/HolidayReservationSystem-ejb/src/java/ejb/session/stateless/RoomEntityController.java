@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Inventory;
 import entity.RoomEntity;
+import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.EJB;
@@ -94,7 +95,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         em.flush();
     }
 
-    public RoomEntity retrieveRoomByRoomNumber(Long roomNumber) throws RoomNotFoundException {
+    public RoomEntity retrieveRoomByRoomNumber(RoomNumber roomNumber) throws RoomNotFoundException {
 
         Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomNumber=:inRoomNumber");
         query.setParameter("inRoomNumber", roomNumber);

@@ -7,11 +7,16 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -24,10 +29,28 @@ public class ReservationLineItemEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer quantity = 0;
-    @Column(nullable = false)
-    private BigDecimal reservationTotal;
+    private Integer numberOfRooms = 0;
+    @Column(scale=2)
+    private BigDecimal totalAmount;
+    
+    @OneToOne
+    private RoomTypeEntity roomType;
+    @ManyToOne
+    private ReservationEntity reservation;
+    @OneToMany (mappedBy = "reservationlineitem")
+    private List<RoomRatePerNightEntity> roomRatePerNight;
 
+    public ReservationLineItemEntity() {
+    }
+
+    public ReservationLineItemEntity(BigDecimal totalAmount, RoomTypeEntity roomType, ReservationEntity reservation) {
+        this();
+        this.totalAmount = totalAmount;
+        this.roomType = roomType;
+        this.reservation = reservation;
+        this.roomRatePerNight = new ArrayList<RoomRatePerNightEntity>();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -59,6 +82,62 @@ public class ReservationLineItemEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.ReservationLineItemEntity[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the totalAmount
+     */
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * @param totalAmount the totalAmount to set
+     */
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    /**
+     * @return the roomType
+     */
+    public RoomTypeEntity getRoomType() {
+        return roomType;
+    }
+
+    /**
+     * @param roomType the roomType to set
+     */
+    public void setRoomType(RoomTypeEntity roomType) {
+        this.roomType = roomType;
+    }
+
+    /**
+     * @return the reservation
+     */
+    public ReservationEntity getReservation() {
+        return reservation;
+    }
+
+    /**
+     * @param reservation the reservation to set
+     */
+    public void setReservation(ReservationEntity reservation) {
+        this.reservation = reservation;
+    }
+
+    /**
+     * @return the roomRatePerNight
+     */
+    public List<RoomRatePerNightEntity> getRoomRatePerNight() {
+        return roomRatePerNight;
+    }
+
+    /**
+     * @param roomRatePerNight the roomRatePerNight to set
+     */
+    public void setRoomRatePerNight(List<RoomRatePerNightEntity> roomRatePerNight) {
+        this.roomRatePerNight = roomRatePerNight;
     }
     
 }

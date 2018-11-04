@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,7 +30,8 @@ public class RoomEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomId;
     @Column(length = 4, nullable = false, unique = true)
-    private Long roomNumber;
+    @Embedded
+    private RoomNumber roomNumber;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomStatus roomStatus;
@@ -44,7 +46,7 @@ public class RoomEntity implements Serializable {
         this.roomStatus = VACANT;
     }
 
-    public RoomEntity(Long roomNumber) {
+    public RoomEntity(RoomNumber roomNumber) {
         this();
         this.roomNumber = roomNumber;
     }
@@ -82,14 +84,14 @@ public class RoomEntity implements Serializable {
     /**
      * @return the roomNumber
      */
-    public Long getRoomNumber() {
+    public RoomNumber getRoomNumber() {
         return roomNumber;
     }
 
     /**
      * @param roomNumber the roomNumber to set
      */
-    public void setRoomNumber(Long roomNumber) {
+    public void setRoomNumber(RoomNumber roomNumber) {
         this.roomNumber = roomNumber;
     }
 
