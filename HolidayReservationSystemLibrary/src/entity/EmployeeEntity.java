@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,37 +21,44 @@ import util.enumeration.EmployeeAccessRight;
  * @author twp10
  */
 @Entity
-public class EmployeeEntity extends Client implements Serializable {
+public class EmployeeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long employeeId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(unique = true, nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private EmployeeAccessRight accessRight;
-    private Boolean isLoggedIn;
+    @Column(length = 8, unique = true, nullable = false)
+    private String phoneNumber;
+    @Column(unique = true)
+    private String email;
     
-    @OneToMany(mappedBy="client")
+    @OneToMany(mappedBy="employee")
     private List <ReservationEntity> reservation;
 
     public EmployeeEntity() {
-        this.reservation = new ArrayList<>();
-        this.isLoggedIn = false;
     }
 
-    public EmployeeEntity(Long employeeId, String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight) {
+    public EmployeeEntity(String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
         
         this();
-        
-        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = userName;
         this.password = password;
         this.accessRight = accessRight;
+        this.phoneNumber = phoneNum;
+        this.email = emailAddress;
+        this.reservation = new ArrayList<ReservationEntity>();
     }
     
     
@@ -173,17 +181,31 @@ public class EmployeeEntity extends Client implements Serializable {
     }
 
     /**
-     * @return the isLoggedIn
+     * @return the phoneNumber
      */
-    public Boolean getIsLoggedIn() {
-        return isLoggedIn;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
-     * @param isLoggedIn the isLoggedIn to set
+     * @param phoneNumber the phoneNumber to set
      */
-    public void setIsLoggedIn(Boolean isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }

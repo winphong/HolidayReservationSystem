@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,21 +20,29 @@ import javax.persistence.OneToMany;
  * @author twp10
  */
 @Entity
-public class GuestEntity extends Client implements Serializable {
+public class GuestEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long guestId;
+    @Column(nullable = false, unique = true)
+    private String identificationNumber;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(unique = true, nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(length = 8, unique = true, nullable = false)
     private Long phoneNumber;
+    @Column(unique = true)
     private String email;
     
-    @OneToMany(mappedBy="client")
-    private List <ReservationEntity> reservation;
+    @OneToMany(mappedBy="guest")
+    private List <OnlineReservationEntity> reservation;
 
     public GuestEntity() {
         this.reservation = new ArrayList<>();
@@ -173,15 +182,29 @@ public class GuestEntity extends Client implements Serializable {
     /**
      * @return the reservation
      */
-    public List <ReservationEntity> getReservation() {
+    public List <OnlineReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(List <ReservationEntity> reservation) {
+    public void setReservation(List <OnlineReservationEntity> reservation) {
         this.reservation = reservation;
+    }
+
+    /**
+     * @return the identificationNumber
+     */
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    /**
+     * @param identificationNumber the identificationNumber to set
+     */
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
     }
     
 }

@@ -5,10 +5,19 @@
  */
 package ejb.session.stateless;
 
+import entity.EmployeeEntity;
+import java.util.List;
+
 /**
  *
  * @author twp10
  */
 public interface EmployeeEntityControllerRemote {
+
+    public EmployeeEntity employeeLogin(String username, String password);
+
+    public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee);
+
+    public List<EmployeeEntity> viewAllEmployee();
     
 }

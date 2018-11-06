@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateless;
+package ejb.session.stateful;
 
-import entity.Inventory;
 import entity.ReservationEntity;
-import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -23,9 +20,9 @@ import javax.persistence.Query;
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
-@Stateless
+@Stateful
 @Local (ReservationEntityControllerLocal.class)
 @Remote (ReservationEntityControllerRemote.class)
 
@@ -42,14 +39,14 @@ public class ReservationEntityController implements ReservationEntityControllerR
     public void reserveRoom(ReservationEntity newReservation) {
         
         em.persist(newReservation);
-        
-        List<RoomTypeEntity> listOfRoomTypes = newReservation.getRoomType();
-        
-        for(RoomTypeEntity roomType : listOfRoomTypes) {
-            
-            roomType.getReservation().add(newReservation);
-            newReservation.getRoomType().add(roomType);
-        }
+//        
+//        List<RoomTypeEntity> listOfRoomTypes = newReservation.getRoomType();
+//        
+//        for(RoomTypeEntity roomType : listOfRoomTypes) {
+//            
+//            roomType.getReservation().add(newReservation);
+//            newReservation.getRoomType().add(roomType);
+//        }
         
         em.flush();
     }

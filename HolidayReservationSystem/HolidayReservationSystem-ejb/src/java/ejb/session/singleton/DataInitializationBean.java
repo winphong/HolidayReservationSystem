@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateless;
+package ejb.session.singleton;
 
-import entity.ReservationEntity;
+import javax.ejb.Singleton;
+import javax.ejb.LocalBean;
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
+@Singleton
+@LocalBean
+public class DataInitializationBean {
 
-public interface ReservationEntityControllerRemote {
-
-    public void reserveRoom(ReservationEntity newReservation);
     
 }

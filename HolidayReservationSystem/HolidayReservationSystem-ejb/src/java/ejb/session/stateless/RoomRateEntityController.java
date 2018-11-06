@@ -72,10 +72,6 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
             
             roomRateToUpdate.setName(roomRate.getName());
             roomRateToUpdate.setRoomType(roomRate.getRoomType());
-            roomRateToUpdate.setRatePerNight(roomRate.getRatePerNight());
-            roomRateToUpdate.setReservationType(roomRate.getReservationType());
-            roomRateToUpdate.setValidFrom(roomRate.getValidFrom());
-            roomRateToUpdate.setValidTill(roomRate.getValidTill());
             roomRateToUpdate.setIsDisabled(roomRate.getIsDisabled());
         }
     }

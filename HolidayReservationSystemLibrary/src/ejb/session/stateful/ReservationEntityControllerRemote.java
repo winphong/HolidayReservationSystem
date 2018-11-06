@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package ejb.session.stateful;
+
+import entity.ReservationEntity;
+
+
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
-public class Client {
-    
-    private Client client;
-    
-    // Need to do inheritance but idk how
-    
-    
+
+public interface ReservationEntityControllerRemote {
+    public void reserveRoom(ReservationEntity newReservation);
 }

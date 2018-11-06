@@ -41,16 +41,6 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
             
             employee = (EmployeeEntity) query.getSingleResult();
             
-            if (employee.getIsLoggedIn().equals(Boolean.TRUE)) {
-                
-                System.out.println("Employee is already logged in!");
-            
-            } else {
-            
-                employee.setIsLoggedIn(Boolean.TRUE);
-                System.out.println("Log in successful!");
-            }
-            
             return employee;
         
         } catch ( NoResultException | NonUniqueResultException ex ) {
@@ -59,19 +49,6 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
             
         }
         return null;
-    }
-    
-    public void employeeLogout() {
-        
-        if (employee.getIsLoggedIn().equals(Boolean.FALSE)) {
-            
-            System.out.println("Employee is not logged in!");
-        
-        } else {
-            
-            employee.setIsLoggedIn(Boolean.FALSE);
-            System.out.println("Succesfully logged out!");
-        }
     }
     
     public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee) {

@@ -13,8 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,13 +27,17 @@ public class RoomTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomTypeId;
-    @Column(unique=true)
+    @Column(unique = true, nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
     private BigDecimal size;
+    @Column(nullable = false)
     private String bed;
+    @Column(nullable = false)
     private Integer capacity;
     private String amenities;
+    @Column(unique = true, nullable = false)
     private Integer tier;
     private Boolean isDisabled;
     
@@ -43,13 +47,13 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy="roomType")
     private List<RoomRateEntity> roomRate;
     
-    @ManyToMany(mappedBy="roomType")
-    private List<ReservationEntity> reservation;
+    @OneToOne(mappedBy="roomType")
+    private ReservationLineItemEntity reservationItem;
 
     public RoomTypeEntity() {
     }
 
-    public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier, Boolean isDisabled) {
+    public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier) {
         this.name = name;
         this.description = description;
         this.size = size;
@@ -57,7 +61,7 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
         this.amenities = amenities;
         this.tier = tier;
-        this.isDisabled = isDisabled;
+        this.isDisabled = false;
     }
     
     
@@ -232,16 +236,17 @@ public class RoomTypeEntity implements Serializable {
     }
 
     /**
-     * @return the reservation
+     * @return the reservationItem
      */
-    public List<ReservationEntity> getReservation() {
-        return reservation;
+    public ReservationLineItemEntity getReservationItem() {
+        return reservationItem;
     }
 
     /**
-     * @param reservation the reservation to set
+     * @param reservationItem the reservationItem to set
      */
-    public void setReservation(List<ReservationEntity> reservation) {
-        this.reservation = reservation;
-    }   
+    public void setReservationItem(ReservationLineItemEntity reservationItem) {
+        this.reservationItem = reservationItem;
+    }
+ 
 }

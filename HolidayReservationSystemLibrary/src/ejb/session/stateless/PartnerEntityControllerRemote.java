@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.PartnerEntity;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +15,9 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface PartnerEntityControllerRemote {
+
+    public PartnerEntity createNewPartner(PartnerEntity newPartner);
+
+    public List<PartnerEntity> viewAllPartner();
     
 }
