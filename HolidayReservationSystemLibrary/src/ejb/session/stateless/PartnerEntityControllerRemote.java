@@ -7,17 +7,19 @@ package ejb.session.stateless;
 
 import entity.PartnerEntity;
 import java.util.List;
-import javax.ejb.Remote;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
  * @author twp10
  */
-@Remote
+
 public interface PartnerEntityControllerRemote {
 
     public PartnerEntity createNewPartner(PartnerEntity newPartner);
 
     public List<PartnerEntity> viewAllPartner();
+
+    public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException;
     
 }

@@ -5,13 +5,12 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Local;
+import entity.PartnerEntity;
 
 /**
  *
  * @author twp10
  */
-@Local
 public interface PartnerEntityControllerLocal {
-    
+    public PartnerEntity createNewPartner(PartnerEntity newPartner);
 }

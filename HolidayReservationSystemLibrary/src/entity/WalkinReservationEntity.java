@@ -41,8 +41,8 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
     public WalkinReservationEntity() {
     }
 
-    public WalkinReservationEntity(String guestFirstName, String guestLastName, Long guestPhoneNumber, String guestEmail, String guestIdentificationNumber, EmployeeEntity employee, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
-        super(startDate, endDate, isCheckedIn);
+    public WalkinReservationEntity(String guestFirstName, String guestLastName, Long guestPhoneNumber, String guestEmail, String guestIdentificationNumber, EmployeeEntity employee, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+        super(bookingDate, startDate, endDate, isCheckedIn);
         this.guestFirstName = guestFirstName;
         this.guestLastName = guestLastName;
         this.guestPhoneNumber = guestPhoneNumber;

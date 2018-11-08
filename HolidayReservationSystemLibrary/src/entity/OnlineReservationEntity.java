@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -22,12 +23,15 @@ public class OnlineReservationEntity extends ReservationEntity implements Serial
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @ManyToOne
+    private GuestEntity guest;
 
     public OnlineReservationEntity() {
     }
 
-    public OnlineReservationEntity(LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
-        super(startDate, endDate, isCheckedIn);
+    public OnlineReservationEntity(LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+        super(bookingDate, startDate, endDate, isCheckedIn);
     }
 
     public Long getId() {
@@ -61,6 +65,20 @@ public class OnlineReservationEntity extends ReservationEntity implements Serial
     @Override
     public String toString() {
         return "entity.OnlineReservationEntity[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the guest
+     */
+    public GuestEntity getGuest() {
+        return guest;
+    }
+
+    /**
+     * @param guest the guest to set
+     */
+    public void setGuest(GuestEntity guest) {
+        this.guest = guest;
     }
     
 }

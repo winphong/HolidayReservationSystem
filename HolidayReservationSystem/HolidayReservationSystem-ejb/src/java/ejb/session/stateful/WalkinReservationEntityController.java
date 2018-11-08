@@ -23,10 +23,10 @@ import javax.persistence.Query;
  * @author Asus
  */
 @Stateful
-@Local (ReservationEntityControllerLocal.class)
-@Remote (ReservationEntityControllerRemote.class)
+@Local (WalkinReservationEntityControllerLocal.class)
+@Remote (WalkinReservationEntityControllerRemote.class)
 
-public class ReservationEntityController implements ReservationEntityControllerRemote, ReservationEntityControllerLocal {
+public class WalkinReservationEntityController implements WalkinReservationEntityControllerRemote, WalkinReservationEntityControllerLocal {
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;

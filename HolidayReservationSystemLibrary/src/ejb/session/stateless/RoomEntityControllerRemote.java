@@ -25,7 +25,7 @@ public interface RoomEntityControllerRemote {
 
     public void deleteRoom(RoomEntity room);
 
-    public RoomEntity retrieveRoomByRoomNumber(RoomNumber roomNumber) throws RoomNotFoundException;
+    public RoomEntity retrieveRoomByRoomNumber(Long roomNumber) throws RoomNotFoundException;
 
     public List<RoomEntity> viewAllRoom();
     

@@ -5,7 +5,6 @@
  */
 package managementclient;
 
-import ejb.session.stateful.ReservationEntityControllerRemote;
 import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
@@ -13,6 +12,7 @@ import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import javax.ejb.EJB;
+import ejb.session.stateful.WalkinReservationEntityControllerRemote;
 
 /**
  *
@@ -24,7 +24,7 @@ public class Main {
     private static GuestEntityControllerRemote guestEntityControllerRemote;
 
     @EJB
-    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private static WalkinReservationEntityControllerRemote reservationEntityControllerRemote;
 
     @EJB
     private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;

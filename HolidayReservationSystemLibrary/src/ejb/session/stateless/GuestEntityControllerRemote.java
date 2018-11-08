@@ -5,10 +5,19 @@
  */
 package ejb.session.stateless;
 
+import entity.GuestEntity;
+import entity.OnlineReservationEntity;
+import java.util.List;
+import util.exception.InvalidLoginCredentialException;
+
 /**
  *
  * @author twp10
  */
 public interface GuestEntityControllerRemote {
+
+    public GuestEntity guestLogin(String username, String password) throws InvalidLoginCredentialException;
+
+    public GuestEntity registerGuest(GuestEntity newGuest);
     
 }
