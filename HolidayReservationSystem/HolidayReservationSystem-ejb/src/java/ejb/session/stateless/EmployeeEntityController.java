@@ -15,56 +15,57 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
  * @author twp10
  */
 @Stateless
-@Local (EmployeeEntityControllerLocal.class)
-@Remote (EmployeeEntityControllerRemote.class)
+@Local(EmployeeEntityControllerLocal.class)
+@Remote(EmployeeEntityControllerRemote.class)
 
 public class EmployeeEntityController implements EmployeeEntityControllerRemote, EmployeeEntityControllerLocal {
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
-    
-    private EmployeeEntity employee;    
-    
-    public EmployeeEntity employeeLogin(String username, String password) {
-        
-        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername AND e.password = :inPassword");
-        query.setParameter("inUsername", username);
-        query.setParameter("inPassword", password);
-        
+
+    private EmployeeEntity employee;
+
+    public EmployeeEntity employeeLogin(String username, String password) throws InvalidLoginCredentialException{
+
         try {
-            
-            employee = (EmployeeEntity) query.getSingleResult();
-            
-            return employee;
-        
-        } catch ( NoResultException | NonUniqueResultException ex ) {
-            
-            System.out.println("Invalid credential!");
-            
+            Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
+
+            query.setParameter("inUsername", username);
+
+            if (employee.getPassword().equals(password)) {
+
+                employee = (EmployeeEntity) query.getSingleResult();
+                return employee;
+
+            } else {
+               throw new InvalidLoginCredentialException("Invalid password!");
+            }
+        } catch (InvalidLoginCredentialException ex) {
+            System.out.println("Invalid user!");
         }
         return null;
     }
-    
+
     public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee) {
-        
+
         em.persist(newEmployee);
         em.flush();
-        
+
         return newEmployee;
     }
-    
+
     public List<EmployeeEntity> viewAllEmployee() {
-        
+
         Query query = em.createQuery("SELECT e FROM EmployeeEntity e");
-        
-        return (List<EmployeeEntity>) query.getResultList(); 
+
+        return (List<EmployeeEntity>) query.getResultList();
     }
-    
-    
+
 }

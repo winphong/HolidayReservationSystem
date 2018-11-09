@@ -37,7 +37,7 @@ public class GuestEntity implements Serializable {
     @Column(nullable = false)
     private String password;
     @Column(length = 8, unique = true, nullable = false)
-    private Long phoneNumber;
+    private String phoneNumber;
     @Column(unique = true)
     private String email;
     
@@ -48,7 +48,7 @@ public class GuestEntity implements Serializable {
         this.reservation = new ArrayList<>();
     }
 
-    public GuestEntity(String firstName, String lastName, String userName, String password, Long phoneNumber, String email) {
+    public GuestEntity(String firstName, String lastName, String userName, String password, String phoneNumber, String email) {
         
         this();
         
@@ -154,14 +154,14 @@ public class GuestEntity implements Serializable {
     /**
      * @return the phoneNumber
      */
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
     /**
      * @param phoneNumber the phoneNumber to set
      */
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

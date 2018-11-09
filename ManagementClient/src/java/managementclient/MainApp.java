@@ -5,7 +5,6 @@
  */
 package managementclient;
 
-import ejb.session.stateful.ReservationEntityControllerRemote;
 import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
@@ -17,6 +16,7 @@ import java.util.Scanner;
 import util.enumeration.EmployeeAccessRight;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
+import ejb.session.stateful.WalkinReservationEntityControllerRemote;
 
 /**
  *
@@ -25,7 +25,7 @@ import util.exception.InvalidLoginCredentialException;
 public class MainApp {
 
     private GuestEntityControllerRemote guestEntityControllerRemote;
-    private ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private WalkinReservationEntityControllerRemote reservationEntityControllerRemote;
     private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
     private RoomEntityControllerRemote roomEntityControllerRemote;
     private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
@@ -41,7 +41,7 @@ public class MainApp {
     public MainApp() {
     }
 
-    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
+    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;

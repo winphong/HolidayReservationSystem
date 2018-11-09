@@ -58,8 +58,10 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     public void updateRoom(RoomEntity room) {
 
         RoomEntity roomToUpdate;
+        RoomNumber roomNumber = room.getRoomNumber();
+        Long roomId = Long.valueOf(roomNumber.getFloor()+""+roomNumber.getNumber());
         try {
-            roomToUpdate = retrieveRoomByRoomNumber(room.getRoomNumber());
+            roomToUpdate = retrieveRoomByRoomNumber(roomId);
             roomToUpdate.setGuest(room.getGuest());
             roomToUpdate.setRoomStatus(room.getRoomStatus());
             roomToUpdate.setRoomType(room.getRoomType());
@@ -95,7 +97,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         em.flush();
     }
 
-    public RoomEntity retrieveRoomByRoomNumber(RoomNumber roomNumber) throws RoomNotFoundException {
+    public RoomEntity retrieveRoomByRoomNumber(Long roomNumber) throws RoomNotFoundException {
 
         Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomNumber=:inRoomNumber");
         query.setParameter("inRoomNumber", roomNumber);

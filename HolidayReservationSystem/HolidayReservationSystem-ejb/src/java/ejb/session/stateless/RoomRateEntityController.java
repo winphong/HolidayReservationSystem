@@ -16,14 +16,15 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.RoomRateNotFoundException;
 
 /**
  *
  * @author twp10
  */
 @Stateless
-@Local (RoomRateEntityControllerLocal.class)
-@Remote (RoomRateEntityControllerRemote.class)
+@Local(RoomRateEntityControllerLocal.class)
+@Remote(RoomRateEntityControllerRemote.class)
 
 public class RoomRateEntityController implements RoomRateEntityControllerRemote, RoomRateEntityControllerLocal {
 
@@ -32,77 +33,74 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    
-    
     // Client ask for roomType and roomRate
     public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate, RoomTypeEntity roomType) {
-        
+
         em.persist(newRoomRate);
-        
+
         roomType.getRoomRate().add(newRoomRate);
         newRoomRate.setRoomType(roomType);
-        
+
         em.flush();
-        
+
         return newRoomRate;
     }
-    
-    public RoomRateEntity retrieveRoomRateByName(String name) {
-        
+
+    public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException {
+
         Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name=:inName");
         query.setParameter("inName", name);
-        
+
         try {
-            
+
             return (RoomRateEntity) query.getSingleResult();
-            
+
         } catch (NoResultException | NonUniqueResultException ex) {
-            
-            System.out.println("Room rate " + name + " does not exist!");
+
+            throw new RoomRateNotFoundException("Room rate " + name + " does not exist!");
         }
-        
-        return null;
     }
-    
+
     public void updateRoomRate(RoomRateEntity roomRate) {
-        
-        if ( roomRate != null ) {
-            
-            RoomRateEntity roomRateToUpdate = retrieveRoomRateByName(roomRate.getName());
-            
-            roomRateToUpdate.setName(roomRate.getName());
-            roomRateToUpdate.setRoomType(roomRate.getRoomType());
-            roomRateToUpdate.setIsDisabled(roomRate.getIsDisabled());
+
+        if (roomRate != null) {
+
+            try {
+                RoomRateEntity roomRateToUpdate = retrieveRoomRateByName(roomRate.getName());
+                roomRateToUpdate.setName(roomRate.getName());
+                roomRateToUpdate.setRoomType(roomRate.getRoomType());
+                roomRateToUpdate.setIsDisabled(roomRate.getIsDisabled());
+            }
+            catch (RoomRateNotFoundException ex){
+                System.out.println("Room Rate " + roomRate.getRoomRateId() + " does not exist!");
+            }
         }
     }
-    
+
     // If roomRate.getRoomType.getReservation != null, disable
     public void disableRoomRate(RoomRateEntity roomRate) {
-        
+
         roomRate.setIsDisabled(Boolean.TRUE);
     }
-    
+
     // If roomRate.getRoomType.getReservation == null, delete
     public void deleteRoomRate(RoomRateEntity roomRate) {
-        
+
         RoomTypeEntity roomType = roomRate.getRoomType();
-        
+
         roomType.getRoomRate().remove(roomRate);
         roomRate.setRoomType(null);
-        
+
         em.remove(roomRate);
         em.flush();
     }
-    
-    public void viewAllRoomRate() {
-        
+
+    public List<RoomRateEntity> viewAllRoomRate() {
+
         Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr");
-        
+
         List<RoomRateEntity> roomRates = (List<RoomRateEntity>) query.getResultList();
-        
-        for(RoomRateEntity roomRate: roomRates) {
-            
-            System.out.println("Room rate: " + roomRate.getName());
-        }
+
+        return roomRates;
     }
 }

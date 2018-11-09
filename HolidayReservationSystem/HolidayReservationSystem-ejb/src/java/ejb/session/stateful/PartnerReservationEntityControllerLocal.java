@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateless;
-
-import entity.EmployeeEntity;
+package ejb.session.stateful;
 
 /**
  *
- * @author twp10
+ * @author Asus
  */
-public interface EmployeeEntityControllerLocal {
+
+public interface PartnerReservationEntityControllerLocal {
     
-     public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee);
 }

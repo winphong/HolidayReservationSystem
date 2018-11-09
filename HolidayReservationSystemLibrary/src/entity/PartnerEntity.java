@@ -33,7 +33,7 @@ public class PartnerEntity implements Serializable {
     @Column(nullable = false)
     private String password;
     @Column(length = 8, nullable = false, unique = true)
-    private Long phoneNumber;
+    private String phoneNumber;
     @Column(length = 10, nullable = false, unique = true)
     private String companyRegistrationId;
     @Column(unique = true)
@@ -47,7 +47,7 @@ public class PartnerEntity implements Serializable {
     public PartnerEntity() {
     }
 
-    public PartnerEntity(String companyName, String userName, String password, Long phoneNumber, String companyRegistrationId, String email) {
+    public PartnerEntity(String companyName, String userName, String password, String phoneNumber, String companyRegistrationId, String email) {
         
         this();
         this.companyName = companyName;
@@ -125,14 +125,14 @@ public class PartnerEntity implements Serializable {
     /**
      * @return the phoneNumber
      */
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
     /**
      * @param phoneNumber the phoneNumber to set
      */
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

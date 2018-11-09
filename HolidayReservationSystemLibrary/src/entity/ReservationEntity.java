@@ -35,6 +35,8 @@ public abstract class ReservationEntity implements Serializable {
     private LocalDate startDate;
     @Column (nullable = false)
     private LocalDate endDate;
+    @Column (nullable = false)
+    private LocalDate bookingDate;
     private Boolean isCheckedIn = false;
     private Boolean isAllocated = false;
     @Column (scale = 2)
@@ -47,9 +49,10 @@ public abstract class ReservationEntity implements Serializable {
         this.reservationLineItemEntities = new ArrayList<ReservationLineItemEntity>();
     }
 
-    public ReservationEntity(LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+    public ReservationEntity(LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
         
         this();
+        this.bookingDate = LocalDate.now();
         this.startDate = startDate;
         this.endDate = endDate;
         this.isCheckedIn = isCheckedIn;
@@ -171,6 +174,20 @@ public abstract class ReservationEntity implements Serializable {
      */
     public void setIsAllocated(Boolean isAllocated) {
         this.isAllocated = isAllocated;
+    }
+
+    /**
+     * @return the bookingDate
+     */
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    }
+
+    /**
+     * @param bookingDate the bookingDate to set
+     */
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
     }
     
 }

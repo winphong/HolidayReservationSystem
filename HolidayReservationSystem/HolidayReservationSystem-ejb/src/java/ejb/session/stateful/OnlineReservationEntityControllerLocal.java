@@ -5,15 +5,10 @@
  */
 package ejb.session.stateful;
 
-import entity.ReservationEntity;
-
-
-
 /**
  *
  * @author Asus
  */
-
-public interface ReservationEntityControllerRemote {
-    public void reserveRoom(ReservationEntity newReservation);
+public interface OnlineReservationEntityControllerLocal {
+    
 }

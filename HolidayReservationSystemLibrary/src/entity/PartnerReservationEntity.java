@@ -32,8 +32,8 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
     public PartnerReservationEntity() {
     }
 
-    public PartnerReservationEntity(CustomerEntity customer, PartnerEntity partner, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
-        super(startDate, endDate, isCheckedIn);
+    public PartnerReservationEntity(CustomerEntity customer, PartnerEntity partner, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+        super(bookingDate, startDate, endDate, isCheckedIn);
         this.customer = customer;
         this.partner = partner;
     }

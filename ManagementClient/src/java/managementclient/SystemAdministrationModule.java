@@ -137,10 +137,8 @@ public class SystemAdministrationModule {
     private void doCreateNewPartner (){
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: System Administration :: Create New Partner ***\n");
-        System.out.print("Enter First Name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Enter Last Name: ");
-        String lastName = scanner.nextLine();
+        System.out.print("Enter Company Name: ");
+        String companyName = scanner.nextLine();
         System.out.print("Enter Registration Id: ");
         String registrationId = scanner.nextLine();
         System.out.print("Enter User Name: ");
@@ -148,11 +146,11 @@ public class SystemAdministrationModule {
         System.out.print("Enter Password: ");
         String password = scanner.nextLine();
         System.out.print("Enter Phone Number: ");
-        Long phoneNumber = scanner.nextLong();
+        String phoneNumber = scanner.nextLine();
         System.out.print("Enter Email Address: ");
         String email = scanner.nextLine();
         
-        PartnerEntity newPartner = new PartnerEntity(firstName,lastName,userName,password,phoneNumber,registrationId,email);
+        PartnerEntity newPartner = new PartnerEntity(companyName,userName,password,phoneNumber,registrationId,email);
         partnerEntityControllerRemote.createNewPartner(newPartner);
         System.out.println("New Partner with Id " + newPartner.getPartnerId() + " created.");
     }
@@ -161,13 +159,14 @@ public class SystemAdministrationModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Employees ***\n");
         List<PartnerEntity> partnerEntities = partnerEntityControllerRemote.viewAllPartner();
-        System.out.printf("%12s%20s%20s%20s%20s%20s%10s%20s\n", "Employee ID", "First Name", "Last Name", "Registration Id", "Username", "Password", "Phone Number", "Email Address");
+        System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n", "Partner ID", "Company Name", "Registration Id", "Username", "Password", "Phone Number", "Email Address");
         
         for (PartnerEntity partnerEntity: partnerEntities)
         {
-            System.out.printf("%12s%20s%20s%20s%20s%20s%10s%20s\n",partnerEntity.getPartnerId(),partnerEntity.getFirstName(),partnerEntity.getLastName(),partnerEntity.getCompanyRegistrationId(),partnerEntity.getUserName(),partnerEntity.getPassword(),partnerEntity.getPhoneNumber(),partnerEntity.getEmail());
+            System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n",partnerEntity.getPartnerId(),partnerEntity.getCompanyName(),partnerEntity.getCompanyRegistrationId(),partnerEntity.getUserName(),partnerEntity.getPassword(),partnerEntity.getPhoneNumber(),partnerEntity.getEmail());
         }
         System.out.print("Press any key to continue...: ");
         scanner.nextLine();
     }
 }
+ 

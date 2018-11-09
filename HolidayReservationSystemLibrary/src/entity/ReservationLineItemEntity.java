@@ -139,5 +139,19 @@ public class ReservationLineItemEntity implements Serializable {
     public void setRoomRatePerNight(List<RoomRatePerNightEntity> roomRatePerNight) {
         this.roomRatePerNight = roomRatePerNight;
     }
+
+    /**
+     * @return the numberOfRooms
+     */
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    /**
+     * @param numberOfRooms the numberOfRooms to set
+     */
+    public void setNumberOfRooms(Integer numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
     
 }

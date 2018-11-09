@@ -5,7 +5,6 @@
  */
 package ejb.session.stateless;
 
-import ejb.session.stateful.ReservationEntityControllerLocal;
 import entity.Inventory;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
@@ -20,6 +19,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import ejb.session.stateful.WalkinReservationEntityControllerLocal;
 
 /**
  *
@@ -35,7 +35,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     private EntityManager em;
     
     @EJB 
-    private ReservationEntityControllerLocal reservationEntityControllerLocal;
+    private WalkinReservationEntityControllerLocal reservationEntityControllerLocal;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
