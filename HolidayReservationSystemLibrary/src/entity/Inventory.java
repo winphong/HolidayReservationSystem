@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -29,12 +30,12 @@ public class Inventory implements Serializable {
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventoryId;
     private LocalDate date;
-    private List<RoomTypeEntity> roomTypes;
+    private List<RoomTypeEntity> roomTypes = null;
     private Integer totalNumOfRoomAvailable;
-    private List<List<RoomEntity>> availableRoom;
+    private List<List<RoomEntity>> availableRoom = null;
 
     
     public Inventory() {
@@ -88,10 +89,12 @@ public class Inventory implements Serializable {
         query.setParameter("Boolean", Boolean.FALSE);
         
         // Get a list of roomTypes that is not disabled
-        roomTypes = query.getResultList();
-        
+        roomTypes = (List<RoomTypeEntity>) query.getResultList();
+        // Reset availableRoom to a new ArrayList first before adding to the list again
+        availableRoom = new ArrayList<>();
+        // 
         totalNumOfRoomAvailable = 0;
-
+        
         // For each room type
         for(RoomTypeEntity roomType : roomTypes) {
             
@@ -101,13 +104,14 @@ public class Inventory implements Serializable {
             // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
             for(RoomEntity room : rooms) {
                 
-                if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus() == RoomStatus.VACANT ) {
+                if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus().equals(RoomStatus.VACANT) ) {
                     roomForEachRoomType.add(room);
                     totalNumOfRoomAvailable++;
                 }   
             }
             // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
-            getAvailableRoom().add(roomForEachRoomType);        
+            getAvailableRoom().add(roomForEachRoomType);
+            // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
         }
     }
 

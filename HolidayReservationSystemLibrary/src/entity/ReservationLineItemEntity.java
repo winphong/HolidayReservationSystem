@@ -7,16 +7,12 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,53 +23,56 @@ public class ReservationLineItemEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Integer numberOfRooms = 0;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reservationLineItemId;
+    private Integer numOfRoomBooked = 0;
     @Column(scale=2)
     private BigDecimal totalAmount;
+    private RoomTypeEntity roomType;
     
+    /*
     @OneToOne
     private RoomTypeEntity roomType;
-    @ManyToOne
-    private ReservationEntity reservation;
     @OneToMany (mappedBy = "reservationlineitem")
     private List<RoomRatePerNightEntity> roomRatePerNight;
-
+    */
+    
+    @ManyToOne
+    private ReservationEntity reservation;
+    
     public ReservationLineItemEntity() {
     }
 
-    public ReservationLineItemEntity(BigDecimal totalAmount, RoomTypeEntity roomType, ReservationEntity reservation) {
+    public ReservationLineItemEntity(BigDecimal totalAmount, Integer numOfRoom, RoomTypeEntity roomType) {
         this();
+        this.numOfRoomBooked = numOfRoom;
         this.totalAmount = totalAmount;
         this.roomType = roomType;
-        this.reservation = reservation;
-        this.roomRatePerNight = new ArrayList<RoomRatePerNightEntity>();
     }
     
-    public Long getId() {
-        return id;
+    public Long getReservationLineItemId() {
+        return reservationLineItemId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setReservationLineItemId(Long reservationLineItemId) {
+        this.reservationLineItemId = reservationLineItemId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (reservationLineItemId != null ? reservationLineItemId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the reservationLineItemId fields are not set
         if (!(object instanceof ReservationLineItemEntity)) {
             return false;
         }
         ReservationLineItemEntity other = (ReservationLineItemEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.reservationLineItemId == null && other.reservationLineItemId != null) || (this.reservationLineItemId != null && !this.reservationLineItemId.equals(other.reservationLineItemId))) {
             return false;
         }
         return true;
@@ -81,7 +80,7 @@ public class ReservationLineItemEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ReservationLineItemEntity[ id=" + id + " ]";
+        return "entity.ReservationLineItemEntity[ id=" + reservationLineItemId + " ]";
     }
 
     /**
@@ -99,20 +98,6 @@ public class ReservationLineItemEntity implements Serializable {
     }
 
     /**
-     * @return the roomType
-     */
-    public RoomTypeEntity getRoomType() {
-        return roomType;
-    }
-
-    /**
-     * @param roomType the roomType to set
-     */
-    public void setRoomType(RoomTypeEntity roomType) {
-        this.roomType = roomType;
-    }
-
-    /**
      * @return the reservation
      */
     public ReservationEntity getReservation() {
@@ -127,31 +112,31 @@ public class ReservationLineItemEntity implements Serializable {
     }
 
     /**
-     * @return the roomRatePerNight
+     * @return the numOfRoomBooked
      */
-    public List<RoomRatePerNightEntity> getRoomRatePerNight() {
-        return roomRatePerNight;
+    public Integer getNumOfRoomBooked() {
+        return numOfRoomBooked;
     }
 
     /**
-     * @param roomRatePerNight the roomRatePerNight to set
+     * @param numOfRoomBooked the numOfRoomBooked to set
      */
-    public void setRoomRatePerNight(List<RoomRatePerNightEntity> roomRatePerNight) {
-        this.roomRatePerNight = roomRatePerNight;
+    public void setNumOfRoomBooked(Integer numOfRoomBooked) {
+        this.numOfRoomBooked = numOfRoomBooked;
     }
 
     /**
-     * @return the numberOfRooms
+     * @return the roomType
      */
-    public Integer getNumberOfRooms() {
-        return numberOfRooms;
+    public RoomTypeEntity getRoomType() {
+        return roomType;
     }
 
     /**
-     * @param numberOfRooms the numberOfRooms to set
+     * @param roomType the roomType to set
      */
-    public void setNumberOfRooms(Integer numberOfRooms) {
-        this.numberOfRooms = numberOfRooms;
+    public void setRoomType(RoomTypeEntity roomType) {
+        this.roomType = roomType;
     }
     
 }

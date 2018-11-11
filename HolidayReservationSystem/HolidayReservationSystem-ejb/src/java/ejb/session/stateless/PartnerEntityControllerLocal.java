@@ -12,5 +12,10 @@ import entity.PartnerEntity;
  * @author twp10
  */
 public interface PartnerEntityControllerLocal {
+    
     public PartnerEntity createNewPartner(PartnerEntity newPartner);
+
+    public PartnerEntity retrievePartnerByUsername(String username);
+
+    public PartnerEntity retrievePartnerById(Long partnerId);
 }

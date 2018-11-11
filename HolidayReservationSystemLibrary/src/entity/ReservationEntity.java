@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 /**
@@ -29,8 +30,8 @@ public abstract class ReservationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reservationId;
     @Column (nullable = false)
     private LocalDate startDate;
     @Column (nullable = false)
@@ -38,15 +39,18 @@ public abstract class ReservationEntity implements Serializable {
     @Column (nullable = false)
     private LocalDate bookingDate;
     private Boolean isCheckedIn = false;
-    private Boolean isAllocated = false;
+    //private Boolean isAllocated = false;
     @Column (scale = 2)
     private BigDecimal totalAmount;
     
     @OneToMany(mappedBy = "reservation")
     private List<ReservationLineItemEntity> reservationLineItemEntities;
 
+    @OneToMany(mappedBy = "currentReservation")
+    private List<RoomEntity> rooms;
+
     public ReservationEntity() {
-        this.reservationLineItemEntities = new ArrayList<ReservationLineItemEntity>();
+        this.reservationLineItemEntities = new ArrayList<>();
     }
 
     public ReservationEntity(LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
@@ -59,18 +63,18 @@ public abstract class ReservationEntity implements Serializable {
     }
     
     
-    public Long getId() {
-        return id;
+    public Long getReservationId() {
+        return reservationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setReservationId(Long id) {
+        this.reservationId = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (reservationId != null ? reservationId.hashCode() : 0);
         return hash;
     }
 
@@ -81,7 +85,7 @@ public abstract class ReservationEntity implements Serializable {
             return false;
         }
         ReservationEntity other = (ReservationEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.reservationId == null && other.reservationId != null) || (this.reservationId != null && !this.reservationId.equals(other.reservationId))) {
             return false;
         }
         return true;
@@ -89,7 +93,7 @@ public abstract class ReservationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reservation[ id=" + id + " ]";
+        return "entity.Reservation[ id=" + reservationId + " ]";
     }
 
     /**
@@ -163,20 +167,6 @@ public abstract class ReservationEntity implements Serializable {
     }
 
     /**
-     * @return the isAllocated
-     */
-    public Boolean getIsAllocated() {
-        return isAllocated;
-    }
-
-    /**
-     * @param isAllocated the isAllocated to set
-     */
-    public void setIsAllocated(Boolean isAllocated) {
-        this.isAllocated = isAllocated;
-    }
-
-    /**
      * @return the bookingDate
      */
     public LocalDate getBookingDate() {
@@ -188,6 +178,20 @@ public abstract class ReservationEntity implements Serializable {
      */
     public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
+    }
+
+    /**
+     * @return the rooms
+     */
+    public List<RoomEntity> getRooms() {
+        return rooms;
+    }
+
+    /**
+     * @param rooms the rooms to set
+     */
+    public void setRooms(List<RoomEntity> rooms) {
+        this.rooms = rooms;
     }
     
 }

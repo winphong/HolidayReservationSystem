@@ -14,4 +14,8 @@ import entity.EmployeeEntity;
 public interface EmployeeEntityControllerLocal {
     
      public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee);
+
+    public EmployeeEntity retrieveEmployeeById(Long employeeId);
+
+    public EmployeeEntity retrieveEmployeeByUsername(String username);
 }

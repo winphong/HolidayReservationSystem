@@ -5,10 +5,14 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomRateEntity;
+import util.exception.RoomRateNotFoundException;
+
 /**
  *
  * @author twp10
  */
 public interface RoomRateEntityControllerLocal {
     
+     public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException;
 }

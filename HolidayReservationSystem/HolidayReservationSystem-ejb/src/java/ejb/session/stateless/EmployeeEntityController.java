@@ -53,6 +53,7 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
         return null;
     }
 
+    @Override
     public EmployeeEntity createNewEmployee(EmployeeEntity newEmployee) {
 
         em.persist(newEmployee);
@@ -61,11 +62,41 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
         return newEmployee;
     }
 
+    @Override
     public List<EmployeeEntity> viewAllEmployee() {
 
         Query query = em.createQuery("SELECT e FROM EmployeeEntity e");
 
         return (List<EmployeeEntity>) query.getResultList();
     }
-
+    
+    public EmployeeEntity retrieveEmployeeByUsername(String username) {
+        
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
+        query.setParameter("inUsername", username);
+        
+        try {
+            
+            return (EmployeeEntity) query.getSingleResult();
+            
+        } catch ( NoResultException | NonUniqueResultException ex ) {
+            
+            System.err.println(ex.getMessage());
+        }
+        
+        return null;
+    }
+    
+    public EmployeeEntity retrieveEmployeeById(Long employeeId) {
+        
+        try {
+            
+            return em.find(EmployeeEntity.class, employeeId);
+        
+        } catch (IllegalArgumentException ex) {
+            
+            throw new IllegalArgumentException("No id");
+            
+        }
+    }
 }

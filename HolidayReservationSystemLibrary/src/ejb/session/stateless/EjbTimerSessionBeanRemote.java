@@ -5,16 +5,13 @@
  */
 package ejb.session.stateless;
 
-import entity.RoomTypeEntity;
-import java.time.LocalDate;
-import java.util.List;
+import javax.ejb.Remote;
 
 /**
  *
  * @author twp10
  */
-public interface InventoryControllerRemote {
-
-    public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired);
+@Remote
+public interface EjbTimerSessionBeanRemote {
     
 }

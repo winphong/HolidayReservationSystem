@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
@@ -21,47 +20,55 @@ import javax.persistence.ManyToOne;
 public class PartnerReservationEntity extends ReservationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long partnerReservationId;
     
-    @ManyToOne
-    private CustomerEntity customer;
+    private String customerFirstName;
+    private String customerLastName;
+    private String customerEmail;
+    private String customerContactNumber;
+    
+//    @ManyToOne
+//    private CustomerEntity customer;
     @ManyToOne
     private PartnerEntity partner;
 
     public PartnerReservationEntity() {
     }
 
-    public PartnerReservationEntity(CustomerEntity customer, PartnerEntity partner, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+    public PartnerReservationEntity(PartnerEntity partner, String customerFirstName, String customerLastName, String customerEmail, String customerContactNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
         super(bookingDate, startDate, endDate, isCheckedIn);
-        this.customer = customer;
         this.partner = partner;
+        this.customerFirstName = customerFirstName;
+        this.customerLastName = customerLastName;
+        this.customerEmail = customerEmail;
+        this.customerContactNumber = customerContactNumber;
     }
-
     
-    public Long getId() {
-        return id;
+
+    public Long getPartnerReservationId() {
+        return partnerReservationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPartnerReservationId(Long partnerReservationId) {
+        this.partnerReservationId = partnerReservationId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (partnerReservationId != null ? partnerReservationId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the partnerReservationId fields are not set
         if (!(object instanceof PartnerReservationEntity)) {
             return false;
         }
         PartnerReservationEntity other = (PartnerReservationEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.partnerReservationId == null && other.partnerReservationId != null) || (this.partnerReservationId != null && !this.partnerReservationId.equals(other.partnerReservationId))) {
             return false;
         }
         return true;
@@ -69,21 +76,7 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
 
     @Override
     public String toString() {
-        return "entity.PartnerReservationEntity[ id=" + id + " ]";
-    }
-
-    /**
-     * @return the customer
-     */
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    /**
-     * @param customer the customer to set
-     */
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
+        return "entity.PartnerReservationEntity[ id=" + partnerReservationId + " ]";
     }
 
     /**
@@ -98,6 +91,62 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
      */
     public void setPartner(PartnerEntity partner) {
         this.partner = partner;
+    }
+
+    /**
+     * @return the customerFirstName
+     */
+    public String getCustomerFirstName() {
+        return customerFirstName;
+    }
+
+    /**
+     * @param customerFirstName the customerFirstName to set
+     */
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
+    }
+
+    /**
+     * @return the customerLastName
+     */
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    /**
+     * @param customerLastName the customerLastName to set
+     */
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
+
+    /**
+     * @return the customerEmail
+     */
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    /**
+     * @param customerEmail the customerEmail to set
+     */
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    /**
+     * @return the customerContactNumber
+     */
+    public String getCustomerContactNumber() {
+        return customerContactNumber;
+    }
+
+    /**
+     * @param customerContactNumber the customerContactNumber to set
+     */
+    public void setCustomerContactNumber(String customerContactNumber) {
+        this.customerContactNumber = customerContactNumber;
     }
 
     

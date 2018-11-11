@@ -9,7 +9,6 @@ import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
-import entity.PartnerEntity_;
 import java.util.List;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRight;

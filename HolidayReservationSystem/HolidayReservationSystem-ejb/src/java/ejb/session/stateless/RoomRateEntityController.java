@@ -46,6 +46,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
         return newRoomRate;
     }
 
+    @Override
     public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException {
 
         Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name=:inName");

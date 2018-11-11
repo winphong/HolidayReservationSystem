@@ -5,16 +5,15 @@
  */
 package ejb.session.stateless;
 
-import entity.GuestEntity;
+import entity.ReservationEntity;
+import javax.ejb.Remote;
 
 /**
  *
  * @author twp10
  */
-public interface GuestEntityControllerLocal {
-
-    public GuestEntity retrieveGuestByUsername(String username);
-
-    public GuestEntity retrieveGuestById(Long guestId);
-    
+@Remote
+public interface ReservationEntityControllerRemote {
+ 
+    public ReservationEntity retrieveReservationById(Long reservationId);
 }

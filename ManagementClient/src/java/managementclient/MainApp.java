@@ -17,6 +17,7 @@ import util.enumeration.EmployeeAccessRight;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import util.exception.RoomTypeNotFoundException;
 
 /**
  *
@@ -110,7 +111,7 @@ public class MainApp {
         }
     }
 
-    private void menuMain() {
+    private void menuMain() throws RoomTypeNotFoundException, Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 

@@ -37,8 +37,8 @@ public class Main {
     @EJB
     private static GuestEntityControllerRemote guestEntityControllerRemote;
 
-    public static void main(String[] args) {
-        MainApp mainApp = new MainApp();
+    public static void main(String[] args) throws Exception {
+        GuestMainApp mainApp = new GuestMainApp(roomRateEntityControllerRemote, roomEntityControllerRemote, roomTypeEntityControllerRemote, onlineReservationEntityControllerRemote, inventoryControllerRemote, guestEntityControllerRemote);
         mainApp.runApp();
     }
     

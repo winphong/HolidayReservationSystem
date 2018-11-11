@@ -20,6 +20,8 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import ejb.session.stateful.WalkinReservationEntityControllerLocal;
+import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 
 /**
  *
@@ -84,13 +86,29 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         
          // Get using getAvailableRoom will return room that is not disabled
         // If use getRoomTypes.get(index).getRoom() will return all room, including those that has been disabled
-        List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom();
+        List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom(); // availableRoom is not disable and is vacant
         
         Integer roomTypeIndex = 0;
         Boolean availableThroughout;
         Integer countOfRoomAvailableThroughout;
-        Integer numOfReservationThatOverlapWithBooking = reservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate).size();
-
+        // One reservation might have more than one room
+        List<ReservationEntity> reservationList = reservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate);
+        List<ReservationLineItemEntity> reservationLineItems;
+        
+        Integer numOfReservationThatOverlapWithBooking = 0;
+        
+        // Check through all reservation
+        for (ReservationEntity reservation : reservationList) {
+            
+            reservationLineItems = reservation.getReservationLineItemEntities();
+            
+            // For all reservation, check through the reservationLineItem
+            for(ReservationLineItemEntity reservationLineItem : reservationLineItems ) {
+                
+                numOfReservationThatOverlapWithBooking += reservationLineItem.getNumOfRoomBooked();
+            }
+        }
+         
         // Loop through each room type
         for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
             
@@ -101,19 +119,20 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 
                 availableThroughout = Boolean.TRUE;
                 
-                // Loop through the booking date
+                // Loop through the booking date starting from the startDate to the endDate
+                // From the highlighted line, the function already ensure all the room retrieved will be available for startDate
+                // Therefore, the search loop can start a day after the startDate
                 for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate) ; date.plusDays(1)) {
                     
-                    if (roomExist(room, date, roomTypeIndex)) {
-                        continue;
-                    } else {
+                    // If the particular room is not available for the entire duration, set availbleThroughout to be false
+                    if (!roomExist(room, date, roomTypeIndex)) {
                         availableThroughout = Boolean.FALSE;
                         break;
                     }
                 }
                 
                 // As long there is enough room that is available throughout to fulfill the numOfRoomRequired
-                // Need to check with reservation also, if reservation 
+                // Need to check with reservation also, if reservation exist
                 if ( availableThroughout.equals(Boolean.TRUE) ) {
                     
                     countOfRoomAvailableThroughout++; 
@@ -131,6 +150,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     
     // Helper method
     // roomTypeIndex - indicate which roomType we are searching from
+    @Override
     public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex) {
         
         Inventory inventory = getInventoryByDate(date);

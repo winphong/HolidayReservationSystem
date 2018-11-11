@@ -45,18 +45,17 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     }
 
     @Override
-    public RoomTypeEntity retrieveRoomTypeById(Long id) throws RoomTypeNotFoundException {
-
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.roomTypeId=:inId");
-        query.setParameter("inId", id);
-
-        try {
-
-            return (RoomTypeEntity) query.getSingleResult();
-
-        } catch (NoResultException | NonUniqueResultException ex) {
-
-            throw new RoomTypeNotFoundException("Room type of Id" + id + " does not exist!");
+    public RoomTypeEntity retrieveRoomTypeById(Long roomTypeId) throws RoomTypeNotFoundException {
+        
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
+        
+        if (roomType != null) {
+            
+            return roomType;
+        
+        } else {
+        
+            throw new RoomTypeNotFoundException("Room type of Id" + roomTypeId + " does not exist!");
         }
 
     }

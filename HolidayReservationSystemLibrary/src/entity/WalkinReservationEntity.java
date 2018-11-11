@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
@@ -22,14 +21,14 @@ import javax.persistence.ManyToOne;
 public class WalkinReservationEntity extends ReservationEntity implements Serializable {
 
     private static long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long walkInReservationId;
     @Column(nullable = false)
     private String guestFirstName;
     @Column(nullable = false)
     private String guestLastName;
     @Column(length=8, nullable = false, unique = true)
-    private Long guestPhoneNumber;
+    private String guestContactNumber;
     @Column(unique = true)
     private String guestEmail;
     @Column(length = 9, unique = true, nullable = false)
@@ -41,29 +40,28 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
     public WalkinReservationEntity() {
     }
 
-    public WalkinReservationEntity(String guestFirstName, String guestLastName, Long guestPhoneNumber, String guestEmail, String guestIdentificationNumber, EmployeeEntity employee, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+    public WalkinReservationEntity(String guestFirstName, String guestLastName, String guestContactNumber, String guestEmail, String guestIdentificationNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
         super(bookingDate, startDate, endDate, isCheckedIn);
         this.guestFirstName = guestFirstName;
         this.guestLastName = guestLastName;
-        this.guestPhoneNumber = guestPhoneNumber;
+        this.guestContactNumber = guestContactNumber;
         this.guestEmail = guestEmail;
         this.guestIdentificationNumber = guestIdentificationNumber;
-        this.employee = employee;
     }
 
     
-    public Long getId() {
-        return id;
+    public Long getPartnerReservationId() {
+        return walkInReservationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPartnerReservationId(Long id) {
+        this.walkInReservationId = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getPartnerReservationId() != null ? getPartnerReservationId().hashCode() : 0);
         return hash;
     }
 
@@ -74,7 +72,7 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
             return false;
         }
         WalkinReservationEntity other = (WalkinReservationEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getPartnerReservationId() == null && other.getPartnerReservationId() != null) || (this.getPartnerReservationId() != null && !this.walkInReservationId.equals(other.walkInReservationId))) {
             return false;
         }
         return true;
@@ -82,7 +80,7 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
 
     @Override
     public String toString() {
-        return "entity.WalkinReservationEntity[ id=" + getId() + " ]";
+        return "entity.WalkinReservationEntity[ id=" + getPartnerReservationId() + " ]";
     }
 
     /**
@@ -130,15 +128,15 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
     /**
      * @return the guestPhoneNumber
      */
-    public Long getGuestPhoneNumber() {
-        return guestPhoneNumber;
+    public String getGuestContactNumber() {
+        return guestContactNumber;
     }
 
     /**
      * @param guestPhoneNumber the guestPhoneNumber to set
      */
-    public void setGuestPhoneNumber(Long guestPhoneNumber) {
-        this.guestPhoneNumber = guestPhoneNumber;
+    public void setGuestContactNumber(String guestPhoneNumber) {
+        this.guestContactNumber = guestPhoneNumber;
     }
 
     /**

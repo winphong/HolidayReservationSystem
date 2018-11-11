@@ -5,10 +5,7 @@
  */
 package ejb.session.stateless;
 
-import entity.EmployeeEntity;
 import entity.GuestEntity;
-import entity.OnlineReservationEntity;
-import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -66,4 +63,33 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
         return newGuest;
     }
     
+    public GuestEntity retrieveGuestByUsername(String username) {
+        
+        Query query = em.createQuery("SELECT g FROM GuestEntity g WHERE g.username = :inUsername");
+        query.setParameter("inUsername", username);
+        
+        try {
+            
+            return (GuestEntity) query.getSingleResult();
+            
+        } catch ( NoResultException | NonUniqueResultException ex ) {
+            
+            System.err.println(ex.getMessage());
+        }
+        
+        return null;
+    }
+    
+    public GuestEntity retrieveGuestById(Long guestId) {
+        
+        try {
+            
+            return em.find(GuestEntity.class, guestId);
+        
+        } catch (IllegalArgumentException ex) {
+            
+            throw new IllegalArgumentException("No id");
+            
+        }
+    }
 }

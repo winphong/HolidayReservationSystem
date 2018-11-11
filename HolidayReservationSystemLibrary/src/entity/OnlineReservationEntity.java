@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
@@ -21,8 +20,8 @@ import javax.persistence.ManyToOne;
 public class OnlineReservationEntity extends ReservationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long onlineReservationId;
     
     @ManyToOne
     private GuestEntity guest;
@@ -34,18 +33,18 @@ public class OnlineReservationEntity extends ReservationEntity implements Serial
         super(bookingDate, startDate, endDate, isCheckedIn);
     }
 
-    public Long getId() {
-        return id;
+    public Long getOnlineReservationId() {
+        return onlineReservationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOnlineReservationId(Long id) {
+        this.onlineReservationId = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (onlineReservationId != null ? onlineReservationId.hashCode() : 0);
         return hash;
     }
 
@@ -56,7 +55,7 @@ public class OnlineReservationEntity extends ReservationEntity implements Serial
             return false;
         }
         OnlineReservationEntity other = (OnlineReservationEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.onlineReservationId == null && other.onlineReservationId != null) || (this.onlineReservationId != null && !this.onlineReservationId.equals(other.onlineReservationId))) {
             return false;
         }
         return true;
@@ -64,7 +63,7 @@ public class OnlineReservationEntity extends ReservationEntity implements Serial
 
     @Override
     public String toString() {
-        return "entity.OnlineReservationEntity[ id=" + id + " ]";
+        return "entity.OnlineReservationEntity[ id=" + onlineReservationId + " ]";
     }
 
     /**

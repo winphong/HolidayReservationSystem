@@ -67,4 +67,34 @@ public class PartnerEntityController implements PartnerEntityControllerRemote, P
 
     }
     
+    public PartnerEntity retrievePartnerByUsername(String username) {
+        
+        Query query = em.createQuery("SELECT p FROM PartnerEntity p WHERE p.username = :inUsername");
+        query.setParameter("inUsername", username);
+        
+        try {
+            
+            return (PartnerEntity) query.getSingleResult();
+            
+        } catch ( NoResultException | NonUniqueResultException ex ) {
+            
+            System.err.println(ex.getMessage());
+        }
+        
+        return null;
+    }
+    
+    public PartnerEntity retrievePartnerById(Long partnerId) {
+        
+        try {
+            
+            return em.find(PartnerEntity.class, partnerId);
+        
+        } catch (IllegalArgumentException ex) {
+            
+            throw new IllegalArgumentException("No id");
+            
+        }
+    }
+    
 }

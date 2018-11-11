@@ -7,13 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import util.enumeration.RoomStatus;
 import static util.enumeration.RoomStatus.VACANT;
@@ -27,26 +27,33 @@ public class RoomEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
     @Column(length = 4, nullable = false, unique = true)
-    @Embedded
-    private RoomNumber roomNumber;
+    private String roomNumber;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomStatus roomStatus;
-    private Long guest;
+    private String guest;
+    private Boolean isReady;
     private Boolean isDisabled;
     
+    @JoinColumn(nullable = false)
     @ManyToOne
     private RoomTypeEntity roomType;
+    
+    @ManyToOne
+    private ReservationEntity currentReservation;
+    
+    @ManyToOne
+    private ReservationEntity nextReservation;
 
     public RoomEntity() {
         this.isDisabled = Boolean.FALSE;
         this.roomStatus = VACANT;
     }
 
-    public RoomEntity(RoomNumber roomNumber) {
+    public RoomEntity(String roomNumber) {
         this();
         this.roomNumber = roomNumber;
     }
@@ -84,14 +91,14 @@ public class RoomEntity implements Serializable {
     /**
      * @return the roomNumber
      */
-    public RoomNumber getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
     /**
      * @param roomNumber the roomNumber to set
      */
-    public void setRoomNumber(RoomNumber roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
@@ -112,14 +119,14 @@ public class RoomEntity implements Serializable {
     /**
      * @return the guest
      */
-    public Long getGuest() {
+    public String getGuest() {
         return guest;
     }
 
     /**
      * @param guest the guest to set
      */
-    public void setGuest(Long guest) {
+    public void setGuest(String guest) {
         this.guest = guest;
     }
 
@@ -149,6 +156,48 @@ public class RoomEntity implements Serializable {
      */
     public void setIsDisabled(Boolean isDisabled) {
         this.isDisabled = isDisabled;
+    }
+
+    /**
+     * @return the reservation
+     */
+    public ReservationEntity getCurrentReservation() {
+        return currentReservation;
+    }
+
+    /**
+     * @param reservation the reservation to set
+     */
+    public void setCurrentReservation(ReservationEntity reservation) {
+        this.currentReservation = reservation;
+    }
+
+    /**
+     * @return the nextReservation
+     */
+    public ReservationEntity getNextReservation() {
+        return nextReservation;
+    }
+
+    /**
+     * @param nextReservation the nextReservation to set
+     */
+    public void setNextReservation(ReservationEntity nextReservation) {
+        this.nextReservation = nextReservation;
+    }
+
+    /**
+     * @return the isReady
+     */
+    public Boolean getIsReady() {
+        return isReady;
+    }
+
+    /**
+     * @param isReady the isReady to set
+     */
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
     }
     
 }

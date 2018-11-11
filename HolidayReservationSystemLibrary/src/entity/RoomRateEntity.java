@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -25,14 +27,16 @@ public class RoomRateEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomRateId;
     @Column(unique = true, nullable = false)
     private String name;
     private Boolean isDisabled;
     @Column(scale=2)
     private BigDecimal ratePerNight;
+    @Temporal(TemporalType.DATE)
     private Date validFrom;
+    @Temporal (TemporalType.DATE)
     private Date validTill;
     
     @OneToOne
