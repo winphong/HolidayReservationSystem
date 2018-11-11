@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Scanner;
 import javax.ejb.EJB;
 import util.enumeration.RoomStatus;
+import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 
 /**
@@ -181,7 +182,7 @@ public class FrontOfficeModule {
         System.out.print("/nEnter first name: ");
         String guestFirstName = scanner.nextLine().trim();
         System.out.print("/nEnter last name: ");
-        String guestlastName = scanner.nextLine().trim();;
+        String guestLastName = scanner.nextLine().trim();
         System.out.print("/nEnter guest identification number: ");
         String guestIdentificationNumber = scanner.nextLine().trim();
         System.out.print("/nEnter contact number: ");
@@ -192,7 +193,7 @@ public class FrontOfficeModule {
         //ReservationEntity newReservation = new WalkinReservationEntity();
         try {
             
-            RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
+            //RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
             
             walkInReservationEntityControllerRemote.reserveRoom(roomTypeName, startDate, endDate, numOfRoomRequired);
             
@@ -206,10 +207,10 @@ public class FrontOfficeModule {
         
         if ( response.equalsIgnoreCase("Y") ) {
             searchRoomAgain(startDate, endDate, guestFirstName, 
-                    guestlastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+                    guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
         } else {
             walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName, 
-                    guestlastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+                    guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
         }
     }
     
@@ -265,7 +266,8 @@ public class FrontOfficeModule {
                 allRoomsReadyForCheckIn = Boolean.FALSE;
                 break;
             }
-        }
+        }      
+// Should we split out and show which room is available and which room is not?? 
         
         if ( allRoomsReadyForCheckIn.equals(Boolean.TRUE) ) {     
             for(RoomEntity room : rooms) {
@@ -279,9 +281,41 @@ public class FrontOfficeModule {
         }
     }
     
-    public void guestCheckout(){
+    public void guestCheckout() throws RoomNotFoundException{
         
+        Scanner scanner = new Scanner(System.in);
         
         // next reservation become your current reservation
+        // if nextReservation != null; set currentReservation = nextReservation
+        // set to Allocated
+        
+        while(true) {
+            System.out.print("\nEnter room number to checkout: >");
+            String roomNumber = scanner.nextLine().trim();
+            RoomEntity room = roomEntityControllerRemote.retrieveRoomByRoomNumber(roomNumber);
+            
+            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) ) {
+                
+                if ( room.getNextReservation() != null ) {
+                    room.setCurrentReservation(room.getNextReservation());
+                    room.setNextReservation(null);
+                } else {
+                    room.setCurrentReservation(null);
+                    room.setRoomStatus(RoomStatus.VACANT);
+                }
+            //  room.getCurrentReservation().getRooms().remove(room);
+                room.setIsReady(Boolean.FALSE);
+                room.setGuest(null);
+                System.out.println("Room " + room.getRoomNumber() + " successfully checked out!");
+// TO-DO: Set timer to change all room to isReady at 2pm
+            } else {
+                System.out.println("\nRoom is not occupied");
+            }
+            System.out.print("Do you wish to perform another check out? (Y/N): >");
+            String response = scanner.nextLine().trim();
+            if (response.equalsIgnoreCase("N")) {
+                break;
+            }
+        }
     }
 }

@@ -14,5 +14,5 @@ public enum RoomStatus {
     ALLOCATED,
     OCCUPIED,
     MAINTENANCE,
-    HOUSEKEEPING;
+    //HOUSEKEEPING;
 }

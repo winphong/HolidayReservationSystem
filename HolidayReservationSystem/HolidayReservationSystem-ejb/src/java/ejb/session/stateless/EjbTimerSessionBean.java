@@ -24,7 +24,10 @@ import util.enumeration.RoomStatus;
 public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerSessionBeanLocal {
 
     @EJB
+    private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal;
+    @EJB
     private ReservationEntityControllerLocal reservationEntityControllerLocal;
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -75,9 +78,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                     if ( availableThroughout.equals(Boolean.TRUE) ) {
                         
                         countOfRoomAvailableThroughout++;
-                        
                         room.setRoomStatus(RoomStatus.ALLOCATED);
-                        
                         // If the room if not occupied
                         if ( room.getCurrentReservation() != null ) {
                             room.setNextReservation(reservation);
@@ -99,5 +100,23 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                 }
             } 
         }
-    } 
+    }
+    
+    @Schedule(hour = "14", info = "scheduleEveryDay2PM")
+    public void finishUpHousekeeping() {
+        
+        List<RoomTypeEntity> roomTypes = roomTypeEntityControllerLocal.retrieveAllRoomType();
+        
+        for(RoomTypeEntity roomType : roomTypes) {
+            
+            List<RoomEntity> rooms = roomType.getRoom();
+            
+            for(RoomEntity room : rooms) {
+                
+                if ( room.getIsDisabled().equals(Boolean.FALSE) && (room.getRoomStatus().equals(RoomStatus.ALLOCATED) || room.getRoomStatus().equals(RoomStatus.VACANT))) {
+                    room.setIsReady(Boolean.TRUE);
+                }
+            }
+        }
+    }
 }
