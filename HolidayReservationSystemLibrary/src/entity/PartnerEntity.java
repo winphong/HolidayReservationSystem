@@ -40,9 +40,9 @@ public class PartnerEntity implements Serializable {
     private String email;
     
     @OneToMany(mappedBy="partner")
-    private List <ReservationEntity> reservation;
-    @OneToMany(mappedBy = "partner")
-    private List <CustomerEntity> customers;
+    private List <PartnerReservationEntity> reservation;
+//    @OneToMany(mappedBy = "partner")
+//    private List <CustomerEntity> customers;
 
     public PartnerEntity() {
     }
@@ -56,8 +56,8 @@ public class PartnerEntity implements Serializable {
         this.phoneNumber = phoneNumber;
         this.companyRegistrationId = companyRegistrationId;
         this.email = email;
-        this.reservation = new ArrayList<ReservationEntity>();
-        this.customers = new ArrayList<CustomerEntity>();
+        this.reservation = new ArrayList<>();
+        
     }
     
     
@@ -167,14 +167,14 @@ public class PartnerEntity implements Serializable {
     /**
      * @return the reservation
      */
-    public List <ReservationEntity> getReservation() {
+    public List <PartnerReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(List <ReservationEntity> reservation) {
+    public void setReservation(List <PartnerReservationEntity> reservation) {
         this.reservation = reservation;
     }
 
@@ -191,19 +191,4 @@ public class PartnerEntity implements Serializable {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
-
-    /**
-     * @return the customers
-     */
-    public List <CustomerEntity> getCustomers() {
-        return customers;
-    }
-
-    /**
-     * @param customers the customers to set
-     */
-    public void setCustomers(List <CustomerEntity> customers) {
-        this.customers = customers;
-    }
-    
 }

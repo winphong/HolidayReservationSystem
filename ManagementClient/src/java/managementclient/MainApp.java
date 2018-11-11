@@ -52,7 +52,7 @@ public class MainApp {
         this.employeeEntityControllerRemote = employeeEntityControllerRemote;
     }
 
-    public void runApp() {
+    public void runApp() throws Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 

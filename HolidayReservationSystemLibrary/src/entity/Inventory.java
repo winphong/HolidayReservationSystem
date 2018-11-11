@@ -34,12 +34,11 @@ public class Inventory implements Serializable {
     private Long inventoryId;
     private LocalDate date;
     private List<RoomTypeEntity> roomTypes = null;
-    private Integer totalNumOfRoomAvailable;
+    private Integer totalNumOfRoomAvailable = 0;
     private List<List<RoomEntity>> availableRoom = null;
 
     
     public Inventory() {
-        updateInventory();
     }
 
     public Inventory(LocalDate date) {
@@ -85,8 +84,8 @@ public class Inventory implements Serializable {
     // need to modify to include use case for create and update
     public void updateInventory() {
         
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :Boolean");
-        query.setParameter("Boolean", Boolean.FALSE);
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :inBoolean");
+        query.setParameter("inBoolean", Boolean.FALSE);
         
         // Get a list of roomTypes that is not disabled
         roomTypes = (List<RoomTypeEntity>) query.getResultList();

@@ -25,18 +25,18 @@ public class CustomerEntity extends GuestEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne
-    private PartnerEntity partner;
-    @OneToMany (mappedBy = "customer")
-    private List <PartnerReservationEntity> partnerReservationEntities;
+//    @ManyToOne
+//    private PartnerEntity partner;
+//    @OneToMany (mappedBy = "customer")
+//    private List <PartnerReservationEntity> partnerReservationEntities;
 
     public CustomerEntity() {
     }
 
     public CustomerEntity(PartnerEntity partner, String firstName, String lastName, String userName, String password, String phoneNumber, String email) {
         super(firstName, lastName, userName, password, phoneNumber, email);
-        this.partner = partner;
-        this.partnerReservationEntities = new ArrayList <PartnerReservationEntity>();
+//        this.partner = partner;
+//        this.partnerReservationEntities = new ArrayList <PartnerReservationEntity>();
     }
 
     public Long getId() {
@@ -71,33 +71,4 @@ public class CustomerEntity extends GuestEntity implements Serializable {
     public String toString() {
         return "entity.CustomerEntity[ id=" + id + " ]";
     }
-
-    /**
-     * @return the partner
-     */
-    public PartnerEntity getPartner() {
-        return partner;
-    }
-
-    /**
-     * @param partner the partner to set
-     */
-    public void setPartner(PartnerEntity partner) {
-        this.partner = partner;
-    }
-
-    /**
-     * @return the partnerReservationEntities
-     */
-    public List <PartnerReservationEntity> getPartnerReservationEntities() {
-        return partnerReservationEntities;
-    }
-
-    /**
-     * @param partnerReservationEntities the partnerReservationEntities to set
-     */
-    public void setPartnerReservationEntities(List <PartnerReservationEntity> partnerReservationEntities) {
-        this.partnerReservationEntities = partnerReservationEntities;
-    }
-    
 }

@@ -39,8 +39,8 @@ public class RoomRateEntity implements Serializable {
     @Temporal (TemporalType.DATE)
     private Date validTill;
     
-    @OneToOne
-    private RoomRatePerNightEntity roomRatePerNightEntity;
+//    @OneToOne
+//    private RoomRatePerNightEntity roomRatePerNightEntity;
     @ManyToOne
     private RoomTypeEntity roomType;
 
@@ -135,21 +135,7 @@ public class RoomRateEntity implements Serializable {
     public void setRoomType(RoomTypeEntity roomType) {
         this.roomType = roomType;
     }
-
-    /**
-     * @return the roomRatePerNightEntity
-     */
-    public RoomRatePerNightEntity getRoomRatePerNightEntity() {
-        return roomRatePerNightEntity;
-    }
-
-    /**
-     * @param roomRatePerNightEntity the roomRatePerNightEntity to set
-     */
-    public void setRoomRatePerNightEntity(RoomRatePerNightEntity roomRatePerNightEntity) {
-        this.roomRatePerNightEntity = roomRatePerNightEntity;
-    }
-
+    
     /**
      * @return the ratePerNight
      */

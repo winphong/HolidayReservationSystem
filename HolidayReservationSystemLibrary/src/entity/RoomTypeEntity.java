@@ -61,7 +61,7 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
         this.amenities = amenities;
         this.tier = tier;
-        this.isDisabled = false;
+        this.isDisabled = Boolean.FALSE;
     }
     
     

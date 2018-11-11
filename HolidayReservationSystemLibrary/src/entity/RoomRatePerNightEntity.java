@@ -29,11 +29,11 @@ public class RoomRatePerNightEntity implements Serializable {
     @Column (nullable = false)
     private BigDecimal rate;
     
-    @OneToOne(mappedBy = "roomratepernight")
-    private RoomRateEntity roomRateEntity;
-    
-    @ManyToOne
-    private ReservationLineItemEntity reservationLineItemEntity;
+//    @OneToOne(mappedBy = "roomratepernight")
+//    private RoomRateEntity roomRateEntity;
+//    
+//    @ManyToOne
+//    private ReservationLineItemEntity reservationLineItemEntity;
 
     public RoomRatePerNightEntity() {
     }
@@ -41,8 +41,8 @@ public class RoomRatePerNightEntity implements Serializable {
     public RoomRatePerNightEntity(BigDecimal rate, RoomRateEntity roomRateEntity, ReservationLineItemEntity reservationLineItemEntity) {
         this();
         this.rate = rate;
-        this.roomRateEntity = roomRateEntity;
-        this.reservationLineItemEntity = reservationLineItemEntity;
+//        this.roomRateEntity = roomRateEntity;
+//        this.reservationLineItemEntity = reservationLineItemEntity;
     }
     
     public Long getId() {
@@ -91,33 +91,4 @@ public class RoomRatePerNightEntity implements Serializable {
     public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
-
-    /**
-     * @return the reservationLineItemEntity
-     */
-    public ReservationLineItemEntity getReservationLineItemEntity() {
-        return reservationLineItemEntity;
-    }
-
-    /**
-     * @param reservationLineItemEntity the reservationLineItemEntity to set
-     */
-    public void setReservationLineItemEntity(ReservationLineItemEntity reservationLineItemEntity) {
-        this.reservationLineItemEntity = reservationLineItemEntity;
-    }
-
-    /**
-     * @return the roomRateEntity
-     */
-    public RoomRateEntity getRoomRateEntity() {
-        return roomRateEntity;
-    }
-
-    /**
-     * @param roomRateEntity the roomRateEntity to set
-     */
-    public void setRoomRateEntity(RoomRateEntity roomRateEntity) {
-        this.roomRateEntity = roomRateEntity;
-    }
-    
 }

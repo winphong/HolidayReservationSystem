@@ -43,7 +43,7 @@ public class EmployeeEntity implements Serializable {
     private String email;
     
     @OneToMany(mappedBy="employee")
-    private List <ReservationEntity> reservation;
+    private List <WalkinReservationEntity> reservation;
 
     public EmployeeEntity() {
     }
@@ -58,7 +58,7 @@ public class EmployeeEntity implements Serializable {
         this.accessRight = accessRight;
         this.phoneNumber = phoneNum;
         this.email = emailAddress;
-        this.reservation = new ArrayList<ReservationEntity>();
+        this.reservation = new ArrayList<>();
     }
     
     
@@ -169,14 +169,14 @@ public class EmployeeEntity implements Serializable {
     /**
      * @return the reservation
      */
-    public List <ReservationEntity> getReservation() {
+    public List <WalkinReservationEntity> getReservation() {
         return reservation;
     }
 
     /**
      * @param reservation the reservation to set
      */
-    public void setReservation(List <ReservationEntity> reservation) {
+    public void setReservation(List <WalkinReservationEntity> reservation) {
         this.reservation = reservation;
     }
 
