@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Inventory;
+import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import entity.RoomNumber;
 import entity.RoomTypeEntity;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -19,6 +22,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.RoomStatus;
 import util.exception.RoomNotFoundException;
 
 /**
@@ -31,12 +35,15 @@ import util.exception.RoomNotFoundException;
 
 public class RoomEntityController implements RoomEntityControllerRemote, RoomEntityControllerLocal {
 
+    @EJB
+    private ReservationEntityControllerLocal reservationEntityControllerLocal;
+
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
 
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
-
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType) {
@@ -121,5 +128,68 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         List<RoomEntity> rooms = (List<RoomEntity>) query.getResultList();
 
         return rooms;
+    }
+    
+    // Reserve room is still needed because guest can walkin and reserve for future date
+    // Once reserve room, we need to allocate room for the guest if the start date of reservation is equal to current date
+    @Override
+    public void walkInAllocateRoom(Long reservationId) {
+
+        // Retrieve the current reservation
+        ReservationEntity reservation = reservationEntityControllerLocal.retrieveReservationById(reservationId);
+        List<ReservationLineItemEntity> reservationLineItems = reservation.getReservationLineItemEntities();
+        Integer countOfRoomAvailableThroughout;
+        Boolean availableThroughout;
+        
+        // Loop through all the reservationLineItem of currentReservation
+        for(ReservationLineItemEntity reservationLineItem : reservationLineItems) {
+            
+            RoomTypeEntity roomType = reservationLineItem.getRoomType();
+            
+            List<RoomEntity> rooms = roomType.getRoom();
+                
+                countOfRoomAvailableThroughout = 0;
+                        
+                // Loop through all the rooms of the specified roomType & check whether can fullfil the booking requirement
+                // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
+                for(RoomEntity room : rooms) {
+                    
+                    availableThroughout = Boolean.TRUE;
+                    
+                    for(LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()) ; date.plusDays(1)) {
+                        
+                        if ( !room.getRoomStatus().equals(RoomStatus.VACANT) ) {
+                            // If the current reservation end date is the same as new reservation start date, the room is considered available
+                            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
+                            
+                            } else {
+                                availableThroughout = Boolean.FALSE;
+                                break;
+                            }
+                        }
+                    }
+                    if ( availableThroughout.equals(Boolean.TRUE) ) {
+                        
+                        countOfRoomAvailableThroughout++;
+                        room.setRoomStatus(RoomStatus.ALLOCATED); // should I change here??
+                        // If the room if not occupied
+                        if ( room.getCurrentReservation() != null ) {
+                            room.setNextReservation(reservation);
+                        } else {
+                            room.setCurrentReservation(reservation);
+                        }
+                        
+                        reservation.getRooms().add(room);
+                        
+                        // If all room in reservation has been successfully allocated, break
+                        if ( countOfRoomAvailableThroughout.equals(reservationLineItem.getNumOfRoomBooked()) ) {
+                            break;
+                        }
+                    }  
+                }                
+                if (countOfRoomAvailableThroughout < reservationLineItem.getNumOfRoomBooked()) {
+                    //throw unable to allocate all reserved room exception
+                }            
+        }
     }
 }

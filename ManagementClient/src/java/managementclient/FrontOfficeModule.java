@@ -16,6 +16,7 @@ import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
@@ -209,8 +210,13 @@ public class FrontOfficeModule {
             searchRoomAgain(startDate, endDate, guestFirstName, 
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
         } else {
-            walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName, 
+            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName, 
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+            
+            // If the reservation's start date = current date, the call walkInAllocateRoom method;
+            if ( newReservation.getStartDate().equals(LocalDate.now()) ) {
+               roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+            }
         }
     }
     
@@ -241,11 +247,18 @@ public class FrontOfficeModule {
             searchRoomAgain(startDate, endDate, guestFirstName, 
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
         } else {
-            walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName, 
+            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName, 
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+            
+            // If the reservation's start date = current date, the call walkInAllocateRoom method;
+            if ( newReservation.getStartDate().equals(LocalDate.now()) ) {
+                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+            }
         }
     }
+
     
+
     public void guestCheckin(){
         
         Scanner scanner = new Scanner(System.in);

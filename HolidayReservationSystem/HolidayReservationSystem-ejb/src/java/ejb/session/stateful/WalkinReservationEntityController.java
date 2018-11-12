@@ -101,7 +101,6 @@ public class WalkinReservationEntityController implements WalkinReservationEntit
         query.setParameter("bookingEndDate", bookingEndDate);
 
         try {
-            
             // Return a list of reservation where the date collides with the hotel search
             return (List<ReservationEntity>) query.getResultList();
         
