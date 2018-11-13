@@ -156,11 +156,11 @@ public class FrontOfficeModule {
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
         
-        List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
+        //List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
         
         Integer index = 1;
         
-        for(RoomTypeEntity availableRoomType : availableRoomTypes) {
+        for(RoomTypeEntity availableRoomType : inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired)) {
             
             System.out.println(index + ": " + availableRoomType.getName());
             index++;
@@ -269,11 +269,11 @@ public class FrontOfficeModule {
         
         ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
         
-        List<RoomEntity> rooms = reservation.getRooms();
+        //List<RoomEntity> rooms = reservation.getRooms();
         
         Boolean allRoomsReadyForCheckIn = Boolean.TRUE;
         
-        for(RoomEntity room : rooms) {
+        for(RoomEntity room : reservation.getRooms()) {
             // If any of the rooms reserved is not ready for check in
             if ( room.getIsReady().equals(Boolean.FALSE) ) {
                 allRoomsReadyForCheckIn = Boolean.FALSE;
@@ -283,7 +283,7 @@ public class FrontOfficeModule {
 // Should we split out and show which room is available and which room is not?? 
         
         if ( allRoomsReadyForCheckIn.equals(Boolean.TRUE) ) {     
-            for(RoomEntity room : rooms) {
+            for(RoomEntity room : reservation.getRooms()) {
                 if ( room.getIsReady().equals(Boolean.TRUE) ) {
                     room.setGuest(guestName);
                     room.setRoomStatus(RoomStatus.OCCUPIED);

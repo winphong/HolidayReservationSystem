@@ -159,11 +159,11 @@ public class MainApp {
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getPartnerReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
             
-            List <ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
+            //List <ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
             System.out.println("Reservation Details: ");
             System.out.println("-------------------------");
             System.out.printf("%20s%20s%15s\n", "Room Type", "Number of Rooms", "Total Amount");
-            for (ReservationLineItemEntity item : items){
+            for (ReservationLineItemEntity item : reservation.getReservationLineItemEntities()){
                 System.out.printf("%20s%20s%15s\n", item.getRoomType(), item.getNumOfRoomBooked(), item.getTotalAmount());
             }
             

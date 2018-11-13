@@ -101,7 +101,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // Check each room and each date and make sure there is atleast one that is 
     public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) {
         
-        List<RoomTypeEntity> availableRoomType = null;
+        List<RoomTypeEntity> availableRoomType = new ArrayList<>();
         
         Inventory inventory = getInventoryByDate(startDate);
         
@@ -166,6 +166,10 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             }
             roomTypeIndex++;
         }
+        
+        reservationList = null;
+        reservationLineItems = null;
+        listOfRoomsForDifferentRoomTypes = null;
         return availableRoomType;
     }
     
@@ -193,22 +197,22 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         query.setParameter("inBoolean", Boolean.FALSE);
         
         // Get a list of roomTypes that is not disabled
-        List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
+        //List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
         // List<RoomEntity> availableRoom = new ArrayList<>();   
         Integer totalNumOfRoomAvailable = 0;
         
         List<RoomEntity> roomForEachRoomType;
-        List<RoomEntity> rooms;
+        //List<RoomEntity> rooms;
         
         // Set availableRoom to new List
         inventory.setAvailableRoom(new ArrayList<>());
+        roomForEachRoomType = new ArrayList<>();
         // For each room type
-        for(RoomTypeEntity roomType : roomTypes) {
-            roomForEachRoomType = new ArrayList<>();
+        for(RoomTypeEntity roomType : (List<RoomTypeEntity>) query.getResultList()) {
             // Get the list of room
-            rooms = roomType.getRoom();           
+            //rooms = roomType.getRoom();           
             // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
-            for(RoomEntity room : rooms) {
+            for(RoomEntity room : roomType.getRoom()) {
                 // Not disable and vacant
                 if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus().equals(RoomStatus.VACANT) ) {
                     roomForEachRoomType.add(room);
@@ -216,9 +220,13 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 }   
             }
             inventory.getAvailableRoom().add(roomForEachRoomType);
+            roomForEachRoomType.clear();
             // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
         }
         // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
         inventory.setTotalNumOfRoomAvailable(totalNumOfRoomAvailable);
+        //roomTypes = null;
+        //roomForEachRoomType = null;
+        //rooms = null;
     }
 }

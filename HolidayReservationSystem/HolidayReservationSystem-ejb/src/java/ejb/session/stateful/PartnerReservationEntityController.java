@@ -45,7 +45,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
     
     public PartnerReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException {
 
-        Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.id=:inId");
+        Query query = em.createQuery("SELECT ore FROM PartnerReservationEntity ore WHERE ore.partnerReservationId =:inId");
         query.setParameter("inId", id);
 
         try {

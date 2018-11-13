@@ -2,7 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="HolidayReservationSystem-ejbPU" transaction-type="JTA">
     <jta-data-source>jdbc/HolidayReservationSystem</jta-data-source>
-    <class>entity.CustomerEntity</class>
     <class>entity.EmployeeEntity</class>
     <class>entity.GuestEntity</class>
     <class>entity.Inventory</class>
@@ -13,7 +12,6 @@
     <class>entity.ReservationLineItemEntity</class>
     <class>entity.RoomEntity</class>
     <class>entity.RoomRateEntity</class>
-    <class>entity.RoomRatePerNightEntity</class>
     <class>entity.RoomTypeEntity</class>
     <class>entity.WalkinReservationEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>

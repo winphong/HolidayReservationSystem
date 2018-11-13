@@ -52,7 +52,7 @@ public class DataInitializationBean {
             initializeRoomType();
             initializeInventory();
         }
-        inventoryControllerLocal.updateAllInventory();
+        //inventoryControllerLocal.updateAllInventory();
     }
 
     public void initializeEmployee(){
@@ -74,9 +74,11 @@ public class DataInitializationBean {
     }
     
     public void initializeInventory() {
+        Inventory inventory;
         for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date.plusDays(1) ) {      
-            Inventory inventory = new Inventory(date);
+            inventory = new Inventory(date);
             em.persist(inventory);
+            inventory = null;
         }
     }    
 }

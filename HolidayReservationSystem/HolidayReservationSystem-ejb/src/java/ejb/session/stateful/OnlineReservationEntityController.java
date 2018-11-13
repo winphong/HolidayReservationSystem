@@ -100,19 +100,27 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         
         //Calculate total amount from room rate per night
         List<RoomRateEntity> roomRatesForABooking = new ArrayList<>();
+        List<RoomRateEntity> roomRates;
+        Integer resultIndexForNormalRate;
+        Integer resultIndexForPeakRate;
+        Integer resultIndexForPromotionRate;
+        Date currentDate;
+        Boolean peakIsValid;
+        Boolean promotionIsValid;
+        BigDecimal subTotal;
         
         for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date.plusDays(1)) {
 
-            List<RoomRateEntity> roomRates = roomType.getRoomRate();
+            roomRates = roomType.getRoomRate();
             
-            Integer resultIndexForNormalRate = roomRates.indexOf("Normal Rate");
-            Integer resultIndexForPeakRate = roomRates.indexOf("Peak Rate");
-            Integer resultIndexForPromotionRate = roomRates.indexOf("Promotion Rate");
+            resultIndexForNormalRate = roomRates.indexOf("Normal Rate");
+            resultIndexForPeakRate = roomRates.indexOf("Peak Rate");
+            resultIndexForPromotionRate = roomRates.indexOf("Promotion Rate");
             
-            Date currentDate  = java.sql.Date.valueOf(date);
+            currentDate  = java.sql.Date.valueOf(date);
             
-            Boolean peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
-            Boolean promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
+            peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
+            promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
             
             
             if ( resultIndexForNormalRate != -1 && resultIndexForPeakRate != -1 && resultIndexForPromotionRate != 1 ){
@@ -159,7 +167,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
             }
         }
         
-        BigDecimal subTotal = BigDecimal.ZERO;
+        subTotal = BigDecimal.ZERO;
         
         for (RoomRateEntity roomRatePerNight : roomRatesForABooking) {
             
@@ -167,6 +175,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
             subTotal = subTotal.add(roomRatePerNight.getRatePerNight().multiply(new BigDecimal(numOfRoomRequired)));
         }
         
+        roomRatesForABooking = null;
         // *************** roomType might have lazy fetching issue *********************
         reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
         totalLineItem++;

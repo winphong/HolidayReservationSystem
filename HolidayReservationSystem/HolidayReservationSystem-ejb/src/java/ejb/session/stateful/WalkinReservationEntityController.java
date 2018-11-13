@@ -71,7 +71,7 @@ public class WalkinReservationEntityController implements WalkinReservationEntit
 
         RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName(roomTypeName);
         
-        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name := :inRoomRateName");
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name = :inRoomRateName");
         query.setParameter("inRoomRateName", "Published Rate");
         
         RoomRateEntity publishedRoomRate = null;
@@ -90,6 +90,7 @@ public class WalkinReservationEntityController implements WalkinReservationEntit
         reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
         totalLineItem++;
         totalAmount.add(subTotal);
+        
     }
     
     @Override

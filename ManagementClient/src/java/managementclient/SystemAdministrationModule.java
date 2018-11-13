@@ -122,10 +122,10 @@ public class SystemAdministrationModule {
     private void doViewAllEmployees(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Employees ***\n");
-        List<EmployeeEntity> employeeEntities = employeeEntityControllerRemote.viewAllEmployee();
+        //List<EmployeeEntity> employeeEntities = employeeEntityControllerRemote.viewAllEmployee();
         System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password", "Phone Number", "Email Address");
         
-        for (EmployeeEntity employeeEntity: employeeEntities)
+        for (EmployeeEntity employeeEntity: employeeEntityControllerRemote.viewAllEmployee())
         {
             System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n",employeeEntity.getEmployeeId(),employeeEntity.getFirstName(),employeeEntity.getLastName(),employeeEntity.getAccessRight(),employeeEntity.getUsername(),employeeEntity.getPassword(),employeeEntity.getPhoneNumber(),employeeEntity.getEmail());
         }
@@ -157,10 +157,10 @@ public class SystemAdministrationModule {
     private void doViewAllPartners(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Employees ***\n");
-        List<PartnerEntity> partnerEntities = partnerEntityControllerRemote.viewAllPartner();
+        //List<PartnerEntity> partnerEntities = partnerEntityControllerRemote.viewAllPartner();
         System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n", "Partner ID", "Company Name", "Registration Id", "Username", "Password", "Phone Number", "Email Address");
         
-        for (PartnerEntity partnerEntity: partnerEntities)
+        for (PartnerEntity partnerEntity: partnerEntityControllerRemote.viewAllPartner())
         {
             System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n",partnerEntity.getPartnerId(),partnerEntity.getCompanyName(),partnerEntity.getCompanyRegistrationId(),partnerEntity.getUserName(),partnerEntity.getPassword(),partnerEntity.getPhoneNumber(),partnerEntity.getEmail());
         }

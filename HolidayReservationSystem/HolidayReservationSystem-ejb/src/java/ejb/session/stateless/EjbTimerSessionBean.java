@@ -43,25 +43,20 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
         
         LocalDate currentDate = LocalDate.now();
         // Get list of reservations for current date
-        List<ReservationEntity> reservations = reservationEntityControllerLocal.retrieveReservationByDateOrderByDescEndDate(currentDate);
         Boolean availableThroughout;
         Integer countOfRoomAvailableThroughout;
         
         // Loop through all reservations for current date
-        for(ReservationEntity reservation : reservations) {
-            
-            List<ReservationLineItemEntity> reservationLineItems = reservation.getReservationLineItemEntities();
-            
+        for(ReservationEntity reservation : reservationEntityControllerLocal.retrieveReservationByDateOrderByDescEndDate(currentDate)) {
             // Loop through all line item for current reservation
-            for(ReservationLineItemEntity reservationLineItem : reservationLineItems) {
+            for(ReservationLineItemEntity reservationLineItem : reservation.getReservationLineItemEntities()) {
                 
                 RoomTypeEntity roomType = reservationLineItem.getRoomType();                
-                List<RoomEntity> rooms = roomType.getRoom();
                 countOfRoomAvailableThroughout = 0;
                         
                 // Loop through all the rooms of the specified roomType & check whether can fullfil the booking requirement
                 // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
-                for(RoomEntity room : rooms) {
+                for(RoomEntity room : roomType.getRoom()) {
                     availableThroughout = Boolean.TRUE;
                     for(LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()) ; date.plusDays(1)) {                       
                         if ( !room.getRoomStatus().equals(RoomStatus.VACANT) ) {
@@ -103,13 +98,11 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     @Schedule(hour = "14", info = "scheduleEveryday2PM")
     public void finishUpHousekeeping() {
         
-        List<RoomTypeEntity> roomTypes = roomTypeEntityControllerLocal.retrieveAllRoomType();
+        //List<RoomTypeEntity> roomTypes = roomTypeEntityControllerLocal.retrieveAllRoomType();
         
-        for(RoomTypeEntity roomType : roomTypes) {
-            
-            List<RoomEntity> rooms = roomType.getRoom();
-            
-            for(RoomEntity room : rooms) {
+        for(RoomTypeEntity roomType : roomTypeEntityControllerLocal.retrieveAllRoomType()) {
+
+            for(RoomEntity room : roomType.getRoom()) {
                 
                 if ( room.getIsDisabled().equals(Boolean.FALSE) && (room.getRoomStatus().equals(RoomStatus.ALLOCATED) || room.getRoomStatus().equals(RoomStatus.VACANT))) {
                     room.setIsReady(Boolean.TRUE);

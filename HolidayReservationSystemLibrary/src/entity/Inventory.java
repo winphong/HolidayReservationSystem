@@ -7,7 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -15,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import util.enumeration.RoomStatus;
 
 /**
  *
@@ -33,7 +30,7 @@ public class Inventory implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventoryId;
     private LocalDate date;
-    private List<RoomTypeEntity> roomTypes = null;
+    //private List<RoomTypeEntity> roomTypes = null;
     private Integer totalNumOfRoomAvailable = 0;
     private List<List<RoomEntity>> availableRoom = null;
 
@@ -125,21 +122,7 @@ public class Inventory implements Serializable {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
-    /**
-     * @return the roomTypes
-     */
-    public List<RoomTypeEntity> getRoomTypes() {
-        return roomTypes;
-    }
-
-    /**
-     * @param roomTypes the roomTypes to set
-     */
-    public void setRoomTypes(List<RoomTypeEntity> roomTypes) {
-        this.roomTypes = roomTypes;
-    }
-
+    
     /**
      * @return the totalNumOfRoomAvailable
      */

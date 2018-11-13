@@ -165,8 +165,8 @@ public class HotelOperationModule {
         String amenities = scanner.nextLine();
         System.out.print("Enter Tier: ");
         Integer tier = scanner.nextInt();
-        List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
-        for (RoomTypeEntity roomType : roomTypes) {
+        //List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
+        for (RoomTypeEntity roomType : roomTypeEntityControllerRemote.viewAllRoomType()) {
             if (roomType.getTier() >= tier) {
                 roomType.setTier(roomType.getTier() + 1);
             }
@@ -267,9 +267,9 @@ public class HotelOperationModule {
     //need to modify again because of isDiabled and also tier
     public void doDeleteRoomType(RoomTypeEntity roomTypeEntity) {
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: Delete Room Type ***\n");
-        List<RoomEntity> rooms = roomTypeEntity.getRoom();
+        //List<RoomEntity> rooms = roomTypeEntity.getRoom();
         Boolean roomInUse = false;
-        for (RoomEntity room : rooms) {
+        for (RoomEntity room : roomTypeEntity.getRoom()) {
             if (room.getRoomStatus() != RoomStatus.VACANT) {
                 roomInUse = true;
                 break;
@@ -306,9 +306,9 @@ public class HotelOperationModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: Create New Room ***\n");
         System.out.println();
-        List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.retrieveAllRoomType();
+        //List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.retrieveAllRoomType();
         System.out.printf("%15s%20s\n", "Room Type Id", "Name");
-        for (RoomTypeEntity roomType : roomTypes) {
+        for (RoomTypeEntity roomType : roomTypeEntityControllerRemote.retrieveAllRoomType()) {
             System.out.printf("%15s%20s\n", roomType.getRoomTypeId(), roomType.getName());
         }
         System.out.print("Enter id of Room Type: ");
@@ -527,9 +527,9 @@ public class HotelOperationModule {
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: Delete Room Rate ***\n");
         RoomTypeEntity roomType = roomRate.getRoomType();
         if (roomType.getIsDisabled().equals(Boolean.FALSE)) {
-            List<RoomEntity> rooms = roomType.getRoom();
+            //List<RoomEntity> rooms = roomType.getRoom();
             Boolean roomInUse = false;
-            for (RoomEntity room : rooms) {
+            for (RoomEntity room : roomType.getRoom()) {
                 // Or maybe allocated
                 if (room.getRoomStatus().equals(RoomStatus.OCCUPIED) || room.getRoomStatus().equals(RoomStatus.ALLOCATED)) {
                     roomInUse = true;

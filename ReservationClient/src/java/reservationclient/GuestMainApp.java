@@ -185,11 +185,11 @@ public class GuestMainApp {
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
         
-        List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
+        //List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
         
         Integer index = 1;
         
-        for(RoomTypeEntity availableRoomType : availableRoomTypes) {
+        for(RoomTypeEntity availableRoomType : inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired)) {
             
             System.out.println(index + ": " + availableRoomType.getName());
             index++;
@@ -211,11 +211,11 @@ public class GuestMainApp {
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
         
-        List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
+        //List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
         
         Integer index = 1;
         
-        for(RoomTypeEntity availableRoomType : availableRoomTypes) {
+        for(RoomTypeEntity availableRoomType : inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired)) {
             
             System.out.println(index + ": " + availableRoomType.getName());
             index++;

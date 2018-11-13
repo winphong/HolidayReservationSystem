@@ -6,7 +6,6 @@
 package ejb.session.stateless;
 
 import entity.RoomEntity;
-import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.util.List;
 import util.exception.RoomNotFoundException;
