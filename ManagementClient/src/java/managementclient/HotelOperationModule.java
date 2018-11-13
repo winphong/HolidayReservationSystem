@@ -11,7 +11,6 @@ import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.EmployeeEntity;
 import entity.RoomEntity;
-import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.util.List;
@@ -349,6 +348,7 @@ public class HotelOperationModule {
             System.out.println("2: Allocated");
             System.out.println("3: Occupied");
             System.out.println("4: Maintenance");
+// Remove housekeeping? Use room.isReady attribute to indicate
             System.out.println("5: Housekeeping");
             System.out.print("Select room status (blank if no change): ");
             input = scanner.nextLine().trim();

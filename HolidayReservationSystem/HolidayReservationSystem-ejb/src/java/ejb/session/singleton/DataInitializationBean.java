@@ -76,7 +76,7 @@ public class DataInitializationBean {
     public void initializeInventory() {
         
         for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusYears(1)); date.plusDays(1) ) {      
-            Inventory inventory = new Inventory(date);
+            Inventory inventory = new Inventory(em, date);
             inventory.updateInventory();
             em.persist(inventory);
             em.flush();

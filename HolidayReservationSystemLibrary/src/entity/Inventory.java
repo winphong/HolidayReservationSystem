@@ -41,9 +41,9 @@ public class Inventory implements Serializable {
     public Inventory() {
     }
 
-    public Inventory(LocalDate date) {
+    public Inventory(EntityManager em, LocalDate date) {
         this();
-        
+        this.em = em;
         this.date = date;
     }
     

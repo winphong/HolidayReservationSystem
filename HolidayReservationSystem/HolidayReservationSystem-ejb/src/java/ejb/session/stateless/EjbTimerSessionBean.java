@@ -119,7 +119,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     @Schedule(hour = "0", info = "scheduleEveryday12AM")
     public void createNewInventory() {
         
-        Inventory inventory = new Inventory(LocalDate.now().plusYears(1));
+        Inventory inventory = new Inventory(em, LocalDate.now().plusYears(1));
         inventory.updateInventory();
         em.persist(inventory);
         em.flush();
