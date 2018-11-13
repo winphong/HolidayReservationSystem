@@ -7,13 +7,12 @@ package entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -22,14 +21,12 @@ import javax.persistence.PersistenceContext;
 @Entity
 public class Inventory implements Serializable {
     
-    @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
-    private EntityManager em;
-    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventoryId;
     private LocalDate date;
+    private Date alternativeDate;
     //private List<RoomTypeEntity> roomTypes = null;
     private Integer totalNumOfRoomAvailable = 0;
     private List<List<RoomEntity>> availableRoom = null;
@@ -41,6 +38,7 @@ public class Inventory implements Serializable {
     public Inventory(LocalDate date) {
         this();
         this.date = date;
+        this.alternativeDate = Date.valueOf(date);
     }
     
     public Long getInventoryId() {

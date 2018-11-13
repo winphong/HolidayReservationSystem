@@ -74,11 +74,28 @@ public class DataInitializationBean {
     }
     
     public void initializeInventory() {
-        Inventory inventory;
-        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date.plusDays(1) ) {      
-            inventory = new Inventory(date);
-            em.persist(inventory);
-            inventory = null;
-        }
+        
+        Inventory inventory = new Inventory(LocalDate.now());
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(1));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(2));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(3));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(4));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(5));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(6));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(7));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(8));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(9));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(10));
+        em.persist(inventory);
     }    
 }
