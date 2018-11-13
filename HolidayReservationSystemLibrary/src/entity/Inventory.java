@@ -41,9 +41,8 @@ public class Inventory implements Serializable {
     public Inventory() {
     }
 
-    public Inventory(EntityManager em, LocalDate date) {
+    public Inventory(LocalDate date) {
         this();
-        this.em = em;
         this.date = date;
     }
     
@@ -80,9 +79,8 @@ public class Inventory implements Serializable {
         return "entity.Inventory[ id=" + inventoryId + " ]";
     }
     
-    // Everytime a room / roomType is created/ updated / deleted, inventory must be updated from the current system date to the latest available booking date
-    // need to modify to include use case for create and update
-    public void updateInventory() {
+    // Migrated to InventoryController
+    /*public void updateInventory() {
         
         Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :inBoolean");
         query.setParameter("inBoolean", Boolean.FALSE);
@@ -112,7 +110,7 @@ public class Inventory implements Serializable {
             getAvailableRoom().add(roomForEachRoomType);
             // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
         }
-    }
+    }*/
 
     /**
      * @return the date

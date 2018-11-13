@@ -15,10 +15,12 @@ import java.time.LocalDate;
  */
 public interface InventoryControllerLocal {
 
-    void updateInventory();
-
+    public void updateAllInventory();
+    
     public Inventory getInventoryByDate(LocalDate date);
 
     public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex);
+
+    public Inventory retrieveInventoryById(Long inventoryId);
     
 }

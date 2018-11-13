@@ -6,6 +6,7 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.EmployeeEntityControllerLocal;
+import ejb.session.stateless.InventoryControllerLocal;
 import ejb.session.stateless.PartnerEntityControllerLocal;
 import entity.EmployeeEntity;
 import entity.Inventory;
@@ -37,9 +38,10 @@ public class DataInitializationBean {
 
     @EJB
     private EmployeeEntityControllerLocal employeeEntityControllerLocal;
-    
     @EJB
     private PartnerEntityControllerLocal partnerEntityControllerLocal;
+    @EJB
+    private InventoryControllerLocal inventoryControllerLocal;
     
     @PostConstruct
     public void postConstruct(){        
@@ -48,24 +50,22 @@ public class DataInitializationBean {
             initializeEmployee();
             initializePartner();
             initializeRoomType();
-        }
-        
-        if (em.find(Inventory.class, new Long(1)) == null) {
             initializeInventory();
         }
+        inventoryControllerLocal.updateAllInventory();
     }
 
+    public void initializeEmployee(){
+        //system admin
+        EmployeeEntity employee = new EmployeeEntity("Win", "Phong", "sysadmin", "password", EmployeeAccessRight.SYSTEMADMINISTRATOR, "12345678", "sysadmin1@gmail.com");
+        em.persist(employee);
+        //employeeEntityControllerLocal.createNewEmployee(employee);
+    }
+    
     public void initializePartner(){
         PartnerEntity partner = new PartnerEntity("Holiday.com","holiday","password","01234567","A0000000A","holiday@gmail.com");
         em.persist(partner);
         //partnerEntityControllerLocal.createNewPartner(partner);
-    }
-    
-    public void initializeEmployee(){
-        //system admin
-        EmployeeEntity employee = new EmployeeEntity("manager", "sysadmin", "sysadmin", "password", EmployeeAccessRight.SYSTEMADMINISTRATOR, "00000000", "sysadmin1@gmail.com");
-        em.persist(employee);
-        //employeeEntityControllerLocal.createNewEmployee(employee);
     }
     
     public void initializeRoomType() {
@@ -74,14 +74,9 @@ public class DataInitializationBean {
     }
     
     public void initializeInventory() {
-        
-        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusYears(1)); date.plusDays(1) ) {      
-            Inventory inventory = new Inventory(em, date);
-            inventory.updateInventory();
+        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date.plusDays(1) ) {      
+            Inventory inventory = new Inventory(date);
             em.persist(inventory);
-            em.flush();
         }
-    }
-    
-    
+    }    
 }

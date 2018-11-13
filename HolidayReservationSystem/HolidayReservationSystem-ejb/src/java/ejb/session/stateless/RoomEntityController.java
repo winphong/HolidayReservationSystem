@@ -53,7 +53,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         newRoom.setRoomType(roomType);
         
         // Need to update inventory from the day of update to the last available inventory object
-        inventoryControllerLocal.updateInventory();
+        inventoryControllerLocal.updateAllInventory();
         em.flush();
         return newRoom;
     }
@@ -68,7 +68,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             roomToUpdate.setRoomStatus(room.getRoomStatus());
             roomToUpdate.setRoomType(room.getRoomType());
             roomToUpdate.setIsDisabled(room.getIsDisabled());
-            inventoryControllerLocal.updateInventory();
+            inventoryControllerLocal.updateAllInventory();
         } catch (RoomNotFoundException ex) {
             System.out.println("Room does not exist!");
         }
@@ -81,7 +81,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     public void disableRoom(RoomEntity room) {
 
         room.setIsDisabled(Boolean.TRUE);
-        inventoryControllerLocal.updateInventory();
+        inventoryControllerLocal.updateAllInventory();
     }
 
     // If VACANT, delete the room
@@ -98,7 +98,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         // If room is already disabled, the room is already not in the inventory
         // Only update inventory if the room is not disabled
         if (room.getIsDisabled().equals(Boolean.FALSE)) {
-            inventoryControllerLocal.updateInventory();
+            inventoryControllerLocal.updateAllInventory();
         }
 
         em.flush();

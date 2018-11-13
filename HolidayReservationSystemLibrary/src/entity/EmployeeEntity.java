@@ -48,12 +48,12 @@ public class EmployeeEntity implements Serializable {
     public EmployeeEntity() {
     }
 
-    public EmployeeEntity(String firstName, String lastName, String userName, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
+    public EmployeeEntity(String firstName, String lastName, String username, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
         
         this();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = userName;
+        this.username = username;
         this.password = password;
         this.accessRight = accessRight;
         this.phoneNumber = phoneNum;

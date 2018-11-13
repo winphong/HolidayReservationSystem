@@ -33,6 +33,8 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal;
     @EJB
     private ReservationEntityControllerLocal reservationEntityControllerLocal;
+    @EJB
+    private InventoryControllerLocal inventoryControllerLocal;
     
     
     
@@ -119,8 +121,8 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     @Schedule(hour = "0", info = "scheduleEveryday12AM")
     public void createNewInventory() {
         
-        Inventory inventory = new Inventory(em, LocalDate.now().plusYears(1));
-        inventory.updateInventory();
+        Inventory inventory = new Inventory(LocalDate.now().plusYears(1));
+        inventoryControllerLocal.updateAllInventory();
         em.persist(inventory);
         em.flush();
     }

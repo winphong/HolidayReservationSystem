@@ -40,7 +40,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
         em.persist(newRoomType);
         em.flush();
-        inventoryControllerLocal.updateInventory();
+        inventoryControllerLocal.updateAllInventory();
         return newRoomType;
     }
 
@@ -92,7 +92,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             roomTypeToUpdate.setRoom(roomType.getRoom());
             roomTypeToUpdate.setRoomRate(roomType.getRoomRate());
             roomTypeToUpdate.setIsDisabled(roomType.getIsDisabled());
-            inventoryControllerLocal.updateInventory();
+            inventoryControllerLocal.updateAllInventory();
         } catch (RoomTypeNotFoundException ex) {
             System.out.println("Room type does not exist!");
         }
@@ -103,7 +103,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     public void disableRoomType(RoomTypeEntity roomType) {
 
         roomType.setIsDisabled(Boolean.TRUE);
-        inventoryControllerLocal.updateInventory();
+        inventoryControllerLocal.updateAllInventory();
     }
 
     // If roomType.getReservation == null && roomType.getRoom == null && roomType.getRoomRate == null, delete
@@ -112,7 +112,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
         em.remove(roomType);
         em.flush();
-        inventoryControllerLocal.updateInventory();
+        inventoryControllerLocal.updateAllInventory();
     }
 
     @Override

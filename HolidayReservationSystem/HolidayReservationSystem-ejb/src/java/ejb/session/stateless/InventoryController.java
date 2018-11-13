@@ -22,6 +22,8 @@ import javax.persistence.Query;
 import ejb.session.stateful.WalkinReservationEntityControllerLocal;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
+import java.util.ArrayList;
+import util.enumeration.RoomStatus;
 
 /**
  *
@@ -42,19 +44,20 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // "Insert Code > Add Business Method")
     
     
-    //need to modify this 
+    // Everytime a room / roomType is created/ updated / deleted, inventory must be updated from the current system date to the latest available booking date
+    // need to modify to include use case for create and update
     @Override
-    public void updateInventory() {
+    public void updateAllInventory() {
         
         LocalDate currentDate = LocalDate.now();
         
         Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.date >= :currentDate");
         query.setParameter("currentDate", currentDate);
         
-        List<Inventory> inventories = query.getResultList();
+        List<Inventory> inventories = (List<Inventory>) query.getResultList();
         
         for(Inventory inventory : inventories) {
-            inventory.updateInventory();
+            updateInventory(inventory.getInventoryId());
         }
     }
     
@@ -71,6 +74,24 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         } catch (NoResultException | NonUniqueResultException ex) {
             
             System.out.println("Inventory for " + inputDate + " does not exist!");
+        }
+        
+        return null;
+    }
+    
+    @Override
+    public Inventory retrieveInventoryById(Long inventoryId) {
+        
+        Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.inventoryId = :inInventoryId");
+        query.setParameter("inInventoryId", inventoryId);
+        
+        try {
+            
+            return (Inventory) query.getSingleResult();
+        
+        } catch (NoResultException | NonUniqueResultException ex) {
+            
+            System.out.println("Inventory with ID : " + inventoryId + " does not exist!");
         }
         
         return null;
@@ -162,5 +183,42 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         } else {
             return Boolean.FALSE;
         } 
+    }
+    
+    private void updateInventory(Long inventoryId) {
+        
+        Inventory inventory = retrieveInventoryById(inventoryId);
+        
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :inBoolean");
+        query.setParameter("inBoolean", Boolean.FALSE);
+        
+        // Get a list of roomTypes that is not disabled
+        List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
+        // List<RoomEntity> availableRoom = new ArrayList<>();   
+        Integer totalNumOfRoomAvailable = 0;
+        
+        List<RoomEntity> roomForEachRoomType;
+        List<RoomEntity> rooms;
+        
+        // Set availableRoom to new List
+        inventory.setAvailableRoom(new ArrayList<>());
+        // For each room type
+        for(RoomTypeEntity roomType : roomTypes) {
+            roomForEachRoomType = new ArrayList<>();
+            // Get the list of room
+            rooms = roomType.getRoom();           
+            // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
+            for(RoomEntity room : rooms) {
+                // Not disable and vacant
+                if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus().equals(RoomStatus.VACANT) ) {
+                    roomForEachRoomType.add(room);
+                    totalNumOfRoomAvailable++;
+                }   
+            }
+            inventory.getAvailableRoom().add(roomForEachRoomType);
+            // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
+        }
+        // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
+        inventory.setTotalNumOfRoomAvailable(totalNumOfRoomAvailable);
     }
 }

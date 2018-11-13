@@ -16,5 +16,7 @@ import java.util.List;
 public interface InventoryControllerRemote {
 
     public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired);
+
+    public void updateAllInventory();
     
 }
