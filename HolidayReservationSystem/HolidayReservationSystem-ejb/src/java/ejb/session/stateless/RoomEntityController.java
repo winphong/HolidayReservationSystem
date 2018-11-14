@@ -13,6 +13,8 @@ import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -23,7 +25,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.RoomStatus;
+import util.exception.CreateNewRoomException;
 import util.exception.RoomNotFoundException;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -43,22 +47,29 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
-    
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType) {
+    @Override
+    public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType) throws CreateNewRoomException {
 
-        em.persist(newRoom);
-        roomType.getRoom().add(newRoom);
-        newRoom.setRoomType(roomType);
-        
-        // Need to update inventory from the day of update to the last available inventory object
-        inventoryControllerLocal.updateAllInventory();
-        em.flush();
-        return newRoom;
+        try {
+            roomType.getRoom().size();
+            em.persist(newRoom);
+            roomType.getRoom().add(newRoom);
+            newRoom.setRoomType(roomType);
+
+            // Need to update inventory from the day of update to the last available inventory object
+            inventoryControllerLocal.updateAllInventory();
+            em.flush();
+            return newRoom;
+        } catch (Exception ex) {
+            throw new CreateNewRoomException("Error creating new room: " + ex.getMessage());
+        }
     }
 
     // Retrieved from retrieveRoomByRoomNumber
+    @Override
     public void updateRoom(RoomEntity room) {
 
         RoomEntity roomToUpdate;
@@ -71,6 +82,8 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             inventoryControllerLocal.updateAllInventory();
         } catch (RoomNotFoundException ex) {
             System.out.println("Room does not exist!");
+        } catch (UpdateInventoryException ex) {
+            System.out.println("Error updating Inventory!");
         }
 
     }
@@ -81,7 +94,11 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     public void disableRoom(RoomEntity room) {
 
         room.setIsDisabled(Boolean.TRUE);
-        inventoryControllerLocal.updateAllInventory();
+        try {
+            inventoryControllerLocal.updateAllInventory();
+        } catch (UpdateInventoryException ex) {
+            System.out.println("Error updating Inventory!");
+        }
     }
 
     // If VACANT, delete the room
@@ -94,11 +111,15 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         room.setRoomType(null);
 
         em.remove(room);
-        
+
         // If room is already disabled, the room is already not in the inventory
         // Only update inventory if the room is not disabled
         if (room.getIsDisabled().equals(Boolean.FALSE)) {
-            inventoryControllerLocal.updateAllInventory();
+            try {
+                inventoryControllerLocal.updateAllInventory();
+            } catch (UpdateInventoryException ex) {
+                System.out.println("Error updating Inventory!");
+            }
         }
 
         em.flush();
@@ -129,7 +150,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
         return rooms;
     }
-    
+
     // Reserve room is still needed because guest can walkin and reserve for future date
     // Once reserve room, we need to allocate room for the guest if the start date of reservation is equal to current date
     @Override
@@ -140,56 +161,56 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         List<ReservationLineItemEntity> reservationLineItems = reservation.getReservationLineItemEntities();
         Integer countOfRoomAvailableThroughout;
         Boolean availableThroughout;
-        
+
         // Loop through all the reservationLineItem of currentReservation
-        for(ReservationLineItemEntity reservationLineItem : reservationLineItems) {
-            
+        for (ReservationLineItemEntity reservationLineItem : reservationLineItems) {
+
             RoomTypeEntity roomType = reservationLineItem.getRoomType();
-            
+
             List<RoomEntity> rooms = roomType.getRoom();
-                
-                countOfRoomAvailableThroughout = 0;
-                        
-                // Loop through all the rooms of the specified roomType & check whether can fullfil the booking requirement
-                // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
-                for(RoomEntity room : rooms) {
-                    
-                    availableThroughout = Boolean.TRUE;
-                    
-                    for(LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()) ; date.plusDays(1)) {
-                        
-                        if ( !room.getRoomStatus().equals(RoomStatus.VACANT) ) {
-                            // If the current reservation end date is the same as new reservation start date, the room is considered available
-                            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
-                            
-                            } else {
-                                availableThroughout = Boolean.FALSE;
-                                break;
-                            }
-                        }
-                    }
-                    if ( availableThroughout.equals(Boolean.TRUE) ) {
-                        
-                        countOfRoomAvailableThroughout++;
-                        room.setRoomStatus(RoomStatus.ALLOCATED); // should I change here??
-                        // If the room if not occupied
-                        if ( room.getCurrentReservation() != null ) {
-                            room.setNextReservation(reservation);
+
+            countOfRoomAvailableThroughout = 0;
+
+            // Loop through all the rooms of the specified roomType & check whether can fullfil the booking requirement
+            // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
+            for (RoomEntity room : rooms) {
+
+                availableThroughout = Boolean.TRUE;
+
+                for (LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()); date.plusDays(1)) {
+
+                    if (!room.getRoomStatus().equals(RoomStatus.VACANT)) {
+                        // If the current reservation end date is the same as new reservation start date, the room is considered available
+                        if (room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
+
                         } else {
-                            room.setCurrentReservation(reservation);
-                        }
-                        
-                        reservation.getRooms().add(room);
-                        
-                        // If all room in reservation has been successfully allocated, break
-                        if ( countOfRoomAvailableThroughout.equals(reservationLineItem.getNumOfRoomBooked()) ) {
+                            availableThroughout = Boolean.FALSE;
                             break;
                         }
-                    }  
-                }                
-                if (countOfRoomAvailableThroughout < reservationLineItem.getNumOfRoomBooked()) {
-                    //throw unable to allocate all reserved room exception
-                }            
+                    }
+                }
+                if (availableThroughout.equals(Boolean.TRUE)) {
+
+                    countOfRoomAvailableThroughout++;
+                    room.setRoomStatus(RoomStatus.ALLOCATED); // should I change here??
+                    // If the room if not occupied
+                    if (room.getCurrentReservation() != null) {
+                        room.setNextReservation(reservation);
+                    } else {
+                        room.setCurrentReservation(reservation);
+                    }
+
+                    reservation.getRooms().add(room);
+
+                    // If all room in reservation has been successfully allocated, break
+                    if (countOfRoomAvailableThroughout.equals(reservationLineItem.getNumOfRoomBooked())) {
+                        break;
+                    }
+                }
+            }
+            if (countOfRoomAvailableThroughout < reservationLineItem.getNumOfRoomBooked()) {
+                //throw unable to allocate all reserved room exception
+            }
         }
     }
 }

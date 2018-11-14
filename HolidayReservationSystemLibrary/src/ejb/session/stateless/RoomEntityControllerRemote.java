@@ -9,6 +9,7 @@ import entity.RoomEntity;
 import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.util.List;
+import util.exception.CreateNewRoomException;
 import util.exception.RoomNotFoundException;
 
 /**
@@ -17,7 +18,7 @@ import util.exception.RoomNotFoundException;
  */
 public interface RoomEntityControllerRemote {
 
-    public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType);
+    public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType) throws CreateNewRoomException;
 
     public void updateRoom(RoomEntity room);
 

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.EmployeeEntity;
+import util.exception.EmployeeNotFoundException;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface EmployeeEntityControllerLocal {
 
     public EmployeeEntity retrieveEmployeeById(Long employeeId);
 
-    public EmployeeEntity retrieveEmployeeByUsername(String username);
+    public EmployeeEntity retrieveEmployeeByUsername(String username) throws EmployeeNotFoundException;
 }

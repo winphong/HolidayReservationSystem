@@ -5,6 +5,7 @@
  */
 package managementclient;
 
+import ejb.session.stateful.OnlineReservationEntityControllerRemote;
 import ejb.session.stateless.EmployeeEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
@@ -17,6 +18,9 @@ import util.enumeration.EmployeeAccessRight;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import ejb.session.stateless.InventoryControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
+import util.exception.EmployeeNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 
 /**
@@ -25,13 +29,16 @@ import util.exception.RoomTypeNotFoundException;
  */
 public class MainApp {
 
-    private GuestEntityControllerRemote guestEntityControllerRemote;
-    private WalkinReservationEntityControllerRemote reservationEntityControllerRemote;
-    private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
-    private RoomEntityControllerRemote roomEntityControllerRemote;
-    private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
-    private PartnerEntityControllerRemote partnerEntityControllerRemote;
-    private EmployeeEntityControllerRemote employeeEntityControllerRemote;
+    private static GuestEntityControllerRemote guestEntityControllerRemote;
+    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private static WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote;
+    private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
+    private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
+    private static RoomEntityControllerRemote roomEntityControllerRemote;
+    private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
+    private static PartnerEntityControllerRemote partnerEntityControllerRemote;
+    private static EmployeeEntityControllerRemote employeeEntityControllerRemote;
+    private static InventoryControllerRemote inventoryControllerRemote;
 
     private SystemAdministrationModule systemAdministrationModule;
     private HotelOperationModule hotelOperationModule;
@@ -42,7 +49,7 @@ public class MainApp {
     public MainApp() {
     }
 
-    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
+    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote) {
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
@@ -50,6 +57,13 @@ public class MainApp {
         this.roomTypeEntityControllerRemote = roomTypeEntityControllerRemote;
         this.partnerEntityControllerRemote = partnerEntityControllerRemote;
         this.employeeEntityControllerRemote = employeeEntityControllerRemote;
+        this.inventoryControllerRemote = inventoryControllerRemote;
+        this.walkinReservationEntityControllerRemote = walkinReservationEntityControllerRemote;
+        this.onlineReservationEntityControllerRemote = onlineReservationEntityControllerRemote;
+    }
+
+    MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void runApp() throws Exception {
@@ -72,9 +86,9 @@ public class MainApp {
                         employeeLogin();
                         System.out.println("Login successful!\n");
 
-                        systemAdministrationModule = new SystemAdministrationModule();
-                        hotelOperationModule = new HotelOperationModule();
-                        frontOfficeModule = new FrontOfficeModule();
+                        systemAdministrationModule = new SystemAdministrationModule(employeeEntityControllerRemote, partnerEntityControllerRemote, currentEmployee);
+                        hotelOperationModule = new HotelOperationModule(employeeEntityControllerRemote, roomTypeEntityControllerRemote, roomEntityControllerRemote, roomRateEntityControllerRemote, reservationEntityControllerRemote, walkinReservationEntityControllerRemote, currentEmployee);
+                        frontOfficeModule = new FrontOfficeModule(reservationEntityControllerRemote, guestEntityControllerRemote, roomEntityControllerRemote, inventoryControllerRemote, roomTypeEntityControllerRemote, walkinReservationEntityControllerRemote, onlineReservationEntityControllerRemote, currentEmployee);
                         menuMain();
 
                     } catch (InvalidLoginCredentialException ex) {
@@ -105,7 +119,12 @@ public class MainApp {
         password = scanner.nextLine().trim();
 
         if (username.length() > 0 && password.length() > 0) {
-            currentEmployee = employeeEntityControllerRemote.employeeLogin(username, password);
+            try{
+                currentEmployee = employeeEntityControllerRemote.employeeLogin(username, password);
+            }
+            catch (EmployeeNotFoundException ex){
+                System.out.println("Employee with username " + username + "does not exist!");
+            }
         } else {
             throw new InvalidLoginCredentialException("Missing login credential!");
         }

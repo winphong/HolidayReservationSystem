@@ -8,6 +8,7 @@ package externalmanagementclient;
 import ejb.session.stateful.PartnerReservationEntityControllerRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
@@ -25,19 +26,20 @@ import util.exception.ReservationNotFoundException;
  */
 public class MainApp {
 
-    private RoomEntityControllerRemote roomEntityControllerRemote;
-    private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
-    private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
-    private InventoryControllerRemote inventoryControllerRemote;
-    private PartnerReservationEntityControllerRemote partnerReservationEntityControllerRemote;
-    private PartnerEntityControllerRemote partnerEntityControllerRemote;    
+    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private static RoomEntityControllerRemote roomEntityControllerRemote;
+    private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
+    private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
+    private static InventoryControllerRemote inventoryControllerRemote;
+    private static PartnerReservationEntityControllerRemote partnerReservationEntityControllerRemote;
+    private static PartnerEntityControllerRemote partnerEntityControllerRemote;    
     
     private PartnerEntity currentPartner;
     
     public MainApp() {
     }
 
-    public MainApp(RoomEntityControllerRemote roomEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, PartnerReservationEntityControllerRemote partnerReservationEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote) {
+    public MainApp(RoomEntityControllerRemote roomEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, PartnerReservationEntityControllerRemote partnerReservationEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote) {
         this();
         this.roomEntityControllerRemote = roomEntityControllerRemote;
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
@@ -45,6 +47,7 @@ public class MainApp {
         this.inventoryControllerRemote = inventoryControllerRemote;
         this.partnerReservationEntityControllerRemote = partnerReservationEntityControllerRemote;
         this.partnerEntityControllerRemote = partnerEntityControllerRemote;
+        this.reservationEntityControllerRemote = reservationEntityControllerRemote;
     }
     
     public void runApp() {

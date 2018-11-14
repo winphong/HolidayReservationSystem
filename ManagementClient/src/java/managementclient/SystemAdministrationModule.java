@@ -72,6 +72,7 @@ public class SystemAdministrationModule {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
+                    System.out.println();
                 }
             }
 
@@ -105,6 +106,7 @@ public class SystemAdministrationModule {
                 System.out.println("Invalid option, please try again!\n");
             }
         }
+        scanner.nextLine();
         System.out.print("Enter User Name: ");
         String userName = scanner.nextLine();
         System.out.print("Enter Password: ");
@@ -115,22 +117,25 @@ public class SystemAdministrationModule {
         String email = scanner.nextLine();
 
         EmployeeEntity newEmployee = new EmployeeEntity(firstName, lastName, userName, password, employeeAccessRight, phoneNumber, email);
-        employeeEntityControllerRemote.createNewEmployee(newEmployee);
+        newEmployee = employeeEntityControllerRemote.createNewEmployee(newEmployee);
         System.out.println("New Employee with Id " + newEmployee.getEmployeeId() + " created.");
+        System.out.println();
     }
     
     private void doViewAllEmployees(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Employees ***\n");
         List<EmployeeEntity> employeeEntities = employeeEntityControllerRemote.viewAllEmployee();
-        System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password", "Phone Number", "Email Address");
+        System.out.printf("%12s%15s%15s%25s%15s%15s%15s%25s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password", "Phone Number", "Email Address");
         
         for (EmployeeEntity employeeEntity: employeeEntities)
         {
-            System.out.printf("%12s%20s%20s%25s%20s%20s%10s%20s\n",employeeEntity.getEmployeeId(),employeeEntity.getFirstName(),employeeEntity.getLastName(),employeeEntity.getAccessRight(),employeeEntity.getUsername(),employeeEntity.getPassword(),employeeEntity.getPhoneNumber(),employeeEntity.getEmail());
+            System.out.printf("%12s%15s%15s%25s%15s%15s%15s%25s\n",employeeEntity.getEmployeeId(),employeeEntity.getFirstName(),employeeEntity.getLastName(),employeeEntity.getAccessRight(),employeeEntity.getUsername(),employeeEntity.getPassword(),employeeEntity.getPhoneNumber(),employeeEntity.getEmail());
         }
+        System.out.println();
         System.out.print("Press any key to continue...: ");
         scanner.nextLine();
+        System.out.println();
     }
     
     private void doCreateNewPartner (){
@@ -150,22 +155,25 @@ public class SystemAdministrationModule {
         String email = scanner.nextLine();
         
         PartnerEntity newPartner = new PartnerEntity(companyName,userName,password,phoneNumber,registrationId,email);
-        partnerEntityControllerRemote.createNewPartner(newPartner);
+        newPartner = partnerEntityControllerRemote.createNewPartner(newPartner);
         System.out.println("New Partner with Id " + newPartner.getPartnerId() + " created.");
+        System.out.println();
     }
     
     private void doViewAllPartners(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Employees ***\n");
+        System.out.println("*** Merlion Hotel HoRS :: System Administration :: View All Partners ***\n");
         List<PartnerEntity> partnerEntities = partnerEntityControllerRemote.viewAllPartner();
-        System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n", "Partner ID", "Company Name", "Registration Id", "Username", "Password", "Phone Number", "Email Address");
+        System.out.printf("%12s%20s%20s%15s%15s%15s%25s\n", "Partner ID", "Company Name", "Registration Id", "Username", "Password", "Phone Number", "Email Address");
         
         for (PartnerEntity partnerEntity: partnerEntities)
         {
-            System.out.printf("%12s%20s%20s%20s%20s%10s%20s\n",partnerEntity.getPartnerId(),partnerEntity.getCompanyName(),partnerEntity.getCompanyRegistrationId(),partnerEntity.getUserName(),partnerEntity.getPassword(),partnerEntity.getPhoneNumber(),partnerEntity.getEmail());
+            System.out.printf("%12s%20s%20s%15s%15s%15s%25s\n",partnerEntity.getPartnerId(),partnerEntity.getCompanyName(),partnerEntity.getCompanyRegistrationId(),partnerEntity.getUserName(),partnerEntity.getPassword(),partnerEntity.getPhoneNumber(),partnerEntity.getEmail());
         }
+        System.out.println();
         System.out.print("Press any key to continue...: ");
         scanner.nextLine();
+        System.out.println();
     }
 }
  

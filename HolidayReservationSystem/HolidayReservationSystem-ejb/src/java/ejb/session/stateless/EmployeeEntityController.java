@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -30,27 +31,20 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
 
-    private EmployeeEntity employee;
-
-    public EmployeeEntity employeeLogin(String username, String password) throws InvalidLoginCredentialException{
+    @Override
+    public EmployeeEntity employeeLogin(String username, String password) throws EmployeeNotFoundException, InvalidLoginCredentialException{
 
         try {
-            Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
-
-            query.setParameter("inUsername", username);
-
-            if (employee.getPassword().equals(password)) {
-
-                employee = (EmployeeEntity) query.getSingleResult();
+            EmployeeEntity employee = retrieveEmployeeByUsername(username);
+            if (employee.getPassword().equals(password)){
                 return employee;
-
-            } else {
-               throw new InvalidLoginCredentialException("Invalid password!");
             }
-        } catch (InvalidLoginCredentialException ex) {
-            System.out.println("Invalid user!");
-        }
-        return null;
+            else{
+                throw new InvalidLoginCredentialException("Invalid password!");
+            }
+        } catch (EmployeeNotFoundException ex) {
+            throw new InvalidLoginCredentialException("Invalid user!");
+        } 
     }
 
     @Override
@@ -70,7 +64,8 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
         return (List<EmployeeEntity>) query.getResultList();
     }
     
-    public EmployeeEntity retrieveEmployeeByUsername(String username) {
+    @Override
+    public EmployeeEntity retrieveEmployeeByUsername(String username) throws EmployeeNotFoundException{
         
         Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
         query.setParameter("inUsername", username);
@@ -81,10 +76,11 @@ public class EmployeeEntityController implements EmployeeEntityControllerRemote,
             
         } catch ( NoResultException | NonUniqueResultException ex ) {
             
-            System.err.println(ex.getMessage());
+            throw new EmployeeNotFoundException("Employee with Username " + username + " does not exist!");
+        } catch (Exception ex){
+            throw new EmployeeNotFoundException("Error: Employee not found! " + ex.getMessage());
         }
-        
-        return null;
+
     }
     
     public EmployeeEntity retrieveEmployeeById(Long employeeId) {

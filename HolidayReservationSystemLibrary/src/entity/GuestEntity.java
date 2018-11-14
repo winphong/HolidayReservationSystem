@@ -48,12 +48,13 @@ public class GuestEntity implements Serializable {
         this.reservation = new ArrayList<>();
     }
 
-    public GuestEntity(String firstName, String lastName, String userName, String password, String phoneNumber, String email) {
+    public GuestEntity(String firstName, String lastName, String identificationNumber, String userName, String password, String phoneNumber, String email) {
         
         this();
         
         this.firstName = firstName;
         this.lastName = lastName;
+        this.identificationNumber = identificationNumber;
         this.username = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;

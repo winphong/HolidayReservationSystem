@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.RoomTypeEntity;
 import java.util.List;
 import util.exception.RoomTypeNotFoundException;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -15,7 +16,7 @@ import util.exception.RoomTypeNotFoundException;
  */
 public interface RoomTypeEntityControllerRemote {
 
-    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType);
+    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType) throws UpdateInventoryException;
 
     public RoomTypeEntity retrieveRoomTypeByName(String name)throws RoomTypeNotFoundException;
 
@@ -30,5 +31,7 @@ public interface RoomTypeEntityControllerRemote {
     public List<RoomTypeEntity> retrieveAllRoomType();
 
     public RoomTypeEntity retrieveRoomTypeById(Long id)throws RoomTypeNotFoundException;
+
+    public void updateTier(int tier);
     
 }

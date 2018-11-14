@@ -20,11 +20,16 @@ import util.exception.InvalidAccessRightException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
 import entity.RoomRateEntity;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.exception.CreateNewRoomException;
 import util.exception.RoomRateNotFoundException;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -36,22 +41,24 @@ public class HotelOperationModule {
     private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
     private RoomEntityControllerRemote roomEntityControllerRemote;
     private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
-    private WalkinReservationEntityControllerRemote reservationEntityControllerRemote;
+    private ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote;
     private EmployeeEntity currentEmployee;
 
     public HotelOperationModule() {
     }
 
-    public HotelOperationModule(EmployeeEntityControllerRemote employeeEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, EmployeeEntity currentEmployee) {
+    public HotelOperationModule(EmployeeEntityControllerRemote employeeEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote, EmployeeEntity currentEmployee) {
         this();
         this.employeeEntityControllerRemote = employeeEntityControllerRemote;
         this.roomTypeEntityControllerRemote = roomTypeEntityControllerRemote;
         this.roomEntityControllerRemote = roomEntityControllerRemote;
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
+        this.walkinReservationEntityControllerRemote = walkinReservationEntityControllerRemote;
         this.currentEmployee = currentEmployee;
     }
-    
+
     // For operation manager
     public void menuHotelOperation() {
 
@@ -140,6 +147,7 @@ public class HotelOperationModule {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
+                    System.out.println();
                 }
             }
             if (response == 4) {
@@ -157,23 +165,25 @@ public class HotelOperationModule {
         String description = scanner.nextLine();
         System.out.print("Enter Size: ");
         BigDecimal size = scanner.nextBigDecimal();
+        scanner.nextLine();
         System.out.print("Enter Bed: ");
         String bed = scanner.nextLine();
         System.out.print("Enter capacity: ");
         Integer capacity = scanner.nextInt();
+        scanner.nextLine();
         System.out.print("Enter amenities: ");
         String amenities = scanner.nextLine();
         System.out.print("Enter Tier: ");
         Integer tier = scanner.nextInt();
-        List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
-        for (RoomTypeEntity roomType : roomTypes) {
-            if (roomType.getTier() >= tier) {
-                roomType.setTier(roomType.getTier() + 1);
-            }
-        }
         RoomTypeEntity newRoomType = new RoomTypeEntity(name, description, size, bed, capacity, amenities, tier);
-        newRoomType = roomTypeEntityControllerRemote.createNewRoomType(newRoomType);
-        System.out.println("New Employee with Id " + newRoomType.getRoomTypeId() + " created.");
+        roomTypeEntityControllerRemote.updateTier(tier);
+        try {
+            newRoomType = roomTypeEntityControllerRemote.createNewRoomType(newRoomType);
+        } catch (UpdateInventoryException ex) {
+            System.out.println("Error updating Inventory!");
+        }
+        System.out.println("New Room Type with Id " + newRoomType.getRoomTypeId() + " created.");
+        System.out.println();
     }
 
     public void doViewRoomTypeDetails() {
@@ -182,11 +192,12 @@ public class HotelOperationModule {
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: View Room Type Details ***\n");
         System.out.print("Enter Name of Room Type to view details: ");
         String name = scanner.nextLine();
+        System.out.println();
         RoomTypeEntity currentRoomTypeEntity;
         try {
             currentRoomTypeEntity = roomTypeEntityControllerRemote.retrieveRoomTypeByName(name);
-            System.out.printf("%15s%20s%20s%10s%10s%10s%20s%%8s%12s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
-            System.out.printf("%15s%20s%20s%10s%10s%10s%20s%%8s%12s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
+            System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
+            System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
             System.out.println("------------------------");
             System.out.println("1: Update Room Type");
             System.out.println("2: Delete Room Type");
@@ -194,6 +205,7 @@ public class HotelOperationModule {
             System.out.println();
             System.out.print("Enter option: ");
             response = scanner.nextInt();
+            System.out.println();
             if (response == 1) {
                 doUpdateRoomType(currentRoomTypeEntity);
             } else if (response == 2) {
@@ -201,6 +213,7 @@ public class HotelOperationModule {
             }
         } catch (RoomTypeNotFoundException ex) {
             System.out.println("Room type of Id" + name + " does not exist!");
+            System.out.println();
         }
 
     }
@@ -251,17 +264,11 @@ public class HotelOperationModule {
         input = scanner.nextLine().trim();
         if (input.length() > 0) {
             Integer tier = new Integer(input);
-            List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
-            for (RoomTypeEntity roomType : roomTypes) {
-                if (roomType.getTier() >= tier) {
-                    roomType.setTier(roomType.getTier() + 1);
-                }
-            }
-            roomTypeEntity.setTier(tier);
+            roomTypeEntityControllerRemote.updateTier(tier);
         }
-
         roomTypeEntityControllerRemote.updateRoomType(roomTypeEntity);
         System.out.println("Room Type updated successfully!\n");
+        System.out.println();
     }
 
     //need to modify again because of isDiabled and also tier
@@ -279,8 +286,10 @@ public class HotelOperationModule {
             String name = roomTypeEntity.getName();
             roomTypeEntityControllerRemote.deleteRoomType(roomTypeEntity);
             System.out.println("Room Type " + name + " successfully deleted.");
+            System.out.println();
         } else {
             System.out.println("Unable to delete room type: Room in use! Room is disabled.");
+            System.out.println();
         }
     }
 
@@ -290,15 +299,17 @@ public class HotelOperationModule {
         List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
         if (roomTypes.size() > 0) {
             System.out.println();
+            System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
             for (RoomTypeEntity roomType : roomTypes) {
-                System.out.printf("%15s%20s%20s%10s%10s%10s%20s%%8s%12s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
-                System.out.printf("%15s%20s%20s%10s%10s%10s%20s%%8s%12s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
+                System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
             scanner.nextLine();
+            System.out.println();
         } else {
             System.out.println("No room types available.");
+            System.out.println();
         }
     }
 
@@ -315,16 +326,25 @@ public class HotelOperationModule {
         Long id = scanner.nextLong();
         try {
             RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeById(id);
+            scanner.nextLine();
             System.out.print("Enter room floor: ");
             String floor = scanner.nextLine().trim();
             System.out.print("Enter room number: ");
             String number = scanner.nextLine().trim();
             // RoomNumber roomNumber = new RoomNumber(floor, number);
             RoomEntity newRoom = new RoomEntity(floor.concat(number));
-            newRoom = roomEntityControllerRemote.createNewRoom(newRoom, roomType);
-            System.out.println("Room " + newRoom.getRoomId() + " successfully created!\n");
+            try {
+                newRoom = roomEntityControllerRemote.createNewRoom(newRoom, roomType);
+                System.out.println("Room " + newRoom.getRoomId() + " successfully created!\n");
+                System.out.println();
+            }
+            catch (CreateNewRoomException ex){
+                System.out.println("Error: New Room not created!" + ex.getMessage());
+                System.out.println();
+            }
         } catch (RoomTypeNotFoundException ex) {
             System.out.println("Room type of Id" + id + " does not exist!");
+            System.out.println();
         }
     }
 
@@ -358,19 +378,22 @@ public class HotelOperationModule {
                     room.setRoomStatus(RoomStatus.values()[roomStatusInt - 1]);
                 } else {
                     System.out.println("Invalid option! Room status not updated.");
+                    System.out.println();
                 }
             }
-            
+
             System.out.print("Enter name of guest occupying the room (blank if no change): ");
             input = scanner.nextLine().trim();
             if (input.length() > 0) {
                 room.setGuest(input);
             }
-            
+
             roomEntityControllerRemote.updateRoom(room);
             System.out.println("Room Type updated successfully!\n");
+            System.out.println();
         } catch (RoomNotFoundException ex) {
             System.out.println("Room " + roomNumber + " does not exist!");
+            System.out.println();
         }
     }
 
@@ -384,13 +407,18 @@ public class HotelOperationModule {
         RoomEntity room;
         try {
             room = roomEntityControllerRemote.retrieveRoomByRoomNumber(roomNumber);
-            if (room.getRoomStatus().equals(RoomStatus.VACANT) ) {
+            if (room.getRoomStatus().equals(RoomStatus.VACANT)) {
                 roomEntityControllerRemote.deleteRoom(room);
+                System.out.println("Room successfully deleted!");
+                System.out.println();
             } else {
                 roomEntityControllerRemote.disableRoom(room);
+                System.out.println("Room in use! Room is diabled.");
+                System.out.println();
             }
         } catch (RoomNotFoundException ex) {
             System.out.println("Room " + roomNumber + " does not exist!");
+            System.out.println();
         }
     }
 
@@ -398,17 +426,19 @@ public class HotelOperationModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: View All Rooms ***\n");
         System.out.println();
-        System.out.printf("%10s%15s%15s%15s%20s%15s\n", "Room Id", "Room Number", "Room Type", "Room Status", "Guest", "Is Disabled");
         List<RoomEntity> rooms = roomEntityControllerRemote.viewAllRoom();
         if (rooms.size() > 0) {
+            System.out.printf("%10s%15s%15s%15s%20s%15s\n", "Room Id", "Room Number", "Room Type", "Room Status", "Guest", "Is Disabled");
             for (RoomEntity room : rooms) {
                 System.out.printf("%10s%15s%15s%15s%20s%15s\n", room.getRoomId(), room.getRoomNumber(), room.getRoomType(), room.getRoomStatus(), room.getGuest(), room.getIsDisabled());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
             scanner.nextLine();
+            System.out.println();
         } else {
             System.out.println("No rooms available.");
+            System.out.println();
         }
     }
 
@@ -426,9 +456,9 @@ public class HotelOperationModule {
         doViewAllRoomTypes();
         System.out.print("Enter Id of Room Type: ");
         Long roomTypeId = scanner.nextLong();
-        
+
         RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeById(roomTypeId);
-        
+
         System.out.print("Enter Rate per Night: ");
         BigDecimal rate = scanner.nextBigDecimal();
         scanner.nextLine();
@@ -539,18 +569,15 @@ public class HotelOperationModule {
             if (roomInUse.equals(Boolean.FALSE)) {
                 roomRateEntityControllerRemote.deleteRoomRate(roomRate);
                 System.out.println("Room Rate deleted successfully.");
-            }
-            else {
+            } else {
                 roomRateEntityControllerRemote.disableRoomRate(roomRate);
                 System.out.println("Unable to delete room rate: room type in use! Room Rate is disabled.");
             }
-        }
-        else{
+        } else {
             roomRateEntityControllerRemote.deleteRoomRate(roomRate);
             System.out.println("Room Rate deleted successfully.");
         }
     }
-    
 
     public void doViewAllRoomRates() {
         Scanner scanner = new Scanner(System.in);

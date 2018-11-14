@@ -12,12 +12,15 @@ import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.RoomStatus;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -122,7 +125,11 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     public void createNewInventory() {
         
         Inventory inventory = new Inventory(LocalDate.now().plusYears(1));
-        inventoryControllerLocal.updateAllInventory();
+        try {
+            inventoryControllerLocal.updateAllInventory();
+        } catch (UpdateInventoryException ex) {
+            System.out.println("Error updating Inventory!");
+        }
         em.persist(inventory);
         em.flush();
     }

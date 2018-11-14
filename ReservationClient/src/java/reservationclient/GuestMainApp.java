@@ -8,6 +8,7 @@ package reservationclient;
 import ejb.session.stateful.OnlineReservationEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.InventoryControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
@@ -30,11 +31,12 @@ import util.exception.RoomTypeNotFoundException;
  */
 public class GuestMainApp {
     
-    private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
-    private RoomEntityControllerRemote roomEntityControllerRemote;
-    private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
-    private OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
-    private InventoryControllerRemote inventoryControllerRemote;
+    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
+    private static RoomEntityControllerRemote roomEntityControllerRemote;
+    private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
+    private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
+    private static InventoryControllerRemote inventoryControllerRemote;
     private GuestEntityControllerRemote guestEntityControllerRemote;
     
     private GuestEntity currentGuest;
@@ -42,7 +44,7 @@ public class GuestMainApp {
     public GuestMainApp() {
     }
     
-    public GuestMainApp(RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote) {
+    public GuestMainApp(RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote) {
         this();
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
         this.roomEntityControllerRemote = roomEntityControllerRemote;
@@ -50,6 +52,7 @@ public class GuestMainApp {
         this.onlineReservationEntityControllerRemote = onlineReservationEntityControllerRemote;
         this.inventoryControllerRemote = inventoryControllerRemote;
         this.guestEntityControllerRemote = guestEntityControllerRemote;
+        this.reservationEntityControllerRemote = reservationEntityControllerRemote;
     }
     
     public void runApp() throws Exception {
@@ -127,7 +130,7 @@ public class GuestMainApp {
         String phoneNumber = scanner.nextLine();
         System.out.print("Enter email: ");
         String email = scanner.nextLine();
-        GuestEntity newGuest = new GuestEntity(firstName, lastName, username, password, phoneNumber, email);
+        GuestEntity newGuest = new GuestEntity(firstName, lastName, id, username, password, phoneNumber, email);
         guestEntityControllerRemote.registerGuest(newGuest);
         System.out.println("You have successfully registered as a new guest!");
     }

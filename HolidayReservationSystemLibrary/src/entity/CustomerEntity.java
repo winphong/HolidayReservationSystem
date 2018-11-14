@@ -33,8 +33,8 @@ public class CustomerEntity extends GuestEntity implements Serializable {
     public CustomerEntity() {
     }
 
-    public CustomerEntity(PartnerEntity partner, String firstName, String lastName, String userName, String password, String phoneNumber, String email) {
-        super(firstName, lastName, userName, password, phoneNumber, email);
+    public CustomerEntity(PartnerEntity partner, String firstName, String lastName, String identificationNumber, String userName, String password, String phoneNumber, String email) {
+        super(firstName, lastName, identificationNumber, userName, password, phoneNumber, email);
 //        this.partner = partner;
 //        this.partnerReservationEntities = new ArrayList <PartnerReservationEntity>();
     }

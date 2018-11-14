@@ -8,6 +8,7 @@ package reservationclient;
 import ejb.session.stateful.OnlineReservationEntityControllerRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.InventoryControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
@@ -18,6 +19,9 @@ import javax.ejb.EJB;
  * @author twp10
  */
 public class Main {
+
+    @EJB
+    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
 
     @EJB
     private static InventoryControllerRemote inventoryControllerRemote;
@@ -38,7 +42,7 @@ public class Main {
     private static GuestEntityControllerRemote guestEntityControllerRemote;
 
     public static void main(String[] args) throws Exception {
-        GuestMainApp mainApp = new GuestMainApp(roomRateEntityControllerRemote, roomEntityControllerRemote, roomTypeEntityControllerRemote, onlineReservationEntityControllerRemote, inventoryControllerRemote, guestEntityControllerRemote);
+        GuestMainApp mainApp = new GuestMainApp(roomRateEntityControllerRemote, roomEntityControllerRemote, roomTypeEntityControllerRemote, onlineReservationEntityControllerRemote, inventoryControllerRemote, guestEntityControllerRemote, reservationEntityControllerRemote);
         mainApp.runApp();
     }
     

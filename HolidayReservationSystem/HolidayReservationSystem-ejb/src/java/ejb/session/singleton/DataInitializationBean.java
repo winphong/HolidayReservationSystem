@@ -13,7 +13,10 @@ import entity.Inventory;
 import entity.PartnerEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -22,6 +25,7 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.EmployeeAccessRight;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -44,15 +48,24 @@ public class DataInitializationBean {
     private InventoryControllerLocal inventoryControllerLocal;
     
     @PostConstruct
-    public void postConstruct(){        
+    public void postConstruct() {        
         
         if (em.find(EmployeeEntity.class, new Long(1)) == null) {
             initializeEmployee();
             initializePartner();
-            initializeRoomType();
-            initializeInventory();
         }
-        inventoryControllerLocal.updateAllInventory();
+        
+        if (em.find(RoomTypeEntity.class, new Long(1)) == null){
+            initializeRoomType();
+        }
+        
+        if (em.find(Inventory.class, new Long(1)) == null) {
+            try {
+                initializeInventory();
+            } catch (UpdateInventoryException ex) {
+                Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void initializeEmployee(){
@@ -73,10 +86,34 @@ public class DataInitializationBean {
         em.persist(roomType);
     }
     
-    public void initializeInventory() {
-        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date.plusDays(1) ) {      
-            Inventory inventory = new Inventory(date);
-            em.persist(inventory);
+    public void initializeInventory() throws UpdateInventoryException{
+        //for(Date date = Date.valueOf(LocalDate.now()); !date.after(Date.valueOf(LocalDate.now().plusWeeks(1))); date.toLocalDate().plusDays(1) ) {      
+            
+        
+        Inventory inventory = new Inventory(LocalDate.now());
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(1));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(2));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(3));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(4));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(5));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(6));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(7));
+        em.persist(inventory);
+        inventory = new Inventory(LocalDate.now().plusDays(8));
+        em.persist(inventory);
+        
+        try{
+            inventoryControllerLocal.updateAllInventory();
+        }
+        catch (Exception ex){
+            throw new UpdateInventoryException(System.err.toString());
         }
     }    
 }

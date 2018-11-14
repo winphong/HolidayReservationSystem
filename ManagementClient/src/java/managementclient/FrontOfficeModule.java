@@ -71,7 +71,7 @@ public class FrontOfficeModule {
     
     public void menuFrontOffice() throws InvalidAccessRightException, Exception{
         if (currentEmployee.getAccessRight() != EmployeeAccessRight.GUESTRELATIONOFFICER) {
-            throw new InvalidAccessRightException("You don't have MANAGER rights to access the system administration module.");
+            throw new InvalidAccessRightException("You don't have MANAGER rights to access the front office module.");
         }
         
         Scanner scanner = new Scanner(System.in);

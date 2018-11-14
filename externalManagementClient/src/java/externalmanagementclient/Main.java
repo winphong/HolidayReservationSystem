@@ -8,6 +8,7 @@ package externalmanagementclient;
 import ejb.session.stateful.PartnerReservationEntityControllerRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.PartnerEntityControllerRemote;
+import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomEntityControllerRemote;
 import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
@@ -18,6 +19,9 @@ import javax.ejb.EJB;
  * @author twp10
  */
 public class Main {
+
+    @EJB
+    private static ReservationEntityControllerRemote reservationEntityController;
 
     @EJB
     private static RoomEntityControllerRemote roomEntityControllerRemote;
@@ -39,7 +43,7 @@ public class Main {
 
     
     public static void main(String[] args) {
-        MainApp mainApp = new MainApp();
+        MainApp mainApp = new MainApp(roomEntityControllerRemote, roomRateEntityControllerRemote, roomTypeEntityControllerRemote, inventoryControllerRemote, partnerReservationEntityControllerRemote, partnerEntityControllerRemote, reservationEntityController);
         mainApp.runApp();
     }
     

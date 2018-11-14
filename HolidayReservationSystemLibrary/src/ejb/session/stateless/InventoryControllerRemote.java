@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
+import util.exception.UpdateInventoryException;
 
 /**
  *
@@ -17,6 +18,6 @@ public interface InventoryControllerRemote {
 
     public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired);
 
-    public void updateAllInventory();
+    public void updateAllInventory() throws UpdateInventoryException;
     
 }
