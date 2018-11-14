@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import util.exception.CreateNewRoomRateException;
 import util.exception.RoomRateNotFoundException;
 
 /**
@@ -16,16 +17,16 @@ import util.exception.RoomRateNotFoundException;
  */
 public interface RoomRateEntityControllerRemote {
 
-    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate, RoomTypeEntity roomType);
-
     public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException;
 
-    public void updateRoomRate(RoomRateEntity roomRate);
+    public void disableRoomRate(Long id);
 
-    public void disableRoomRate(RoomRateEntity roomRate);
-
-    public void deleteRoomRate(RoomRateEntity roomRate);
+    public void deleteRoomRate(Long id);
 
     public List<RoomRateEntity> viewAllRoomRate();
+
+    public void updateRoomRate(RoomRateEntity roomRate, Long id);
+
+    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate, Long id) throws CreateNewRoomRateException;
     
 }

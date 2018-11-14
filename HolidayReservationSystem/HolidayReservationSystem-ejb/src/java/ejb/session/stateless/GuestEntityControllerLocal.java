@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.GuestEntity;
+import util.exception.GuestNotFoundException;
 
 /**
  *
@@ -13,7 +14,7 @@ import entity.GuestEntity;
  */
 public interface GuestEntityControllerLocal {
 
-    public GuestEntity retrieveGuestByUsername(String username);
+    public GuestEntity retrieveGuestByUsername(String username)throws GuestNotFoundException;
 
     public GuestEntity retrieveGuestById(Long guestId);
     

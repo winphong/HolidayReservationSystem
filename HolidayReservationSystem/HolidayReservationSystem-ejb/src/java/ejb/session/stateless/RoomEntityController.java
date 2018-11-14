@@ -5,16 +5,12 @@
  */
 package ejb.session.stateless;
 
-import entity.Inventory;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
-import entity.RoomNumber;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -40,6 +36,9 @@ import util.exception.UpdateInventoryException;
 public class RoomEntityController implements RoomEntityControllerRemote, RoomEntityControllerLocal {
 
     @EJB
+    private RoomTypeEntityControllerLocal roomTypeEntityController;
+
+    @EJB
     private ReservationEntityControllerLocal reservationEntityControllerLocal;
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
@@ -51,14 +50,15 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
-    public RoomEntity createNewRoom(RoomEntity newRoom, RoomTypeEntity roomType) throws CreateNewRoomException {
+    public RoomEntity createNewRoom(RoomEntity newRoom, Long id) throws CreateNewRoomException {
 
         try {
-            roomType.getRoom().size();
+            RoomTypeEntity roomType = roomTypeEntityController.retrieveRoomTypeById(id);
+
             em.persist(newRoom);
             roomType.getRoom().add(newRoom);
             newRoom.setRoomType(roomType);
-
+            em.persist(newRoom);
             // Need to update inventory from the day of update to the last available inventory object
             inventoryControllerLocal.updateAllInventory();
             em.flush();
@@ -70,15 +70,21 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     // Retrieved from retrieveRoomByRoomNumber
     @Override
-    public void updateRoom(RoomEntity room) {
+    public void updateRoom(RoomEntity room, String roomNumber) {
 
         RoomEntity roomToUpdate;
         try {
-            roomToUpdate = retrieveRoomByRoomNumber(room.getRoomNumber());
-            roomToUpdate.setGuest(room.getGuest());
-            roomToUpdate.setRoomStatus(room.getRoomStatus());
-            roomToUpdate.setRoomType(room.getRoomType());
-            roomToUpdate.setIsDisabled(room.getIsDisabled());
+            roomToUpdate = retrieveRoomByRoomNumber(roomNumber);
+            if (room.getRoomNumber()!= null){
+                roomToUpdate.setRoomNumber(roomNumber);
+            }
+            if (room.getGuest() != null) {
+                roomToUpdate.setGuest(room.getGuest());
+            }
+            if (room.getRoomStatus() != null) {
+                roomToUpdate.setRoomStatus(room.getRoomStatus());
+            }
+            em.flush();
             inventoryControllerLocal.updateAllInventory();
         } catch (RoomNotFoundException ex) {
             System.out.println("Room does not exist!");
@@ -88,41 +94,42 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     }
 
-    // need to modify this 
-    // modify to what? (wp)
     @Override
-    public void disableRoom(RoomEntity room) {
+    public void disableRoom(Long id) {
 
-        room.setIsDisabled(Boolean.TRUE);
-        try {
-            inventoryControllerLocal.updateAllInventory();
-        } catch (UpdateInventoryException ex) {
-            System.out.println("Error updating Inventory!");
-        }
-    }
-
-    // If VACANT, delete the room
-    @Override
-    public void deleteRoom(RoomEntity room) {
-
-        RoomTypeEntity roomType = room.getRoomType();
-
-        roomType.getRoom().remove(room);
-        room.setRoomType(null);
-
-        em.remove(room);
-
-        // If room is already disabled, the room is already not in the inventory
-        // Only update inventory if the room is not disabled
-        if (room.getIsDisabled().equals(Boolean.FALSE)) {
+            RoomEntity room = em.find(RoomEntity.class, id);
+            room.setIsDisabled(Boolean.TRUE);
+            em.flush();
             try {
                 inventoryControllerLocal.updateAllInventory();
             } catch (UpdateInventoryException ex) {
                 System.out.println("Error updating Inventory!");
             }
-        }
 
-        em.flush();
+    }
+
+    // If VACANT, delete the room
+    @Override
+    public void deleteRoom(Long roomId, Long roomTypeId) {
+
+            RoomEntity room = em.find(RoomEntity.class, roomId);
+            RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
+            room.setRoomType(null);
+            roomType.getRoom().remove(room);
+            em.remove(room);
+
+            // If room is already disabled, the room is already not in the inventory
+            // Only update inventory if the room is not disabled
+            if (room.getIsDisabled().equals(Boolean.FALSE)) {
+                try {
+                    inventoryControllerLocal.updateAllInventory();
+                } catch (UpdateInventoryException ex) {
+                    System.out.println("Error updating Inventory!");
+                }
+            }
+
+            em.flush();
+
     }
 
     @Override
@@ -138,6 +145,21 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         } catch (NoResultException | NonUniqueResultException ex) {
 
             throw new RoomNotFoundException("Room " + roomNumber + "does not exist!");
+        }
+    }
+
+    public RoomEntity retrieveRoomById(Long id) throws RoomNotFoundException {
+
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomId =:inId");
+        query.setParameter("inId", id);
+
+        try {
+
+            return (RoomEntity) query.getSingleResult();
+
+        } catch (NoResultException | NonUniqueResultException ex) {
+
+            throw new RoomNotFoundException("Room " + id + "does not exist!");
         }
     }
 

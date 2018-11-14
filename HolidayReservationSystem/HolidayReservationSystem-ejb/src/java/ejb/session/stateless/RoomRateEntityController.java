@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -16,6 +17,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.CreateNewRoomRateException;
 import util.exception.RoomRateNotFoundException;
 
 /**
@@ -28,22 +30,30 @@ import util.exception.RoomRateNotFoundException;
 
 public class RoomRateEntityController implements RoomRateEntityControllerRemote, RoomRateEntityControllerLocal {
 
+    @EJB
+    private RoomTypeEntityControllerLocal roomTypeEntityController;
+
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     // Client ask for roomType and roomRate
-    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate, RoomTypeEntity roomType) {
+    @Override
+    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate, Long id) throws CreateNewRoomRateException {
+        try {
+            RoomTypeEntity roomType = roomTypeEntityController.retrieveRoomTypeById(id);
+            em.persist(newRoomRate);
 
-        em.persist(newRoomRate);
+            roomType.getRoomRate().add(newRoomRate);
+            newRoomRate.setRoomType(roomType);
 
-        roomType.getRoomRate().add(newRoomRate);
-        newRoomRate.setRoomType(roomType);
+            em.flush();
 
-        em.flush();
-
-        return newRoomRate;
+            return newRoomRate;
+        } catch (Exception ex) {
+            throw new CreateNewRoomRateException("Error creating new room rate: " + ex.getMessage());
+        }
     }
 
     @Override
@@ -62,38 +72,62 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
         }
     }
 
-    public void updateRoomRate(RoomRateEntity roomRate) {
+    public RoomRateEntity retrieveRoomRateById(Long id) throws RoomRateNotFoundException {
 
-        if (roomRate != null) {
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomRateId =:inId");
+        query.setParameter("inId", id);
 
-            try {
-                RoomRateEntity roomRateToUpdate = retrieveRoomRateByName(roomRate.getName());
+        try {
+
+            return (RoomRateEntity) query.getSingleResult();
+
+        } catch (NoResultException | NonUniqueResultException ex) {
+
+            throw new RoomRateNotFoundException("Room rate " + id + " does not exist!");
+        }
+    }
+
+    public void updateRoomRate(RoomRateEntity roomRate, Long id) {
+
+        try {
+            RoomRateEntity roomRateToUpdate = retrieveRoomRateById(id);
+            if (roomRate.getName() != null) {
                 roomRateToUpdate.setName(roomRate.getName());
-                roomRateToUpdate.setRoomType(roomRate.getRoomType());
-                roomRateToUpdate.setIsDisabled(roomRate.getIsDisabled());
             }
-            catch (RoomRateNotFoundException ex){
-                System.out.println("Room Rate " + roomRate.getRoomRateId() + " does not exist!");
+            if (roomRate.getRatePerNight() != null) {
+                roomRateToUpdate.setRatePerNight(roomRate.getRatePerNight());
             }
+            if (roomRate.getValidFrom() != null) {
+                roomRateToUpdate.setValidFrom(roomRate.getValidFrom());
+            }
+            if (roomRate.getValidTill() != null) {
+                roomRateToUpdate.setValidTill(roomRate.getValidTill());
+            }
+        } catch (RoomRateNotFoundException ex) {
+            System.out.println("Room Rate " + roomRate.getRoomRateId() + " does not exist!");
         }
     }
 
     // If roomRate.getRoomType.getReservation != null, disable
-    public void disableRoomRate(RoomRateEntity roomRate) {
+    @Override
+    public void disableRoomRate(Long id) {
 
+        RoomRateEntity roomRate = em.find(RoomRateEntity.class, id);
         roomRate.setIsDisabled(Boolean.TRUE);
+        em.flush();
+
     }
 
     // If roomRate.getRoomType.getReservation == null, delete
-    public void deleteRoomRate(RoomRateEntity roomRate) {
-
-        RoomTypeEntity roomType = roomRate.getRoomType();
-
-        roomType.getRoomRate().remove(roomRate);
+    @Override
+    public void deleteRoomRate(Long id) {
+        RoomRateEntity roomRate = em.find(RoomRateEntity.class, id);
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomRate.getRoomType().getRoomTypeId());
         roomRate.setRoomType(null);
-
+        roomType.getRoomRate().remove(roomRate);
         em.remove(roomRate);
         em.flush();
+
     }
 
     public List<RoomRateEntity> viewAllRoomRate() {

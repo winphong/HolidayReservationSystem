@@ -20,11 +20,9 @@ public interface RoomTypeEntityControllerRemote {
 
     public RoomTypeEntity retrieveRoomTypeByName(String name)throws RoomTypeNotFoundException;
 
-    public void updateRoomType(RoomTypeEntity roomType);
+    public void disableRoomType(Long id);
 
-    public void disableRoomType(RoomTypeEntity roomType);
-
-    public void deleteRoomType(RoomTypeEntity roomType);
+    public void deleteRoomType(Long id);
 
     public List<RoomTypeEntity> viewAllRoomType();
     
@@ -33,5 +31,7 @@ public interface RoomTypeEntityControllerRemote {
     public RoomTypeEntity retrieveRoomTypeById(Long id)throws RoomTypeNotFoundException;
 
     public void updateTier(int tier);
+
+    public void updateRoomType(RoomTypeEntity roomType, Long id);
     
 }

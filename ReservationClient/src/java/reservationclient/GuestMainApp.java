@@ -20,7 +20,9 @@ import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.ReservationNotFoundException;
 import util.exception.RoomTypeNotFoundException;
@@ -37,7 +39,7 @@ public class GuestMainApp {
     private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
     private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
     private static InventoryControllerRemote inventoryControllerRemote;
-    private GuestEntityControllerRemote guestEntityControllerRemote;
+    private static GuestEntityControllerRemote guestEntityControllerRemote;
     
     private GuestEntity currentGuest;
 
@@ -107,7 +109,12 @@ public class GuestMainApp {
         password = scanner.nextLine().trim();
 
         if (username.length() > 0 && password.length() > 0) {
-            currentGuest = guestEntityControllerRemote.guestLogin(username, password);
+            try{
+                currentGuest = guestEntityControllerRemote.guestLogin(username, password);
+            }
+            catch (GuestNotFoundException ex){
+                System.out.println("Guest with username " + username + "does not exist!");
+            }
         } else {
             throw new InvalidLoginCredentialException("Missing login credential!");
         }
@@ -177,12 +184,12 @@ public class GuestMainApp {
         
         Scanner scanner = new Scanner(System.in);
         
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/mm");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM");
         
-        System.out.println("Enter start date (dd/mm): ");
+        System.out.println("Enter start date (dd/MM): ");
         String date = scanner.nextLine().trim();
         LocalDate startDate = LocalDate.parse(date, dateFormat);
-        System.out.println("Enter end date (dd/mm): ");
+        System.out.println("Enter end date (dd/MM): ");
         date = scanner.nextLine().trim();
         LocalDate endDate = LocalDate.parse(date, dateFormat);
         System.out.println("Enter number of rooms required: ");

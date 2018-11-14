@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.GuestEntity;
 import entity.OnlineReservationEntity;
 import java.util.List;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -16,7 +17,7 @@ import util.exception.InvalidLoginCredentialException;
  */
 public interface GuestEntityControllerRemote {
 
-    public GuestEntity guestLogin(String username, String password) throws InvalidLoginCredentialException;
+    public GuestEntity guestLogin(String username, String password) throws GuestNotFoundException, InvalidLoginCredentialException;
 
     public GuestEntity registerGuest(GuestEntity newGuest);
     

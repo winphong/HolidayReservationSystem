@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -33,15 +34,12 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public GuestEntity guestLogin(String username, String password) throws InvalidLoginCredentialException {
-
+    @Override
+    public GuestEntity guestLogin(String username, String password) throws GuestNotFoundException, InvalidLoginCredentialException {
+        em.flush();
         try {
-
-            Query query = em.createQuery("SELECT g FROM GuestEntity g WHERE g.username = :inUsername");
-            query.setParameter("inUsername", username);
-
+            GuestEntity guest = retrieveGuestByUsername(username);
             if (guest.getPassword().equals(password)) {
-                guest = (GuestEntity) query.getSingleResult();
                 return guest;
             } else {
                 throw new InvalidLoginCredentialException("Invalid password!");
@@ -49,12 +47,13 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
-            throw new InvalidLoginCredentialException("Invalid credential!");
+            throw new GuestNotFoundException("Invalid guest!");
 
         }
 
     }
 
+    @Override
     public GuestEntity registerGuest(GuestEntity newGuest) {
 
         em.persist(newGuest);
@@ -63,7 +62,8 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
         return newGuest;
     }
     
-    public GuestEntity retrieveGuestByUsername(String username) {
+    @Override
+    public GuestEntity retrieveGuestByUsername(String username) throws GuestNotFoundException{
         
         Query query = em.createQuery("SELECT g FROM GuestEntity g WHERE g.username = :inUsername");
         query.setParameter("inUsername", username);
@@ -74,12 +74,11 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
             
         } catch ( NoResultException | NonUniqueResultException ex ) {
             
-            System.err.println(ex.getMessage());
+            throw new GuestNotFoundException ("Guest with Username " + username + " does not exist!");
         }
-        
-        return null;
     }
     
+    @Override
     public GuestEntity retrieveGuestById(Long guestId) {
         
         try {

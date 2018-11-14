@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomEntity;
+import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,7 +41,8 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType) throws UpdateInventoryException{
+    @Override
+    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType) throws UpdateInventoryException {
 
         em.persist(newRoomType);
         em.flush();
@@ -85,20 +88,31 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
     // roomType retrieved the retrieveRoomTypeByName(String name) method
     @Override
-    public void updateRoomType(RoomTypeEntity roomType) {
+    public void updateRoomType(RoomTypeEntity roomType, Long id) {
         RoomTypeEntity roomTypeToUpdate;
         try {
-            roomTypeToUpdate = retrieveRoomTypeByName(roomType.getName());
-            roomTypeToUpdate.setName(roomType.getName());
-            roomTypeToUpdate.setDescription(roomType.getDescription());
-            roomTypeToUpdate.setSize(roomType.getSize());
-            roomTypeToUpdate.setCapacity(roomType.getCapacity());
-            roomTypeToUpdate.setBed(roomType.getBed());
-            roomTypeToUpdate.setAmenities(roomType.getAmenities());
-            roomTypeToUpdate.setTier(roomType.getTier());
-            roomTypeToUpdate.setRoom(roomType.getRoom());
-            roomTypeToUpdate.setRoomRate(roomType.getRoomRate());
-            roomTypeToUpdate.setIsDisabled(roomType.getIsDisabled());
+            roomTypeToUpdate = retrieveRoomTypeById(id);
+            if (roomType.getName() != null) {
+                roomTypeToUpdate.setName(roomType.getName());
+            }
+            if (roomType.getDescription() != null) {
+                roomTypeToUpdate.setDescription(roomType.getDescription());
+            }
+            if (roomType.getSize() != null) {
+                roomTypeToUpdate.setSize(roomType.getSize());
+            }
+            if (roomType.getCapacity() != null) {
+                roomTypeToUpdate.setCapacity(roomType.getCapacity());
+            }
+            if (roomType.getBed() != null) {
+                roomTypeToUpdate.setBed(roomType.getBed());
+            }
+            if (roomType.getAmenities() != null) {
+                roomTypeToUpdate.setAmenities(roomType.getAmenities());
+            }
+            if (roomType.getTier() != null) {
+                roomTypeToUpdate.setTier(roomType.getTier());
+            }
             inventoryControllerLocal.updateAllInventory();
         } catch (RoomTypeNotFoundException ex) {
             System.out.println("Room type does not exist!");
@@ -109,9 +123,14 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
     // If roomType.getReservation != null || roomType.getRoom != null 
     @Override
-    public void disableRoomType(RoomTypeEntity roomType) {
-
-        roomType.setIsDisabled(Boolean.TRUE);
+    public void disableRoomType(Long id) {
+        try{
+            RoomTypeEntity roomType = retrieveRoomTypeById(id);
+            roomType.setIsDisabled(Boolean.TRUE);
+        }
+        catch (RoomTypeNotFoundException ex) {
+            System.out.println("Room type of Id" + id + " does not exist!");
+        }
         try {
             inventoryControllerLocal.updateAllInventory();
         } catch (UpdateInventoryException ex) {
@@ -121,14 +140,30 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
     // If roomType.getReservation == null && roomType.getRoom == null && roomType.getRoomRate == null, delete
     @Override
-    public void deleteRoomType(RoomTypeEntity roomType) {
-
-        em.remove(roomType);
-        em.flush();
+    public void deleteRoomType(Long id) {
         try {
-            inventoryControllerLocal.updateAllInventory();
-        } catch (UpdateInventoryException ex) {
-            System.out.println("Error updating Inventory!");
+            RoomTypeEntity roomType = retrieveRoomTypeById(id);
+            roomType.getRoom().size();
+            roomType.getRoomRate().size();
+            List <RoomEntity> rooms = roomType.getRoom();
+            for (RoomEntity room: rooms){
+                room.setRoomType(null);
+            }
+            roomType.setRoom(null);
+            List <RoomRateEntity> rates = roomType.getRoomRate();
+            for (RoomRateEntity rate: rates){
+                rate.setRoomType(null);
+            }
+            roomType.setRoomRate(null);
+            em.remove(roomType);
+            em.flush();
+            try {
+                inventoryControllerLocal.updateAllInventory();
+            } catch (UpdateInventoryException ex) {
+                System.out.println("Error updating Inventory!");
+            }
+        } catch (RoomTypeNotFoundException ex) {
+            System.out.println("Room type of Id" + id + " does not exist!");
         }
     }
 
@@ -149,8 +184,8 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
         List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
         for (RoomTypeEntity roomType : roomTypes) {
-           roomType.getRoom().size();
-           roomType.getRoomRate().size();
+            roomType.getRoom().size();
+            roomType.getRoomRate().size();
         }
 
         return roomTypes;
@@ -160,10 +195,19 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
         List<RoomTypeEntity> roomTypes = viewAllRoomType();
         for (RoomTypeEntity roomType : roomTypes) {
-            if (roomType.getTier() >= tier) {
-                roomType.setTier(roomType.getTier() + 1);
-            }
+            roomType.setTier(roomType.getTier() - roomTypes.size());
+            em.persist(roomType);
+            em.flush();
+        }
 
+        for (RoomTypeEntity roomType : roomTypes) {
+            if (roomType.getTier() + roomTypes.size() >= tier) {
+                roomType.setTier(roomType.getTier() + roomTypes.size() + 1);
+            } else {
+                roomType.setTier(roomType.getTier() + roomTypes.size());
+            }
+            em.persist(roomType);
+            em.flush();
         }
     }
 }
