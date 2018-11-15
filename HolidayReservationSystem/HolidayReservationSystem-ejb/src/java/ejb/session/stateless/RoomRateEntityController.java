@@ -123,7 +123,6 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
     public void deleteRoomRate(Long id) {
         RoomRateEntity roomRate = em.find(RoomRateEntity.class, id);
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomRate.getRoomType().getRoomTypeId());
-        roomRate.setRoomType(null);
         roomType.getRoomRate().remove(roomRate);
         em.remove(roomRate);
         em.flush();

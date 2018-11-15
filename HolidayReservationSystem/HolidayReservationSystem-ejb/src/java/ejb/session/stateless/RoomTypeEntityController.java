@@ -124,13 +124,9 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     // If roomType.getReservation != null || roomType.getRoom != null 
     @Override
     public void disableRoomType(Long id) {
-        try{
-            RoomTypeEntity roomType = retrieveRoomTypeById(id);
-            roomType.setIsDisabled(Boolean.TRUE);
-        }
-        catch (RoomTypeNotFoundException ex) {
-            System.out.println("Room type of Id" + id + " does not exist!");
-        }
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, id);
+        roomType.setIsDisabled(Boolean.TRUE);
+        em.flush();
         try {
             inventoryControllerLocal.updateAllInventory();
         } catch (UpdateInventoryException ex) {
@@ -141,29 +137,30 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     // If roomType.getReservation == null && roomType.getRoom == null && roomType.getRoomRate == null, delete
     @Override
     public void deleteRoomType(Long id) {
+
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, id);
+        roomType.getRoom().size();
+        
+        List <RoomEntity> rooms = roomType.getRoom();
+        roomType.setRoom(null);
+        for (RoomEntity room: rooms){
+            em.remove(room);
+        }
+        
+        roomType.getRoomRate().size();
+        List <RoomRateEntity> roomRates = roomType.getRoomRate();
+        roomType.setRoomRate(null);
+        for (RoomRateEntity roomRate: roomRates){
+            em.remove(roomRate);
+        }
+        
+        em.remove(roomType);
+
+        
         try {
-            RoomTypeEntity roomType = retrieveRoomTypeById(id);
-            roomType.getRoom().size();
-            roomType.getRoomRate().size();
-            List <RoomEntity> rooms = roomType.getRoom();
-            for (RoomEntity room: rooms){
-                room.setRoomType(null);
-            }
-            roomType.setRoom(null);
-            List <RoomRateEntity> rates = roomType.getRoomRate();
-            for (RoomRateEntity rate: rates){
-                rate.setRoomType(null);
-            }
-            roomType.setRoomRate(null);
-            em.remove(roomType);
-            em.flush();
-            try {
-                inventoryControllerLocal.updateAllInventory();
-            } catch (UpdateInventoryException ex) {
-                System.out.println("Error updating Inventory!");
-            }
-        } catch (RoomTypeNotFoundException ex) {
-            System.out.println("Room type of Id" + id + " does not exist!");
+            inventoryControllerLocal.updateAllInventory();
+        } catch (UpdateInventoryException ex) {
+            System.out.println("Error updating Inventory!");
         }
     }
 
@@ -209,5 +206,18 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             em.persist(roomType);
             em.flush();
         }
+    }
+    
+    @Override
+    public List <RoomEntity> retrieveRooms (Long id) throws RoomTypeNotFoundException{
+        try{
+            RoomTypeEntity roomType = retrieveRoomTypeById(id);
+            roomType.getRoom().size();
+            return roomType.getRoom();
+        }
+        catch (Exception ex){
+            throw new RoomTypeNotFoundException(ex.getMessage());
+        }
+
     }
 }

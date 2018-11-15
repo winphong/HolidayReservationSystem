@@ -31,7 +31,7 @@ public class ReservationLineItemEntity implements Serializable {
     private RoomTypeEntity roomType;
     
     /*
-    @OneToOne
+    @ManyToOne
     private RoomTypeEntity roomType;
     @OneToMany (mappedBy = "reservationlineitem")
     private List<RoomRatePerNightEntity> roomRatePerNight;

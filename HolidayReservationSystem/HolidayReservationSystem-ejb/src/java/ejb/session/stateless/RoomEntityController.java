@@ -114,7 +114,6 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
             RoomEntity room = em.find(RoomEntity.class, roomId);
             RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
-            room.setRoomType(null);
             roomType.getRoom().remove(room);
             em.remove(room);
 

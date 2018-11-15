@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,10 +43,10 @@ public class RoomTypeEntity implements Serializable {
     private Integer tier;
     private Boolean isDisabled;
     
-    @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RoomEntity> room;
     
-    @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RoomRateEntity> roomRate;
     
     @OneToOne(mappedBy="roomType")
