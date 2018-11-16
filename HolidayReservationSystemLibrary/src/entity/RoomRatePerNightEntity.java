@@ -38,11 +38,10 @@ public class RoomRatePerNightEntity implements Serializable {
     public RoomRatePerNightEntity() {
     }
 
-    public RoomRatePerNightEntity(BigDecimal rate, RoomRateEntity roomRateEntity, ReservationLineItemEntity reservationLineItemEntity) {
+    public RoomRatePerNightEntity(BigDecimal rate, RoomRateEntity roomRateEntity) {
         this();
         this.rate = rate;
 //        this.roomRateEntity = roomRateEntity;
-//        this.reservationLineItemEntity = reservationLineItemEntity;
     }
     
     public Long getId() {

@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://ws.ejb/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.ejb/">
+
+<xs:element name="InvalidLoginCredentialException" type="tns:InvalidLoginCredentialException"/>
+
+<xs:element name="partnerLogin" type="tns:partnerLogin"/>
+
+<xs:element name="partnerLoginResponse" type="tns:partnerLoginResponse"/>
+
+<xs:complexType name="partnerLogin">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerEntity">
+<xs:sequence>
+<xs:element name="companyName" type="xs:string" minOccurs="0"/>
+<xs:element name="companyRegistrationId" type="xs:string" minOccurs="0"/>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+<xs:element name="partnerId" type="xs:long" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="phoneNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="reservation" type="tns:partnerReservationEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="userName" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerReservationEntity">
+<xs:complexContent>
+<xs:extension base="tns:reservationEntity">
+<xs:sequence>
+<xs:element name="customerContactNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="customerEmail" type="xs:string" minOccurs="0"/>
+<xs:element name="customerFirstName" type="xs:string" minOccurs="0"/>
+<xs:element name="customerLastName" type="xs:string" minOccurs="0"/>
+<xs:element name="partner" type="tns:partnerEntity" minOccurs="0"/>
+<xs:element name="partnerReservationId" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="reservationEntity" abstract="true">
+<xs:sequence>
+<xs:element name="bookingDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="endDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="isCheckedIn" type="xs:boolean" minOccurs="0"/>
+<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
+<xs:element name="reservationLineItemEntities" type="tns:reservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="rooms" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="startDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="localDate" final="extension restriction">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="reservationLineItemEntity">
+<xs:sequence>
+<xs:element name="numOfRoomBooked" type="xs:int" minOccurs="0"/>
+<xs:element name="reservation" type="tns:reservationEntity" minOccurs="0"/>
+<xs:element name="reservationLineItemId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
+<xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomTypeEntity">
+<xs:sequence>
+<xs:element name="amenities" type="xs:string" minOccurs="0"/>
+<xs:element name="bed" type="xs:string" minOccurs="0"/>
+<xs:element name="capacity" type="xs:int" minOccurs="0"/>
+<xs:element name="description" type="xs:string" minOccurs="0"/>
+<xs:element name="isDisabled" type="xs:boolean" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="reservationItem" type="tns:reservationLineItemEntity" minOccurs="0"/>
+<xs:element name="room" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="roomRate" type="tns:roomRateEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="size" type="xs:decimal" minOccurs="0"/>
+<xs:element name="tier" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomEntity">
+<xs:sequence>
+<xs:element name="currentReservation" type="tns:reservationEntity" minOccurs="0"/>
+<xs:element name="guest" type="xs:string" minOccurs="0"/>
+<xs:element name="isDisabled" type="xs:boolean" minOccurs="0"/>
+<xs:element name="isReady" type="xs:boolean" minOccurs="0"/>
+<xs:element name="nextReservation" type="tns:reservationEntity" minOccurs="0"/>
+<xs:element name="roomNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="roomStatus" type="tns:roomStatus" minOccurs="0"/>
+<xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="roomRateEntity">
+<xs:sequence>
+<xs:element name="isDisabled" type="xs:boolean" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="ratePerNight" type="xs:decimal" minOccurs="0"/>
+<xs:element name="roomRateId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
+<xs:element name="validFrom" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="validTill" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="InvalidLoginCredentialException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="roomStatus">
+<xs:restriction base="xs:string">
+<xs:enumeration value="VACANT"/>
+<xs:enumeration value="ALLOCATED"/>
+<xs:enumeration value="OCCUPIED"/>
+<xs:enumeration value="MAINTENANCE"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

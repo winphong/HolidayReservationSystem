@@ -45,15 +45,14 @@ public class PartnerEntityController implements PartnerEntityControllerRemote, P
         return (List<PartnerEntity>) query.getResultList(); 
     }
     
+    @Override
     public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException {
 
         try {
 
-            Query query = em.createQuery("SELECT p FROM PartnerEntity g WHERE g.username = :inUsername");
-            query.setParameter("inUsername", username);
+            PartnerEntity partner = retrievePartnerByUsername(username);
 
             if (partner.getPassword().equals(password)) {
-                partner = (PartnerEntity) query.getSingleResult();
                 return partner;
             } else {
                 throw new InvalidLoginCredentialException("Invalid password!");
