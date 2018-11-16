@@ -45,7 +45,9 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     private WalkinReservationEntityControllerLocal walkInReservationEntityControllerLocal;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
+    
+    private List<ReservationLineItemEntity> lineItemsForCurrentReservation = new ArrayList<>();
+    
     // Everytime a room / roomType is created/ updated / deleted, inventory must be updated from the current system date to the latest available booking date
     // need to modify to include use case for create and update
     @Override
@@ -122,8 +124,8 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom(); // availableRoom is not disable and is vacant
 
         //Integer roomTypeIndex = 0;
-        Boolean availableThroughout;
-        Integer countOfRoomAvailableThroughout;
+//        Boolean availableThroughout;
+//        Integer countOfRoomAvailableThroughout;
         // One reservation might have more than one room
         List<ReservationEntity> reservationList = walkInReservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate);
         List<ReservationLineItemEntity> reservationLineItems;
@@ -158,11 +160,11 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             }
         }
         
-        List<ReservationLineItemEntity> lineItemsForCurrentReservation = walkInReservationEntityControllerLocal.getReservationLineItems();
-        
-        if ( walkInReservationEntityControllerLocal.getTotalAmount().equals(new BigDecimal(0)) ) {
-            throw new Error("this got error");
-        }
+//        setLineItemsForCurrentReservation(walkInReservationEntityControllerLocal.getReservationLineItems());
+//        
+//        if ( !walkInReservationEntityControllerLocal.getTotalAmount().equals(new BigDecimal("0.00")) ) {
+//            throw new Error("this got error");
+//        }
         
         // Check through the current "running" reservation
         for(ReservationLineItemEntity reservationLineItem : lineItemsForCurrentReservation ) {
@@ -176,8 +178,17 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 }
             }
         }
+        
+        // Check if the available 
+        for (List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
+            
+            if (listOfRooms.size() - numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)) >= numOfRoomRequired) {
+                availableRoomType.add(listOfRooms.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)).getRoomType());
+            }
+        }
+            
 
-        // Loop through each room type
+        /*// Loop through each room type given by the inventory of booking start date
         for (List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
 
             countOfRoomAvailableThroughout = 0;
@@ -187,7 +198,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
 
                 availableThroughout = Boolean.TRUE;
 
-                // Loop through the booking date starting from the startDate to the endDate
+                // Loop through the booking date starting from the boking startDate to the booking endDate
                 // From the highlighted line, the function already ensure all the room retrieved will be available for startDate
                 // Therefore, the search loop can start a day after the startDate
                 for (LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date = date.plusDays(1)) {
@@ -212,7 +223,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 }
             }
             //roomTypeIndex++;
-        }
+        } */
         return availableRoomType;
     }
 
@@ -267,5 +278,21 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         }
         // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
         inventory.setTotalNumOfRoomAvailable(totalNumOfRoomAvailable);
+    }
+
+    /**
+     * @return the lineItemsForCurrentReservation
+     */
+    @Override
+    public List<ReservationLineItemEntity> getLineItemsForCurrentReservation() {
+        return lineItemsForCurrentReservation;
+    }
+
+    /**
+     * @param lineItemsForCurrentReservation the lineItemsForCurrentReservation to set
+     */
+    @Override
+    public void setLineItemsForCurrentReservation(List<ReservationLineItemEntity> lineItemsForCurrentReservation) {
+        this.lineItemsForCurrentReservation = lineItemsForCurrentReservation;
     }
 }

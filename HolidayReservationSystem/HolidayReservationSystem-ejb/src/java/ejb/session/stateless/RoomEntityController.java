@@ -11,7 +11,9 @@ import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.EJBContext;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -46,6 +48,9 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
+    
+    @Resource
+    private EJBContext eJBContext;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -64,6 +69,8 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             
             return newRoom;
         } catch (Exception ex) {
+            
+            eJBContext.setRollbackOnly();
             throw new CreateNewRoomException("Error creating new room: " + ex.getMessage());
         }
     }
@@ -105,7 +112,6 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             } catch (UpdateInventoryException ex) {
                 System.out.println("Error updating Inventory!");
             }
-
     }
 
     // If VACANT, delete the room

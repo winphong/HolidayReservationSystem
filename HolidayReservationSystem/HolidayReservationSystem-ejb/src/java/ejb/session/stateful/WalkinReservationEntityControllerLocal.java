@@ -20,8 +20,4 @@ public interface WalkinReservationEntityControllerLocal {
     public List<ReservationEntity> retrieveReservationByStartAndEndDate(LocalDate bookingStartDate, LocalDate bookingEndDate);
 
     public ReservationEntity checkOut(Long employeeId, LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws Exception;
-
-    public List<ReservationLineItemEntity> getReservationLineItems();
-
-    public BigDecimal getTotalAmount();
 }

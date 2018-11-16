@@ -41,6 +41,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
+    
     @Resource
     private EJBContext eJBContext;
     

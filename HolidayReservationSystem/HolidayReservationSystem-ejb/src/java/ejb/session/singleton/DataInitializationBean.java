@@ -11,7 +11,6 @@ import ejb.session.stateless.PartnerEntityControllerLocal;
 import entity.EmployeeEntity;
 import entity.Inventory;
 import entity.PartnerEntity;
-import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -69,6 +68,11 @@ public class DataInitializationBean {
             }
         }
         
+        try {
+            updateInventory();
+        } catch (UpdateInventoryException ex) {
+            Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -121,5 +125,15 @@ public class DataInitializationBean {
         catch (Exception ex){
             throw new UpdateInventoryException(System.err.toString());
         }
-    }    
+    }
+    
+    private void updateInventory() throws UpdateInventoryException {
+        
+        try{
+            inventoryControllerLocal.updateAllInventory();
+        }
+        catch (Exception ex){
+            throw new UpdateInventoryException(System.err.toString());
+        }
+    }
 }

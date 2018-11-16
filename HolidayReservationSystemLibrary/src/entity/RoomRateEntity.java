@@ -29,7 +29,7 @@ public class RoomRateEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomRateId;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
     private Boolean isDisabled;
     @Column(scale=2)

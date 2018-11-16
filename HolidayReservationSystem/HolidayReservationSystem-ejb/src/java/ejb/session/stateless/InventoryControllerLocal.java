@@ -6,9 +6,11 @@
 package ejb.session.stateless;
 
 import entity.Inventory;
+import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import util.exception.UpdateInventoryException;
 
 /**
@@ -24,5 +26,9 @@ public interface InventoryControllerLocal {
     public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex);
 
     public Inventory retrieveInventoryById(Long inventoryId);
+
+    public List<ReservationLineItemEntity> getLineItemsForCurrentReservation();
+
+    public void setLineItemsForCurrentReservation(List<ReservationLineItemEntity> lineItemsForCurrentReservation);
     
 }
