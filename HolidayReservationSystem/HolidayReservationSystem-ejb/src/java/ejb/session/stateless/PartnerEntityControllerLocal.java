@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PartnerEntity;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
@@ -18,4 +19,6 @@ public interface PartnerEntityControllerLocal {
     public PartnerEntity retrievePartnerByUsername(String username);
 
     public PartnerEntity retrievePartnerById(Long partnerId);
+    
+    public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException;
 }

@@ -37,8 +37,7 @@ public class RoomEntity implements Serializable {
     private String guest;
     private Boolean isReady;
     private Boolean isDisabled;
-    
-    @JoinColumn(nullable = false)
+
     @ManyToOne
     private RoomTypeEntity roomType;
     

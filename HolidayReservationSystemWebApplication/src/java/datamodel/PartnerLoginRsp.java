@@ -14,20 +14,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-
 public class PartnerLoginRsp {
     
     private PartnerEntity partner;
 
+    
     public PartnerLoginRsp() {
     }
 
     public PartnerLoginRsp(PartnerEntity partner) {
         this.partner = partner;
     }
-    
-    
 
+    
     /**
      * @return the partner
      */
