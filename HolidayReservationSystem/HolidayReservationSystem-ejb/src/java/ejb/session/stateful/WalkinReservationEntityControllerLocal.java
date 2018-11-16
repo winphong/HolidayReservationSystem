@@ -6,6 +6,8 @@
 package ejb.session.stateful;
 
 import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,4 +20,8 @@ public interface WalkinReservationEntityControllerLocal {
     public List<ReservationEntity> retrieveReservationByStartAndEndDate(LocalDate bookingStartDate, LocalDate bookingEndDate);
 
     public ReservationEntity checkOut(Long employeeId, LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws Exception;
+
+    public List<ReservationLineItemEntity> getReservationLineItems();
+
+    public BigDecimal getTotalAmount();
 }

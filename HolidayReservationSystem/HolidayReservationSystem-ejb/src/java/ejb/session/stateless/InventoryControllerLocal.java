@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Inventory;
 import entity.RoomEntity;
+import java.sql.Date;
 import java.time.LocalDate;
 import util.exception.UpdateInventoryException;
 
@@ -18,7 +19,7 @@ public interface InventoryControllerLocal {
 
     public void updateAllInventory() throws UpdateInventoryException;
     
-    public Inventory getInventoryByDate(LocalDate date);
+    public Inventory getInventoryByDate(Date date);
 
     public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex);
 

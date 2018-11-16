@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 /**
@@ -33,11 +33,11 @@ public abstract class ReservationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
     @Column (nullable = false)
-    private LocalDate startDate;
+    private Date startDate;
     @Column (nullable = false)
-    private LocalDate endDate;
+    private Date endDate;
     @Column (nullable = false)
-    private LocalDate bookingDate;
+    private Date bookingDate;
     private Boolean isCheckedIn = false;
     //private Boolean isAllocated = false;
     @Column (scale = 2)
@@ -53,10 +53,10 @@ public abstract class ReservationEntity implements Serializable {
         this.reservationLineItemEntities = new ArrayList<>();
     }
 
-    public ReservationEntity(LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+    public ReservationEntity(Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {
         
         this();
-        this.bookingDate = LocalDate.now();
+        this.bookingDate = Date.valueOf(LocalDate.now());
         this.startDate = startDate;
         this.endDate = endDate;
         this.isCheckedIn = isCheckedIn;
@@ -99,28 +99,28 @@ public abstract class ReservationEntity implements Serializable {
     /**
      * @return the startDate
      */
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
     /**
      * @param startDate the startDate to set
      */
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
     /**
      * @return the endDate
      */
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
     /**
      * @param endDate the endDate to set
      */
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -169,14 +169,14 @@ public abstract class ReservationEntity implements Serializable {
     /**
      * @return the bookingDate
      */
-    public LocalDate getBookingDate() {
+    public Date getBookingDate() {
         return bookingDate;
     }
 
     /**
      * @param bookingDate the bookingDate to set
      */
-    public void setBookingDate(LocalDate bookingDate) {
+    public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
     }
 

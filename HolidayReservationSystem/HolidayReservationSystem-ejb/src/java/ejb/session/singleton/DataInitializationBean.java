@@ -11,6 +11,7 @@ import ejb.session.stateless.PartnerEntityControllerLocal;
 import entity.EmployeeEntity;
 import entity.Inventory;
 import entity.PartnerEntity;
+import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -57,22 +58,30 @@ public class DataInitializationBean {
         
         if (em.find(RoomTypeEntity.class, new Long(1)) == null){
             initializeRoomType();
+            //initializeRoom();
         }
         
-        if (em.find(Inventory.class, new Long(1)) == null) {
+        if (em.find(Inventory.class, new Long(137)) == null) {
             try {
                 initializeInventory();
             } catch (UpdateInventoryException ex) {
                 Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        
     }
 
     public void initializeEmployee(){
         //system admin
         EmployeeEntity employee = new EmployeeEntity("Win", "Phong", "sysadmin", "password", EmployeeAccessRight.SYSTEMADMINISTRATOR, "12345678", "sysadmin1@gmail.com");
         em.persist(employee);
-        //employeeEntityControllerLocal.createNewEmployee(employee);
+        
+        employee = new EmployeeEntity("Win", "Phong", "opmanager", "password", EmployeeAccessRight.OPERATIONMANAGER, "86195650", "opmanager@gmail.com");
+        em.persist(employee);
+        
+        employee = new EmployeeEntity("Win", "Phong", "frontoffice", "password", EmployeeAccessRight.GUESTRELATIONOFFICER, "31734509", "frontoffice@gmail.com");
+        em.persist(employee);
     }
     
     public void initializePartner(){
@@ -84,30 +93,27 @@ public class DataInitializationBean {
     public void initializeRoomType() {
         RoomTypeEntity roomType = new RoomTypeEntity("Deluxe Room", "A comfortable yet affordable room for you and your loved ones", new BigDecimal(12.00), "Double", 2, "TV and Hot tub", 1);
         em.persist(roomType);
+        roomType = new RoomTypeEntity("Premium Room", "Bagus!", new BigDecimal(24.00), "Double", 2, "Teapot", 2);
+        em.persist(roomType);
     }
     
-    public void initializeInventory() throws UpdateInventoryException{
-        //for(Date date = Date.valueOf(LocalDate.now()); !date.after(Date.valueOf(LocalDate.now().plusWeeks(1))); date.toLocalDate().plusDays(1) ) {      
-            
+    /* public void initializeRoom() {
         
-        Inventory inventory = new Inventory(LocalDate.now());
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(1));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(2));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(3));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(4));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(5));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(6));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(7));
-        em.persist(inventory);
-        inventory = new Inventory(LocalDate.now().plusDays(8));
-        em.persist(inventory);
+        RoomEntity room = new RoomEntity("0313");
+        room.setRoomType(roomType);
+        em.persist(room);
+        room = new RoomEntity("Premium Room", "Bagus!", new BigDecimal(24.00), "Double", 2, "Teapot", 2);
+        em.persist(room);
+    } */
+    
+    public void initializeInventory() throws UpdateInventoryException{
+        
+        Inventory inventory;
+        
+        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date = date.plusDays(1)) {      
+            inventory = new Inventory(Date.valueOf(date));
+            em.persist(inventory);
+        }
         
         try{
             inventoryControllerLocal.updateAllInventory();

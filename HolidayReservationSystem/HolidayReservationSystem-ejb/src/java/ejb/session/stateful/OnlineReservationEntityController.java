@@ -17,7 +17,7 @@ import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -101,7 +101,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         //Calculate total amount from room rate per night
         List<RoomRateEntity> roomRatesForABooking = new ArrayList<>();
         
-        for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date.plusDays(1)) {
+        for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date = date.plusDays(1)) {
 
             List<RoomRateEntity> roomRates = roomType.getRoomRate();
             
@@ -109,7 +109,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
             Integer resultIndexForPeakRate = roomRates.indexOf("Peak Rate");
             Integer resultIndexForPromotionRate = roomRates.indexOf("Promotion Rate");
             
-            Date currentDate  = java.sql.Date.valueOf(date);
+            Date currentDate  = Date.valueOf(date);
             
             Boolean peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
             Boolean promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
@@ -177,7 +177,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
     public ReservationEntity checkOut(Long guestId, LocalDate startDate, LocalDate endDate) throws Exception {
         
         String identity = "Guest";
-        ReservationEntity newReservation = reservationEntityControllerLocal.createReservation(identity, guestId, new OnlineReservationEntity(LocalDate.now(), startDate, endDate, Boolean.FALSE));
+        ReservationEntity newReservation = reservationEntityControllerLocal.createReservation(identity, guestId, reservationLineItems, totalAmount, new OnlineReservationEntity(Date.valueOf(LocalDate.now()), Date.valueOf(startDate), Date.valueOf(endDate), Boolean.FALSE));
         
         initialiseState();
         

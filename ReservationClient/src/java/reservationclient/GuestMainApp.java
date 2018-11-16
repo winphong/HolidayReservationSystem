@@ -14,13 +14,11 @@ import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.GuestEntity;
 import entity.OnlineReservationEntity;
-import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
@@ -288,7 +286,7 @@ public class GuestMainApp {
         try{
             OnlineReservationEntity reservation = onlineReservationEntityControllerRemote.retrieveReservationById(id);
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
-            System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getOnlineReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
+            System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
             
             List <ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
             System.out.println("Reservation Details: ");
@@ -315,7 +313,7 @@ public class GuestMainApp {
             System.out.println();
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             for (OnlineReservationEntity reservation: reservations){
-                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getOnlineReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
+                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");

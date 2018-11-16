@@ -58,10 +58,10 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             em.persist(newRoom);
             roomType.getRoom().add(newRoom);
             newRoom.setRoomType(roomType);
-            em.persist(newRoom);
+            em.flush();
             // Need to update inventory from the day of update to the last available inventory object
             inventoryControllerLocal.updateAllInventory();
-            em.flush();
+            
             return newRoom;
         } catch (Exception ex) {
             throw new CreateNewRoomException("Error creating new room: " + ex.getMessage());
@@ -199,7 +199,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
                 availableThroughout = Boolean.TRUE;
 
-                for (LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()); date.plusDays(1)) {
+                for (LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()); date = date.plusDays(1)) {
 
                     if (!room.getRoomStatus().equals(RoomStatus.VACANT)) {
                         // If the current reservation end date is the same as new reservation start date, the room is considered available

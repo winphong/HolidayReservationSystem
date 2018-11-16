@@ -6,6 +6,7 @@
 package ejb.session.stateful;
 
 import entity.ReservationEntity;
+import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import util.exception.RoomTypeNotFoundException;
 
@@ -20,5 +21,5 @@ public interface WalkinReservationEntityControllerRemote {
     
     public ReservationEntity checkOut(Long employeeId, LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws Exception;
 
-    public void reserveRoom(String roomTypeName, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException;
+    public void reserveRoom(RoomTypeEntity roomType, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException;
 }

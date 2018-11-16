@@ -22,6 +22,8 @@ import javax.persistence.Query;
 import ejb.session.stateful.WalkinReservationEntityControllerLocal;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import util.enumeration.RoomStatus;
 import util.exception.UpdateInventoryException;
@@ -40,7 +42,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     private EntityManager em;
 
     @EJB
-    private WalkinReservationEntityControllerLocal reservationEntityControllerLocal;
+    private WalkinReservationEntityControllerLocal walkInReservationEntityControllerLocal;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
@@ -49,7 +51,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     @Override
     public void updateAllInventory() throws UpdateInventoryException{
 
-        LocalDate currentDate = LocalDate.now();
+        Date currentDate = Date.valueOf(LocalDate.now());
 
         try {
             Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.date >= :currentDate");
@@ -67,21 +69,25 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     }
 
     @Override
-    public Inventory getInventoryByDate(LocalDate inputDate) {
-
+    public Inventory getInventoryByDate(Date inputDate) {
+        
+        System.out.println(inputDate);
+        
         Query query = em.createQuery("SELECT i FROM Inventory i WHERE i.date = :inputDate");
         query.setParameter("inputDate", inputDate);
 
         try {
-
-            return (Inventory) query.getSingleResult();
+            
+            Inventory inventory = (Inventory) query.getSingleResult();
+            if ( inventory.getAvailableRoom() == null ) {
+                System.out.println("Pui");
+            }
+            return inventory;
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
-            System.out.println("Inventory for " + inputDate + " does not exist!");
+            throw new NoResultException("No result exception");
         }
-
-        return null;
     }
 
     @Override
@@ -104,26 +110,35 @@ public class InventoryController implements InventoryControllerRemote, Inventory
 
     // Check from startDate to endDate whether there is any available room
     // Check each room and each date and make sure there is atleast one that is 
+    @Override
     public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) {
 
-        List<RoomTypeEntity> availableRoomType = null;
-
-        Inventory inventory = getInventoryByDate(startDate);
+        List<RoomTypeEntity> availableRoomType = new ArrayList<>();
+        
+        Inventory inventory = getInventoryByDate(Date.valueOf(startDate));
 
         // Get using getAvailableRoom will return room that is not disabled
         // If use getRoomTypes.get(index).getRoom() will return all room, including those that has been disabled
         List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom(); // availableRoom is not disable and is vacant
 
-        Integer roomTypeIndex = 0;
+        //Integer roomTypeIndex = 0;
         Boolean availableThroughout;
         Integer countOfRoomAvailableThroughout;
         // One reservation might have more than one room
-        List<ReservationEntity> reservationList = reservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate);
+        List<ReservationEntity> reservationList = walkInReservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate);
         List<ReservationLineItemEntity> reservationLineItems;
 
-        Integer numOfReservationThatOverlapWithBooking = 0;
-
-        // Check through all reservation
+        //Integer numOfReservationThatOverlapWithBooking = 0;
+        
+//**** Need to create a list to keep track of reservation for room of each type 
+        List<Integer> numOfRoomOfEachTypeRequiredForReservation = new ArrayList<>(); // size equal number of type of room available
+        
+        // Maybe array easier??
+        for(int i = 0; i < listOfRoomsForDifferentRoomTypes.size(); i++) {
+            numOfRoomOfEachTypeRequiredForReservation.add(0);
+        }
+        
+        // Check through all reservation in the database
         for (ReservationEntity reservation : reservationList) {
 
             reservationLineItems = reservation.getReservationLineItemEntities();
@@ -131,7 +146,34 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             // For all reservation, check through the reservationLineItem
             for (ReservationLineItemEntity reservationLineItem : reservationLineItems) {
 
-                numOfReservationThatOverlapWithBooking += reservationLineItem.getNumOfRoomBooked();
+                // Loop through the list, if matches, add the int to another list
+                for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
+                    
+                    RoomTypeEntity roomType = listOfRooms.get(0).getRoomType();
+                    
+                    if ( reservationLineItem.getRoomType().equals(roomType) ) {
+                        numOfRoomOfEachTypeRequiredForReservation.set(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms), numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)) + reservationLineItem.getNumOfRoomBooked());
+                    }
+                }
+            }
+        }
+        
+        List<ReservationLineItemEntity> lineItemsForCurrentReservation = walkInReservationEntityControllerLocal.getReservationLineItems();
+        
+        if ( walkInReservationEntityControllerLocal.getTotalAmount().equals(new BigDecimal(0)) ) {
+            throw new Error("this got error");
+        }
+        
+        // Check through the current "running" reservation
+        for(ReservationLineItemEntity reservationLineItem : lineItemsForCurrentReservation ) {
+            
+            for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
+                    
+                RoomTypeEntity roomType = listOfRooms.get(0).getRoomType();
+                
+                if ( reservationLineItem.getRoomType().equals(roomType) ) {
+                    numOfRoomOfEachTypeRequiredForReservation.set(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms), numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)) + reservationLineItem.getNumOfRoomBooked());
+                }
             }
         }
 
@@ -148,10 +190,10 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 // Loop through the booking date starting from the startDate to the endDate
                 // From the highlighted line, the function already ensure all the room retrieved will be available for startDate
                 // Therefore, the search loop can start a day after the startDate
-                for (LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date.plusDays(1)) {
+                for (LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date = date.plusDays(1)) {
 
                     // If the particular room is not available for the entire duration, set availbleThroughout to be false
-                    if (!roomExist(room, date, roomTypeIndex)) {
+                    if (!roomExist(room, date, listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms))) {
                         availableThroughout = Boolean.FALSE;
                         break;
                     }
@@ -163,13 +205,13 @@ public class InventoryController implements InventoryControllerRemote, Inventory
 
                     countOfRoomAvailableThroughout++;
 
-                    if ((countOfRoomAvailableThroughout - numOfReservationThatOverlapWithBooking) >= numOfRoomRequired) {
+                    if ((countOfRoomAvailableThroughout - numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms))) >= numOfRoomRequired) {
                         availableRoomType.add(room.getRoomType());
                         break;
                     }
                 }
             }
-            roomTypeIndex++;
+            //roomTypeIndex++;
         }
         return availableRoomType;
     }
@@ -179,7 +221,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     @Override
     public Boolean roomExist(RoomEntity room, LocalDate date, Integer roomTypeIndex) {
 
-        Inventory inventory = getInventoryByDate(date);
+        Inventory inventory = getInventoryByDate(Date.valueOf(date));
 
         List<List<RoomEntity>> listOfRoomEntity = inventory.getAvailableRoom();
 
@@ -193,7 +235,6 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     private void updateInventory(Long inventoryId) {
 
         Inventory inventory = retrieveInventoryById(inventoryId);
-        inventory.getRoomTypes().size();
 
         Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :inBoolean");
         query.setParameter("inBoolean", Boolean.FALSE);
@@ -207,11 +248,10 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         List<RoomEntity> rooms;
 
         // Set availableRoom to new List
-        inventory.setAvailableRoom(new ArrayList<>());
+        inventory.getAvailableRoom().clear();
         // For each room type
         for (RoomTypeEntity roomType : roomTypes) {
             roomForEachRoomType = new ArrayList<>();
-            roomType.getRoom().size();
             // Get the list of room
             rooms = roomType.getRoom();
             // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType

@@ -12,9 +12,9 @@ import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
-import entity.RoomEntity;
-import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.Resource;
@@ -45,7 +45,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     private EJBContext eJBContext;
     
     @Override
-    public ReservationEntity createReservation(String identity, Long Id, ReservationEntity newReservationEntity) throws Exception {
+    public ReservationEntity createReservation(String identity, Long Id, List<ReservationLineItemEntity> reservationLineItems, BigDecimal totalAmount, ReservationEntity newReservationEntity) throws Exception {
         
         if ( newReservationEntity != null ) {
             
@@ -69,14 +69,17 @@ public class ReservationEntityController implements ReservationEntityControllerR
                 
                 em.persist(newReservationEntity);
                 
-                for(ReservationLineItemEntity reservationLineItem : newReservationEntity.getReservationLineItemEntities()) {
+                for(ReservationLineItemEntity reservationLineItem : reservationLineItems) {
                     
                     em.persist(reservationLineItem);
                     reservationLineItem.setReservation(newReservationEntity);
                     newReservationEntity.getReservationLineItemEntities().add(reservationLineItem);
                 }
                 
+                newReservationEntity.setTotalAmount(totalAmount);
+                
                 em.flush();
+                
                 return newReservationEntity;
          
             } catch (IllegalArgumentException ex) {
@@ -127,9 +130,10 @@ public class ReservationEntityController implements ReservationEntityControllerR
     @Override
     public List<ReservationEntity> retrieveReservationByDateOrderByDescEndDate(LocalDate date) {
         
+        Date sqlDate = Date.valueOf(date);
         // Retrieve a list of reservation where the startDate is equal to current date and order by the longest period of booking
         Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.startDate = :inDate ORDER BY r.endDate DESC");
-        query.setParameter("inDate", date);
+        query.setParameter("inDate", sqlDate);
         
         return query.getResultList(); 
     }

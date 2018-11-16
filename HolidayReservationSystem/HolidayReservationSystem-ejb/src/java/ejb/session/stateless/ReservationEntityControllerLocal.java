@@ -6,6 +6,8 @@
 package ejb.session.stateless;
 
 import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
@@ -17,7 +19,7 @@ import javax.ejb.Local;
 @Local
 public interface ReservationEntityControllerLocal {
 
-    public ReservationEntity createReservation(String identity, Long Id, ReservationEntity newReservationEntity) throws Exception;
+    public ReservationEntity createReservation(String identity, Long Id, List<ReservationLineItemEntity> reservationLineItem, BigDecimal totalAmount, ReservationEntity newReservationEntity) throws Exception;
 
     public List<ReservationEntity> retrieveReservationByDateOrderByDescEndDate(LocalDate date);
 

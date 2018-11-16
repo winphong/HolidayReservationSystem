@@ -50,6 +50,7 @@ public class MainApp {
     }
 
     public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote) {
+        this();
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
@@ -62,9 +63,9 @@ public class MainApp {
         this.onlineReservationEntityControllerRemote = onlineReservationEntityControllerRemote;
     }
 
-    MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
+    /*MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 
     public void runApp() throws Exception {
         Scanner scanner = new Scanner(System.in);

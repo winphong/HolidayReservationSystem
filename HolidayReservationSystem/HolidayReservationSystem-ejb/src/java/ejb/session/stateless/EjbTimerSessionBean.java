@@ -10,10 +10,9 @@ import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -66,7 +65,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                 // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
                 for(RoomEntity room : rooms) {
                     availableThroughout = Boolean.TRUE;
-                    for(LocalDate date = reservation.getStartDate(); !date.isAfter(reservation.getEndDate()) ; date.plusDays(1)) {                       
+                    for(LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()) ; date = date.plusDays(1)) {                       
                         if ( !room.getRoomStatus().equals(RoomStatus.VACANT) ) {
                             // If the current reservation end date is the same as new reservation start date, the room is considered available
                             if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
@@ -124,7 +123,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     @Schedule(hour = "0", info = "scheduleEveryday12AM")
     public void createNewInventory() {
         
-        Inventory inventory = new Inventory(LocalDate.now().plusYears(1));
+        Inventory inventory = new Inventory(Date.valueOf(LocalDate.now().plusDays(1)));
         try {
             inventoryControllerLocal.updateAllInventory();
         } catch (UpdateInventoryException ex) {

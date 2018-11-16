@@ -6,7 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,9 +20,9 @@ import javax.persistence.ManyToOne;
 @Entity
 public class WalkinReservationEntity extends ReservationEntity implements Serializable {
 
-    private static long serialVersionUID = 1L;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long walkInReservationId;
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // private Long walkInReservationId;
+    
     @Column(nullable = false)
     private String guestFirstName;
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
     public WalkinReservationEntity() {
     }
 
-    public WalkinReservationEntity(String guestFirstName, String guestLastName, String guestContactNumber, String guestEmail, String guestIdentificationNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, Boolean isCheckedIn) {
+    public WalkinReservationEntity(String guestFirstName, String guestLastName, String guestContactNumber, String guestEmail, String guestIdentificationNumber, Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {
         super(bookingDate, startDate, endDate, isCheckedIn);
         this.guestFirstName = guestFirstName;
         this.guestLastName = guestLastName;
@@ -49,19 +49,21 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
         this.guestIdentificationNumber = guestIdentificationNumber;
     }
 
-    
-    public Long getPartnerReservationId() {
-        return walkInReservationId;
-    }
-
-    public void setPartnerReservationId(Long id) {
-        this.walkInReservationId = id;
+    @Override
+    public Long getReservationId() {
+        return super.getReservationId(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
+    public void setReservationId(Long id) {
+        super.setReservationId(id); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+
+    /*@Override
     public int hashCode() {
         int hash = 0;
-        hash += (getPartnerReservationId() != null ? getPartnerReservationId().hashCode() : 0);
+        hash += (getWalkInReservationId() != null ? getWalkInReservationId().hashCode() : 0);
         return hash;
     }
 
@@ -72,7 +74,7 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
             return false;
         }
         WalkinReservationEntity other = (WalkinReservationEntity) object;
-        if ((this.getPartnerReservationId() == null && other.getPartnerReservationId() != null) || (this.getPartnerReservationId() != null && !this.walkInReservationId.equals(other.walkInReservationId))) {
+        if ((this.getWalkInReservationId() == null && other.getWalkInReservationId() != null) || (this.getWalkInReservationId() != null && !this.walkInReservationId.equals(other.walkInReservationId))) {
             return false;
         }
         return true;
@@ -80,22 +82,22 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
 
     @Override
     public String toString() {
-        return "entity.WalkinReservationEntity[ id=" + getPartnerReservationId() + " ]";
-    }
-
-    /**
-     * @return the serialVersionUID
-     */
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    /**
-     * @param aSerialVersionUID the serialVersionUID to set
-     */
-    public static void setSerialVersionUID(long aSerialVersionUID) {
-        serialVersionUID = aSerialVersionUID;
-    }
+        return "entity.WalkinReservationEntity[ id=" + getWalkInReservationId() + " ]";
+    }*/
+//
+//    /**
+//     * @return the serialVersionUID
+//     */
+//    public static long getSerialVersionUID() {
+//        return serialVersionUID;
+//    }
+//
+//    /**
+//     * @param aSerialVersionUID the serialVersionUID to set
+//     */
+//    public static void setSerialVersionUID(long aSerialVersionUID) {
+//        serialVersionUID = aSerialVersionUID;
+//    }
 
     /**
      * @return the guestFirstName

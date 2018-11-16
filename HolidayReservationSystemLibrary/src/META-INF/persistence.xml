@@ -17,8 +17,6 @@
     <class>entity.NormalRateEntity</class>
     <class>entity.PeakRateEntity</class>
     <class>entity.PromotionRateEntity</class>
-    <class>entity.RoomRatePerNightEntity</class>
-    <class>entity.CustomerEntity</class>
     <class>entity.EmployeeReservationEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/holidayreservationsystem?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

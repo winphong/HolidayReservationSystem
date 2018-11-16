@@ -15,7 +15,9 @@ import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -60,45 +62,59 @@ public class WalkinReservationEntityController implements WalkinReservationEntit
     }
     
     private void initialiseState() {
-        reservationLineItems = new ArrayList<>();
+        setReservationLineItems(new ArrayList<>());
         totalLineItem = 0;
-        totalAmount = new BigDecimal("0.00");
+        setTotalAmount(new BigDecimal("0.00"));
     }
 
     // Need to be tracked
     @Override
-    public void reserveRoom(String roomTypeName, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException {
+    public void reserveRoom(RoomTypeEntity roomType, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException {
 
-        RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName(roomTypeName);
-        
-        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name := :inRoomRateName");
+       
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name = :inRoomRateName");
         query.setParameter("inRoomRateName", "Published Rate");
-        
-        RoomRateEntity publishedRoomRate = null;
-        
+  
         try {
             
-            publishedRoomRate = (RoomRateEntity) query.getSingleResult();
+            RoomRateEntity publishedRoomRate = (RoomRateEntity) query.getSingleResult();
+            BigDecimal subTotal = publishedRoomRate.getRatePerNight().multiply(new BigDecimal(startDate.until(endDate, ChronoUnit.DAYS))).multiply(new BigDecimal(numOfRoomRequired));
         
+            ReservationLineItemEntity reservationLineItemEntity = new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType);
+
+            reservationLineItems.add(reservationLineItemEntity);
+            totalLineItem++;
+            totalAmount.add(subTotal);
+            
         } catch (NoResultException ex) {
             
             throw new NoResultException("Published room rate throw " + ex.getMessage());
         }
-        //Calculate total amount from room rate per night
-        BigDecimal subTotal = publishedRoomRate.getRatePerNight().multiply(new BigDecimal(endDate.compareTo(startDate))).multiply(new BigDecimal(numOfRoomRequired));
+        //Calculate total amount from room rate per night  
+    }
+  
+    @Override
+    public ReservationEntity checkOut(Long employeeId, LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName, 
+            String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws Exception {
         
-        reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
-        totalLineItem++;
-        totalAmount.add(subTotal);
+        String identity = "Employee";
+        ReservationEntity newReservation = reservationEntityControllerLocal.createReservation(identity, employeeId, getReservationLineItems(), getTotalAmount(), new WalkinReservationEntity(guestFirstName, 
+                guestLastName, guestContactNumber, guestEmail, guestIdentificationNumber, Date.valueOf(LocalDate.now()), Date.valueOf(startDate), Date.valueOf(endDate), Boolean.FALSE));
+        
+        initialiseState();
+        
+        return newReservation;
     }
     
+      
     @Override
     public List<ReservationEntity> retrieveReservationByStartAndEndDate(LocalDate bookingStartDate, LocalDate bookingEndDate) {
         
-        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE (r.startDate < :bookingStartDate AND r.startDate <= :bookingEndDate) OR "
-                + "(:bookingStartDate >= r.startDate AND :bookingStartDate > r.endDate AND :bookingEndDate >= r.startDate)");
-        query.setParameter("bookingStartDate", bookingStartDate);
-        query.setParameter("bookingEndDate", bookingEndDate);
+        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE (r.startDate < :bookingStartDate AND r.endDate > :bookingStartDate) OR "
+                + " (r.startDate >= :bookingStartDate AND r.startDate <= :bookingEndDate)");
+                //+ "(:bookingStartDate >= r.startDate AND :bookingStartDate > r.endDate AND :bookingEndDate >= r.startDate)");
+        query.setParameter("bookingStartDate", Date.valueOf(bookingStartDate));
+        query.setParameter("bookingEndDate", Date.valueOf(bookingEndDate));
 
         try {
             // Return a list of reservation where the date collides with the hotel search
@@ -111,16 +127,32 @@ public class WalkinReservationEntityController implements WalkinReservationEntit
         return null;
     }
     
+    /**
+     * @return the reservationLineItems
+     */
     @Override
-    public ReservationEntity checkOut(Long employeeId, LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName, 
-            String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws Exception {
-        
-        String identity = "Employee";
-        ReservationEntity newReservation = reservationEntityControllerLocal.createReservation(identity, employeeId, new WalkinReservationEntity(guestFirstName, 
-                guestLastName, guestContactNumber, guestEmail, guestIdentificationNumber, LocalDate.now(), startDate, endDate, Boolean.FALSE));
-        
-        initialiseState();
-        
-        return newReservation;
+    public List<ReservationLineItemEntity> getReservationLineItems() {
+        return reservationLineItems;
+    }
+
+    /**
+     * @param reservationLineItems the reservationLineItems to set
+     */
+    public void setReservationLineItems(List<ReservationLineItemEntity> reservationLineItems) {
+        this.reservationLineItems = reservationLineItems;
+    }
+
+    /**
+     * @return the totalAmount
+     */
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * @param totalAmount the totalAmount to set
+     */
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
