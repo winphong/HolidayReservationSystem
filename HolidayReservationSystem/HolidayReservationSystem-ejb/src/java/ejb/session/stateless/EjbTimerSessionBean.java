@@ -59,6 +59,11 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
             // Loop through all line item for current reservation
             for(ReservationLineItemEntity reservationLineItem : reservationLineItems) {
                 
+                // If the someone is already staying in the room, what for you allocate
+                if ( reservation.getIsCheckedIn().equals(Boolean.TRUE) ) {
+                    break;
+                }
+                
                 RoomTypeEntity roomType = reservationLineItem.getRoomType();                
                 List<RoomEntity> rooms = roomType.getRoom();
                 countOfRoomAvailableThroughout = 0;
@@ -66,16 +71,24 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                 // Loop through all the rooms of the specified roomType & check whether can fullfil the booking requirement
                 // Need to check whether the next reservation start date is the same as current reservation end time --> if yes, change the status to allocate
                 for(RoomEntity room : rooms) {
+                    
+                    // If the room is already allocated, skip to the next room
+                    if ( room.getRoomStatus().equals(RoomStatus.ALLOCATED) ) {
+                        continue;
+                    }
+                    
+                    if ( countOfRoomAvailableThroughout.equals(reservationLineItem.getNumOfRoomBooked()) ) {
+                            break;
+                    }
                     availableThroughout = Boolean.TRUE;
+                    
                     for(LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()) ; date = date.plusDays(1)) {                       
-                        if ( !room.getRoomStatus().equals(RoomStatus.VACANT) ) {
-                            // If the current reservation end date is the same as new reservation start date, the room is considered available
-                            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
-                                // continue;
-                            } else {
-                                availableThroughout = Boolean.FALSE;
-                                break;
-                            }
+                        
+                        if ( room.getRoomStatus().equals(RoomStatus.MAINTENANCE) 
+                                || room.getRoomStatus().equals(RoomStatus.OCCUPIED) && !room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
+                            
+                            availableThroughout = Boolean.FALSE;
+                            break;
                         }
                     }
                     if ( availableThroughout.equals(Boolean.TRUE) ) {

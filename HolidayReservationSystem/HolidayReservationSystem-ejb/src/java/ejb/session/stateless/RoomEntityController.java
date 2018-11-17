@@ -11,7 +11,9 @@ import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
@@ -244,7 +246,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             }
         }
     }
-    
+
     @Override
     public Boolean checkIn(Long reservationId) {
         
@@ -292,7 +294,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
                     room.setCurrentReservation(null);
                     room.setRoomStatus(RoomStatus.VACANT);
                 }
-            //  room.getCurrentReservation().getRooms().remove(room);
+ 
                 room.setIsReady(Boolean.FALSE);
                 room.setGuest(null);
                 return Boolean.TRUE;

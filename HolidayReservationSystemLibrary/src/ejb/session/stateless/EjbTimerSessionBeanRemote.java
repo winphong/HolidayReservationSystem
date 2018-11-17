@@ -15,5 +15,7 @@ import javax.ejb.Remote;
 public interface EjbTimerSessionBeanRemote {
 
     public void allocateRoom();
+
+    public void finishUpHousekeeping();
     
 }

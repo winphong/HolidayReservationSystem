@@ -17,6 +17,7 @@ import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.ReservationEntity;
+import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
 import java.sql.Date;
@@ -90,8 +91,9 @@ public class FrontOfficeModule {
             System.out.println("3: Check-out Guest");
             System.out.println("-----------------------");
             System.out.println("4: Allocate Room");
+            System.out.println("5: Make room ready");
             System.out.println("-----------------------");
-            System.out.println("5: Back\n");
+            System.out.println("6: Back\n");
             System.out.println();
             response = 0;
 
@@ -109,13 +111,15 @@ public class FrontOfficeModule {
                 } else if (response == 4) {
                     allocateRoom();
                 } else if (response == 5) {
+                    finishUpHouseKeeping();
+                } else if (response == 6) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 4) {
+            if (response == 6) {
                 break;
             }
         }
@@ -289,7 +293,11 @@ public class FrontOfficeModule {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Reservation ID: >");
         Long reservationId = scanner.nextLong();
-          
+        
+        ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
+        
+        List<RoomEntity> rooms = reservation.getRooms();
+
         if ( roomEntityControllerRemote.checkIn(reservationId) ) {
             System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestFirstName() + "has been successfully checked in");
         } else {
@@ -324,8 +332,13 @@ public class FrontOfficeModule {
         }
     }
     
-    public void allocateRoom() {
+    private void allocateRoom() {
         
         ejbTimerSessionBeanRemote.allocateRoom();
+    }
+    
+    private void finishUpHouseKeeping() {
+        
+        ejbTimerSessionBeanRemote.finishUpHousekeeping();
     }
 }
