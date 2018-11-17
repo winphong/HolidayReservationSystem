@@ -182,7 +182,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     // Reserve room is still needed because guest can walkin and reserve for future date
     // Once reserve room, we need to allocate room for the guest if the start date of reservation is equal to current date
-    @Override
+/*    @Override
     public void walkInAllocateRoom(Long reservationId) throws ReservationNotFoundException {
 
         // Retrieve the current reservation
@@ -251,7 +251,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         }
 
     }
-
+*/
     @Override
     public Boolean checkIn(Long reservationId) throws ReservationNotFoundException {
 
