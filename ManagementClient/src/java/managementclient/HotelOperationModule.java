@@ -21,6 +21,8 @@ import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
+import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 import entity.RoomRateEntity;
 import java.sql.Date;
 import java.text.ParseException;
@@ -29,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.exception.CreateNewRoomException;
 import util.exception.CreateNewRoomRateException;
+import util.exception.ReservationNotFoundException;
 import util.exception.RoomRateNotFoundException;
 import util.exception.UpdateInventoryException;
 
@@ -374,25 +377,28 @@ public class HotelOperationModule {
         }
 
         System.out.println("1: Vacant");
-        System.out.println("2: Allocated");
-        System.out.println("3: Occupied");
-        System.out.println("4: Maintenance");
+        System.out.println("2: Occupied");
+        System.out.println("3: Maintenance");
         System.out.print("Select room status (blank if no change): ");
         input = scanner.nextLine().trim();
         if (input.length() > 0) {
             Integer roomStatusInt = Integer.valueOf(input);
-            if (roomStatusInt >= 1 && roomStatusInt <= 5) {
+            if (roomStatusInt >= 1 && roomStatusInt <= 3) {
                 room.setRoomStatus(RoomStatus.values()[roomStatusInt - 1]);
+                if (roomStatusInt == 2) {
+                    System.out.print("Enter name of guest occupying the room: ");
+                    String name = scanner.nextLine();
+                    room.setGuest(name);
+                }
             } else {
                 System.out.println("Invalid option! Room status not updated.");
                 System.out.println();
+                System.out.print("Enter name of guest occupying the room (blank if no change): ");
+                input = scanner.nextLine().trim();
+                if (input.length() > 0) {
+                    room.setGuest(input);
+                }
             }
-        }
-
-        System.out.print("Enter identification number of guest occupying the room (blank if no change): ");
-        input = scanner.nextLine().trim();
-        if (input.length() > 0) {
-            room.setGuest(input);
         }
 
         roomEntityControllerRemote.updateRoom(room, roomNumber);
@@ -448,7 +454,43 @@ public class HotelOperationModule {
 
     //to be modified
     public void doViewRoomAllocationExceptionReport() {
-
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: View Room Allocation Exception Report ***\n");
+        System.out.println();
+        System.out.println("*** Exception: Upgraded to Next Higher Room Type ***\n");
+        System.out.println();
+        try {
+            List <ReservationEntity> upgraded= reservationEntityControllerRemote.retrieveFirstException();
+            for (ReservationEntity reservation: upgraded){
+                System.out.printf("%18s%15s%15s%20s%18s\n", "Reservation Id", "Booked From", "Booked Until", "Room Type", "Number of Rooms");
+                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservation(reservation.getReservationId());
+                for (ReservationLineItemEntity item: items){
+                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
+                }
+                System.out.println();
+            }
+        } catch (ReservationNotFoundException ex) {
+           System.out.println("No exceptions found.");
+        }
+        System.out.println();
+        System.out.println("*** Exception: No Upgrade Available ***\n");
+        System.out.println();
+        try {
+            List <ReservationEntity> failed= reservationEntityControllerRemote.retrieveSecondException();
+            for (ReservationEntity reservation: failed){
+                System.out.printf("%18s%15s%15s%20s%18s\n", "Reservation Id", "Booked From", "Booked Until", "Room Type", "Number of Rooms");
+                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservation(reservation.getReservationId());
+                for (ReservationLineItemEntity item: items){
+                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
+                }
+                System.out.println();
+            }
+        } catch (ReservationNotFoundException ex) {
+           System.out.println("No exceptions found.");
+        }
+        System.out.print("Press any key to continue...: ");
+        scanner.nextLine();
+        System.out.println();
     }
 
     public void doCreateNewRoomRate() throws RoomTypeNotFoundException {
@@ -581,7 +623,7 @@ public class HotelOperationModule {
                 Boolean roomInUse = false;
                 for (RoomEntity room : rooms) {
                     // Or maybe allocated
-                    if (room.getRoomStatus().equals(RoomStatus.OCCUPIED) || room.getRoomStatus().equals(RoomStatus.ALLOCATED)) {
+                    if (room.getRoomStatus().equals(RoomStatus.OCCUPIED)) {
                         roomInUse = true;
                         break;
                     }

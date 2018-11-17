@@ -21,4 +21,6 @@ public interface RoomTypeEntityControllerLocal {
     public RoomTypeEntity retrieveRoomTypeByName(String name)throws RoomTypeNotFoundException;
     
     public RoomTypeEntity retrieveRoomTypeById(Long id)throws RoomTypeNotFoundException;
+
+    public RoomTypeEntity retrieveRoomTypeByTier(int tier) throws RoomTypeNotFoundException;
 }

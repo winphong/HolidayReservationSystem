@@ -14,8 +14,10 @@ import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.GuestEntity;
 import entity.OnlineReservationEntity;
+import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomTypeEntity;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,7 +32,7 @@ import util.exception.RoomTypeNotFoundException;
  * @author Asus
  */
 public class GuestMainApp {
-    
+
     private static ReservationEntityControllerRemote reservationEntityControllerRemote;
     private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
     private static RoomEntityControllerRemote roomEntityControllerRemote;
@@ -38,12 +40,12 @@ public class GuestMainApp {
     private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
     private static InventoryControllerRemote inventoryControllerRemote;
     private static GuestEntityControllerRemote guestEntityControllerRemote;
-    
+
     private GuestEntity currentGuest;
 
     public GuestMainApp() {
     }
-    
+
     public GuestMainApp(RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote) {
         this();
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
@@ -54,7 +56,7 @@ public class GuestMainApp {
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
     }
-    
+
     public void runApp() throws Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
@@ -94,7 +96,7 @@ public class GuestMainApp {
             }
         }
     }
-    
+
     private void guestLogin() throws InvalidLoginCredentialException {
         Scanner scanner = new Scanner(System.in);
         String username = "";
@@ -107,18 +109,17 @@ public class GuestMainApp {
         password = scanner.nextLine().trim();
 
         if (username.length() > 0 && password.length() > 0) {
-            try{
+            try {
                 currentGuest = guestEntityControllerRemote.guestLogin(username, password);
-            }
-            catch (GuestNotFoundException ex){
+            } catch (GuestNotFoundException ex) {
                 System.out.println("Guest with username " + username + "does not exist!");
             }
         } else {
             throw new InvalidLoginCredentialException("Missing login credential!");
         }
     }
-    
-    private void register(){
+
+    private void register() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS Reservation Client :: Register ***\n");
         System.out.print("Enter First Name: ");
@@ -139,8 +140,8 @@ public class GuestMainApp {
         guestEntityControllerRemote.registerGuest(newGuest);
         System.out.println("You have successfully registered as a new guest!");
     }
-    
-    private void menuMain() throws Exception{
+
+    private void menuMain() throws Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
@@ -177,149 +178,224 @@ public class GuestMainApp {
             }
         }
     }
-    
-    private void searchRoom() throws Exception{
-        
+
+    private void searchRoom() throws Exception {
         Scanner scanner = new Scanner(System.in);
-        
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM");
-        
-        System.out.println("Enter start date (dd/MM): ");
+        System.out.println("*** Merlion Hotel HoRS Reservation Client :: Search Room ***\n");
+        //DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/mm");
+        System.out.println("Enter start date (dd/mm/yyyy): ");
         String date = scanner.nextLine().trim();
-        LocalDate startDate = LocalDate.parse(date, dateFormat);
-        System.out.println("Enter end date (dd/MM): ");
+        LocalDate startDate = LocalDate.of(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3, 5)), Integer.parseInt(date.substring(0, 2)));
+        System.out.println("Enter end date (dd/mm/yyyy): ");
         date = scanner.nextLine().trim();
-        LocalDate endDate = LocalDate.parse(date, dateFormat);
+        LocalDate endDate = LocalDate.of(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3, 5)), Integer.parseInt(date.substring(0, 2)));
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
-        
+
         List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
-        
+
         Integer index = 1;
-        
-        for(RoomTypeEntity availableRoomType : availableRoomTypes) {
-            
-            System.out.println(index + ": " + availableRoomType.getName());
+
+        for (RoomTypeEntity availableRoomType : availableRoomTypes) {
+
+            System.out.println(availableRoomType.getName());
             index++;
         }
-        
-        System.out.print("/nReserve room? (Y/N) > ");
-        String response = scanner.nextLine().trim();
-        
-        if ( response.equalsIgnoreCase("Y")) {
+
+        System.out.print("\nReserve room? (Y/N) > ");
+        String response = scanner.next().toUpperCase();
+
+        if (response.equalsIgnoreCase("Y")) {
             makeReservation(startDate, endDate, numOfRoomRequired);
         }
     }
-    
+
     // Overloaded method
-    private void searchRoomAgain(LocalDate startDate, LocalDate endDate) throws Exception{
-        
+    private void searchRoomAgain(LocalDate startDate, LocalDate endDate) throws Exception {
+
         Scanner scanner = new Scanner(System.in);
-        
+
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
-        
+
         List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
-        
+
         Integer index = 1;
-        
-        for(RoomTypeEntity availableRoomType : availableRoomTypes) {
-            
+
+        for (RoomTypeEntity availableRoomType : availableRoomTypes) {
+
             System.out.println(index + ": " + availableRoomType.getName());
             index++;
         }
-        
+
         System.out.print("/nReserve room? (Y/N) > ");
         String response = scanner.nextLine().trim();
-        
-        if ( response.equalsIgnoreCase("Y")) {
+
+        if (response.equalsIgnoreCase("Y")) {
             makeReservation(startDate, endDate, numOfRoomRequired);
         }
     }
-    
-    private void makeReservation(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception{
-        
+
+    private void makeReservation(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception {
+
         Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("/nSelect available room type: >");
+
+        System.out.print("\nSelect available room type: >");
         String roomTypeName = scanner.nextLine().trim();
-        
-//        System.out.print("/nEnter first name: ");
-//        String guestFirstName = scanner.nextLine().trim();
-//        System.out.print("/nEnter last name: ");
-//        String guestlastName = scanner.nextLine();
-//        String password = scanner.nextLine().trim();
-//        System.out.print("/nEnter contact number: ");
-//        String contactNumber = scanner.nextLine().trim();
-//        System.out.print("/nEnter email: ");
-//        String email = scanner.nextLine().trim();
-//        System.out.print("/nEnter guest identification number: ");
-//        String guestIdentificationNumber = scanner.nextLine().trim();
-        
+        System.out.print("Enter first name: ");
+        String guestFirstName = scanner.nextLine().trim();
+        System.out.print("Enter last name: ");
+        String guestLastName = scanner.nextLine().trim();
+        System.out.print("Enter guest identification number: ");
+        String guestIdentificationNumber = scanner.nextLine().trim();
+        System.out.print("Enter contact number: ");
+        String guestContactNumber = scanner.nextLine().trim();
+        System.out.print("Enter email: ");
+        String guestEmail = scanner.nextLine().trim();
+
         //ReservationEntity newReservation = new WalkinReservationEntity();
-        
         try {
-            
+
             RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
-            onlineReservationEntityControllerRemote.reserveRoom(roomTypeName, startDate, endDate, numOfRoomRequired);
-            
+
+            onlineReservationEntityControllerRemote.reserveRoom(roomType.getName(), startDate, endDate, numOfRoomRequired);
+
         } catch (RoomTypeNotFoundException ex) {
-            
+
             System.err.println(ex.getMessage());
         }
-        
+
         System.out.print("\nWould you to reserve another room? (Y/N): ");
         String response = scanner.nextLine().trim();
-        
-        if ( response.equalsIgnoreCase("Y") ) {
-            searchRoomAgain(startDate, endDate);
+
+        if (response.equalsIgnoreCase("Y")) {
+            searchRoomAgain(startDate, endDate, guestFirstName,
+                    guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
         } else {
-            onlineReservationEntityControllerRemote.checkOut(currentGuest.getGuestId(), startDate, endDate);
+
+            System.out.println("\nChecking out!!");
+            ReservationEntity newReservation = onlineReservationEntityControllerRemote.checkOut(currentGuest.getGuestId(), startDate, endDate);
+
+            // If the reservation's start date = current date, the call walkInAllocateRoom method;
+            if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
+                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+            }
         }
     }
-    
-    private void viewReservationDetails(){
+
+    private void searchRoomAgain(LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName,
+            String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
+
+        System.out.println("*** Merlion Hotel HoRS :: Front Office :: Walk-in Search Room ***\n");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter number of rooms required: ");
+        Integer numOfRoomRequired = scanner.nextInt();
+
+        List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
+
+        Integer index = 1;
+
+        for (RoomTypeEntity availableRoomType : availableRoomTypes) {
+
+            System.out.println(availableRoomType.getName());
+            index++;
+        }
+
+        System.out.print("\nReserve room? (Y/N) > ");
+        String response = scanner.next().toUpperCase();
+
+        if (response.equalsIgnoreCase("Y")) {
+            makeReservationAgain(startDate, endDate, numOfRoomRequired, guestFirstName, guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+
+        } else {
+            System.out.println("\nChecking out!!");
+            ReservationEntity newReservation = onlineReservationEntityControllerRemote.checkOut(currentGuest.getGuestId(), startDate, endDate);
+
+            // If the reservation's start date = current date, the call walkInAllocateRoom method;
+            if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
+                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+            }
+        }
+    }
+
+    private void makeReservationAgain(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired, String guestFirstName,
+            String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("\nSelect available room type: >");
+        String roomTypeName = scanner.nextLine().trim();
+
+        //ReservationEntity newReservation = new WalkinReservationEntity();
+        try {
+
+            RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
+
+            onlineReservationEntityControllerRemote.reserveRoom(roomType.getName(), startDate, endDate, numOfRoomRequired);
+
+        } catch (RoomTypeNotFoundException ex) {
+
+            System.err.println(ex.getMessage());
+        }
+
+        System.out.print("\nWould you to reserve another room? (Y/N): ");
+        String response = scanner.nextLine().trim();
+
+        if (response.equalsIgnoreCase("Y")) {
+            searchRoomAgain(startDate, endDate, guestFirstName,
+                    guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
+        } else {
+
+            System.out.println("\nChecking out!!");
+            ReservationEntity newReservation = onlineReservationEntityControllerRemote.checkOut(currentGuest.getGuestId(), startDate, endDate);
+
+            // If the reservation's start date = current date, the call walkInAllocateRoom method;
+            if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
+                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+            }
+        }
+    }
+
+    private void viewReservationDetails() {
         System.out.println("*** Merlion Hotel HoRS Reservation Client :: View My Reservation Details***\n");
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Reservation Id: ");
         Long id = scanner.nextLong();
-        try{
+        try {
             OnlineReservationEntity reservation = onlineReservationEntityControllerRemote.retrieveReservationById(id);
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
-            
-            List <ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
+
+            List<ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
             System.out.println("Reservation Details: ");
             System.out.println("-------------------------");
             System.out.printf("%20s%20s%15s\n", "Room Type", "Number of Rooms", "Total Amount");
-            for (ReservationLineItemEntity item : items){
+            for (ReservationLineItemEntity item : items) {
                 System.out.printf("%20s%20s%15s\n", item.getRoomType(), item.getNumOfRoomBooked(), item.getTotalAmount());
             }
-            
+
             System.out.println();
             System.out.print("Press any key to continue...: ");
             scanner.nextLine();
-        }
-        catch (ReservationNotFoundException ex){
+        } catch (ReservationNotFoundException ex) {
             System.out.println("Reservation " + id + " not found!");
         }
     }
-    
-    private void viewAllReservations(){
+
+    private void viewAllReservations() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS Reservation Client :: View All My Reservations***\n");
-        List <OnlineReservationEntity> reservations = onlineReservationEntityControllerRemote.viewAllReservationsOfGuest(currentGuest);
-        if (reservations.size()>0){
+        List<OnlineReservationEntity> reservations = onlineReservationEntityControllerRemote.viewAllReservationsOfGuest(currentGuest);
+        if (reservations.size() > 0) {
             System.out.println();
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
-            for (OnlineReservationEntity reservation: reservations){
+            for (OnlineReservationEntity reservation : reservations) {
                 System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
             scanner.nextLine();
-        }
-        else{
+        } else {
             System.out.println("No reservations available.");
         }
     }

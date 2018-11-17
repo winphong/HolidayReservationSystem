@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.CheckInException;
+import util.exception.ReservationNotFoundException;
 
 /**
  *
@@ -17,7 +20,15 @@ import javax.ejb.Remote;
 @Remote
 public interface ReservationEntityControllerRemote {
  
-    public ReservationEntity retrieveReservationById(Long reservationId);
+    public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException;
 
-    public List<RoomEntity> retrieveRoomsByReservation(Long reservationId);
+    public List<RoomEntity> retrieveRoomsByReservation(Long reservationId) throws ReservationNotFoundException;
+
+    public Boolean checkIn(Long reservationId, String guest) throws CheckInException, ReservationNotFoundException;
+
+    public List<ReservationEntity> retrieveFirstException() throws ReservationNotFoundException;
+
+    public List<ReservationLineItemEntity> retrieveItemsByReservation(Long id) throws ReservationNotFoundException;
+
+    public List<ReservationEntity> retrieveSecondException() throws ReservationNotFoundException;
 }

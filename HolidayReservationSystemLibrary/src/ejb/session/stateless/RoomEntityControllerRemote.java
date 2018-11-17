@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.RoomEntity;
 import java.util.List;
 import util.exception.CreateNewRoomException;
+import util.exception.ReservationNotFoundException;
 import util.exception.RoomNotFoundException;
 
 /**
@@ -28,10 +29,10 @@ public interface RoomEntityControllerRemote {
 
     public List<RoomEntity> viewAllRoom();
 
-    public void walkInAllocateRoom(Long reservationId);
+    public void walkInAllocateRoom(Long reservationId) throws ReservationNotFoundException;
 
-    public Boolean checkIn(Long reservationId);
+    public Boolean checkIn(Long reservationId) throws ReservationNotFoundException;
 
-    public Boolean checkOut(String roomNumber) throws RoomNotFoundException;
+    public Boolean checkOut(String roomNumber) throws RoomNotFoundException,ReservationNotFoundException;
     
 }

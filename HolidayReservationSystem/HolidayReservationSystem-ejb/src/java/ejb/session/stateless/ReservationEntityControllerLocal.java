@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.ReservationLineItemNotFoundException;
+import util.exception.ReservationNotFoundException;
 
 /**
  *
@@ -23,5 +25,7 @@ public interface ReservationEntityControllerLocal {
 
     public List<ReservationEntity> retrieveReservationByDateOrderByDescEndDate(LocalDate date);
 
-    public ReservationEntity retrieveReservationById(Long reservationId);
+    public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException;
+
+    public ReservationLineItemEntity retrieveItemById(Long id) throws ReservationLineItemNotFoundException;
 }
