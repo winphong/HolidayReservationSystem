@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PartnerEntity;
+import entity.PartnerReservationEntity;
 import java.util.List;
 import util.exception.InvalidLoginCredentialException;
 
@@ -21,5 +22,7 @@ public interface PartnerEntityControllerRemote {
     public List<PartnerEntity> viewAllPartner();
 
     public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException;
+
+    public List<PartnerReservationEntity> retrieveAllReservations(Long partnerId);
     
 }

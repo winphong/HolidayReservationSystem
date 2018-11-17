@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PartnerEntity;
+import entity.PartnerReservationEntity;
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -96,4 +97,9 @@ public class PartnerEntityController implements PartnerEntityControllerRemote, P
         }
     }
     
+    @Override
+    public List <PartnerReservationEntity> retrieveAllReservations (Long partnerId){
+        PartnerEntity partner = retrievePartnerById(partnerId);
+        return partner.getReservation();
+    }
 }

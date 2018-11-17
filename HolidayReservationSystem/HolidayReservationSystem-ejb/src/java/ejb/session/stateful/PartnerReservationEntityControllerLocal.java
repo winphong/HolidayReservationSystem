@@ -5,11 +5,14 @@
  */
 package ejb.session.stateful;
 
+import entity.PartnerReservationEntity;
+import util.exception.ReservationNotFoundException;
+
 /**
  *
  * @author Asus
  */
 
 public interface PartnerReservationEntityControllerLocal {
-    
+    public PartnerReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException;
 }

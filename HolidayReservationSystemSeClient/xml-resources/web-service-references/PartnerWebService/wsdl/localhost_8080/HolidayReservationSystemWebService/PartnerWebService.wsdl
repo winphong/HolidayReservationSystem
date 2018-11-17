@@ -13,11 +13,35 @@
 <message name="InvalidLoginCredentialException">
 <part name="fault" element="tns:InvalidLoginCredentialException"/>
 </message>
+<message name="retrieveAllReservations">
+<part name="parameters" element="tns:retrieveAllReservations"/>
+</message>
+<message name="retrieveAllReservationsResponse">
+<part name="parameters" element="tns:retrieveAllReservationsResponse"/>
+</message>
+<message name="retrieveReservationById">
+<part name="parameters" element="tns:retrieveReservationById"/>
+</message>
+<message name="retrieveReservationByIdResponse">
+<part name="parameters" element="tns:retrieveReservationByIdResponse"/>
+</message>
+<message name="ReservationNotFoundException">
+<part name="fault" element="tns:ReservationNotFoundException"/>
+</message>
 <portType name="PartnerWebService">
 <operation name="partnerLogin">
 <input wsam:Action="http://ws.ejb/PartnerWebService/partnerLoginRequest" message="tns:partnerLogin"/>
 <output wsam:Action="http://ws.ejb/PartnerWebService/partnerLoginResponse" message="tns:partnerLoginResponse"/>
 <fault message="tns:InvalidLoginCredentialException" name="InvalidLoginCredentialException" wsam:Action="http://ws.ejb/PartnerWebService/partnerLogin/Fault/InvalidLoginCredentialException"/>
+</operation>
+<operation name="retrieveAllReservations">
+<input wsam:Action="http://ws.ejb/PartnerWebService/retrieveAllReservationsRequest" message="tns:retrieveAllReservations"/>
+<output wsam:Action="http://ws.ejb/PartnerWebService/retrieveAllReservationsResponse" message="tns:retrieveAllReservationsResponse"/>
+</operation>
+<operation name="retrieveReservationById">
+<input wsam:Action="http://ws.ejb/PartnerWebService/retrieveReservationByIdRequest" message="tns:retrieveReservationById"/>
+<output wsam:Action="http://ws.ejb/PartnerWebService/retrieveReservationByIdResponse" message="tns:retrieveReservationByIdResponse"/>
+<fault message="tns:ReservationNotFoundException" name="ReservationNotFoundException" wsam:Action="http://ws.ejb/PartnerWebService/retrieveReservationById/Fault/ReservationNotFoundException"/>
 </operation>
 </portType>
 <binding name="PartnerWebServicePortBinding" type="tns:PartnerWebService">
@@ -32,6 +56,27 @@
 </output>
 <fault name="InvalidLoginCredentialException">
 <soap:fault name="InvalidLoginCredentialException" use="literal"/>
+</fault>
+</operation>
+<operation name="retrieveAllReservations">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="retrieveReservationById">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="ReservationNotFoundException">
+<soap:fault name="ReservationNotFoundException" use="literal"/>
 </fault>
 </operation>
 </binding>

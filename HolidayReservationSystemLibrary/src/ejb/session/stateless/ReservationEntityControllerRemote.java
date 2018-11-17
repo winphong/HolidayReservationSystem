@@ -6,6 +6,8 @@
 package ejb.session.stateless;
 
 import entity.ReservationEntity;
+import entity.RoomEntity;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -16,4 +18,6 @@ import javax.ejb.Remote;
 public interface ReservationEntityControllerRemote {
  
     public ReservationEntity retrieveReservationById(Long reservationId);
+
+    public List<RoomEntity> retrieveRoomsByReservation(Long reservationId);
 }

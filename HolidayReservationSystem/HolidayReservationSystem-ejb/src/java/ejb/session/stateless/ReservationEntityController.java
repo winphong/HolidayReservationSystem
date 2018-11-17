@@ -12,6 +12,7 @@ import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
+import entity.RoomEntity;
 import entity.WalkinReservationEntity;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -150,5 +151,12 @@ public class ReservationEntityController implements ReservationEntityControllerR
             System.out.println("throw new exception reservation ID " + reservationId + " not found");
             return null;
         }
+    }
+    
+    @Override
+    public List <RoomEntity> retrieveRoomsByReservation (Long reservationId){
+        ReservationEntity reservation = retrieveReservationById(reservationId);
+        List <RoomEntity> rooms = reservation.getRooms();
+        return rooms;
     }
 }

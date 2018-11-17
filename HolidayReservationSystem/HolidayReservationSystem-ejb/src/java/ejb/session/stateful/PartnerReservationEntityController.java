@@ -43,6 +43,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
         return reservations;
     }
     
+    @Override
     public PartnerReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException {
 
         Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.id=:inId");

@@ -281,14 +281,14 @@ public class FrontOfficeModule {
     public void guestCheckin(){
         
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Reservation ID: >");
+        System.out.print("Reservation ID: ");
         Long reservationId = scanner.nextLong();
-        System.out.print("/nName of guest: ");
+        System.out.print("Name of guest: ");
         String guestName = scanner.nextLine().trim();
         
         ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
         
-        List<RoomEntity> rooms = reservation.getRooms();
+        List<RoomEntity> rooms = reservationEntityControllerRemote.retrieveRoomsByReservation(reservationId);
         
         Boolean allRoomsReadyForCheckIn = Boolean.TRUE;
         
