@@ -243,7 +243,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     }
 
     @Override
-    public ReservationLineItemEntity retrieveItemById(Long id) throws ReservationLineItemNotFoundException {
+    public ReservationLineItemEntity retrieveReservationLineItemById(Long id) throws ReservationLineItemNotFoundException {
         ReservationLineItemEntity reservationItem = em.find(ReservationLineItemEntity.class, id);
 
         if (reservationItem != null) {

@@ -202,7 +202,7 @@ public class FrontOfficeModule {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -239,7 +239,7 @@ public class FrontOfficeModule {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -289,8 +289,6 @@ public class FrontOfficeModule {
         Long reservationId = scanner.nextLong();
        
         ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
-        
-        List<RoomEntity> rooms = reservation.getRooms();
 
         try {
             if ( roomEntityControllerRemote.checkIn(reservationId) ) {

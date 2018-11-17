@@ -38,9 +38,9 @@ public abstract class ReservationEntity implements Serializable {
     private Date endDate;
     @Column (nullable = false)
     private Date bookingDate;
-    private Boolean isCheckedIn = false;
-    private Boolean isNotAllocated = false;
-    private Boolean isUpgraded = false;
+    private Boolean isCheckedIn = Boolean.FALSE;
+    private Boolean isNotAllocated = Boolean.TRUE;
+    private Boolean isUpgraded = Boolean.FALSE;
     @Column (scale = 2)
     private BigDecimal totalAmount;
     

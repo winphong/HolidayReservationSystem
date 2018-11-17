@@ -301,6 +301,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
                 if (room.getNextReservation() != null) {
                     room.setCurrentReservation(room.getNextReservation());
                     room.setNextReservation(null);
+                    room.setRoomStatus(RoomStatus.ALLOCATED);
                 } else {
                     room.setCurrentReservation(null);
                     room.setRoomStatus(RoomStatus.VACANT);

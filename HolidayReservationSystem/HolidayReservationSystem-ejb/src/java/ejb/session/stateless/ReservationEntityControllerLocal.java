@@ -27,5 +27,5 @@ public interface ReservationEntityControllerLocal {
 
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException;
 
-    public ReservationLineItemEntity retrieveItemById(Long id) throws ReservationLineItemNotFoundException;
+    public ReservationLineItemEntity retrieveReservationLineItemById(Long id) throws ReservationLineItemNotFoundException;
 }

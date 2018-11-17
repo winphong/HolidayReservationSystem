@@ -177,7 +177,8 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     @Override
     public List<RoomTypeEntity> retrieveAllRoomType() {
 
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = FALSE");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :Boolean");
+        query.setParameter("Boolean", Boolean.FALSE);
 
         List<RoomTypeEntity> roomTypes = (List<RoomTypeEntity>) query.getResultList();
         for (RoomTypeEntity roomType : roomTypes) {
@@ -223,7 +224,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     
     @Override
     public RoomTypeEntity retrieveRoomTypeByTier (int tier) throws RoomTypeNotFoundException{
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.tier:inTier");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.tier = :inTier");
         query.setParameter("inTier", tier);
 
         try {

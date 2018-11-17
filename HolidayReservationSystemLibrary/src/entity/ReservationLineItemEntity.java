@@ -29,6 +29,7 @@ public class ReservationLineItemEntity implements Serializable {
     @Column(scale=2)
     private BigDecimal totalAmount;
     private RoomTypeEntity roomType;
+    private Boolean isAllocated = Boolean.FALSE;
     
     /*
     @ManyToOne
@@ -139,4 +140,18 @@ public class ReservationLineItemEntity implements Serializable {
         this.roomType = roomType;
     }
     
+    
+    /**
+     * @return the isAllocated
+     */
+    public Boolean getIsAllocated() {
+        return isAllocated;
+    }
+
+    /**
+     * @param isAllocated the isAllocated to set
+     */
+    public void setIsAllocated(Boolean isAllocated) {
+        this.isAllocated = isAllocated;
+    }
 }

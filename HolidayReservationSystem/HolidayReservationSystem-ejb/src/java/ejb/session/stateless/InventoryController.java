@@ -183,7 +183,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         for (List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
             
             if (listOfRooms.size() - numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)) >= numOfRoomRequired) {
-                availableRoomType.add(listOfRooms.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms)).getRoomType());
+                availableRoomType.add(listOfRooms.get(0).getRoomType());
             }
         }
             
@@ -268,7 +268,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
             for (RoomEntity room : rooms) {
                 // Not disable and vacant
-                if (room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus().equals(RoomStatus.VACANT)) {
+                if (room.getIsDisabled().equals(Boolean.FALSE)) {
                     roomForEachRoomType.add(room);
                     totalNumOfRoomAvailable++;
                 }
