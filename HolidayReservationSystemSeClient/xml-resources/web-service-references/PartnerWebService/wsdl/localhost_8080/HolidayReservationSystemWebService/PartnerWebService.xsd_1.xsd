@@ -2,20 +2,56 @@
 
 <xs:element name="InvalidLoginCredentialException" type="tns:InvalidLoginCredentialException"/>
 
+<xs:element name="ReservationNotFoundException" type="tns:ReservationNotFoundException"/>
+
 <xs:element name="partnerLogin" type="tns:partnerLogin"/>
 
 <xs:element name="partnerLoginResponse" type="tns:partnerLoginResponse"/>
 
-<xs:complexType name="partnerLogin">
+<xs:element name="retrieveAllReservations" type="tns:retrieveAllReservations"/>
+
+<xs:element name="retrieveAllReservationsResponse" type="tns:retrieveAllReservationsResponse"/>
+
+<xs:element name="retrieveReservationById" type="tns:retrieveReservationById"/>
+
+<xs:element name="retrieveReservationByIdResponse" type="tns:retrieveReservationByIdResponse"/>
+
+<xs:complexType name="retrieveAllReservations">
 <xs:sequence>
-<xs:element name="arg0" type="xs:string" minOccurs="0"/>
-<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg0" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="partnerLoginResponse">
+<xs:complexType name="retrieveAllReservationsResponse">
 <xs:sequence>
-<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
+<xs:element name="return" type="tns:partnerReservationEntity" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerReservationEntity">
+<xs:complexContent>
+<xs:extension base="tns:reservationEntity">
+<xs:sequence>
+<xs:element name="customerContactNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="customerEmail" type="xs:string" minOccurs="0"/>
+<xs:element name="customerFirstName" type="xs:string" minOccurs="0"/>
+<xs:element name="customerLastName" type="xs:string" minOccurs="0"/>
+<xs:element name="partner" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="reservationEntity" abstract="true">
+<xs:sequence>
+<xs:element name="bookingDate" type="tns:date" minOccurs="0"/>
+<xs:element name="endDate" type="tns:date" minOccurs="0"/>
+<xs:element name="isCheckedIn" type="xs:boolean" minOccurs="0"/>
+<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
+<xs:element name="reservationLineItemEntities" type="tns:reservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="rooms" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="startDate" type="tns:date" minOccurs="0"/>
+<xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -32,35 +68,7 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="partnerReservationEntity">
-<xs:complexContent>
-<xs:extension base="tns:reservationEntity">
-<xs:sequence>
-<xs:element name="customerContactNumber" type="xs:string" minOccurs="0"/>
-<xs:element name="customerEmail" type="xs:string" minOccurs="0"/>
-<xs:element name="customerFirstName" type="xs:string" minOccurs="0"/>
-<xs:element name="customerLastName" type="xs:string" minOccurs="0"/>
-<xs:element name="partner" type="tns:partnerEntity" minOccurs="0"/>
-<xs:element name="partnerReservationId" type="xs:long" minOccurs="0"/>
-</xs:sequence>
-</xs:extension>
-</xs:complexContent>
-</xs:complexType>
-
-<xs:complexType name="reservationEntity" abstract="true">
-<xs:sequence>
-<xs:element name="bookingDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="endDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="isCheckedIn" type="xs:boolean" minOccurs="0"/>
-<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
-<xs:element name="reservationLineItemEntities" type="tns:reservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-<xs:element name="rooms" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-<xs:element name="startDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="totalAmount" type="xs:decimal" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="localDate" final="extension restriction">
+<xs:complexType name="date">
 <xs:sequence/>
 </xs:complexType>
 
@@ -115,7 +123,38 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="partnerLogin">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="InvalidLoginCredentialException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrieveReservationById">
+<xs:sequence>
+<xs:element name="arg0" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrieveReservationByIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerReservationEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ReservationNotFoundException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
 </xs:sequence>

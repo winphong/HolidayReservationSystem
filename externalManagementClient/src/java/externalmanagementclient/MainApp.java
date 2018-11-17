@@ -68,8 +68,7 @@ public class MainApp {
 
                 if (response == 1) {
                     try {
-                        partnerLogin();
-                        System.out.println("Login successful!\n");
+                        partnerLogin();                       
                         menuMain();
 
                     } catch (InvalidLoginCredentialException ex) {
@@ -101,6 +100,7 @@ public class MainApp {
 
         if (username.length() > 0 && password.length() > 0) {
             currentPartner = partnerEntityControllerRemote.partnerLogin(username, password);
+            System.out.println("Login successful!\n");
         } else {
             throw new InvalidLoginCredentialException("Missing login credential!");
         }

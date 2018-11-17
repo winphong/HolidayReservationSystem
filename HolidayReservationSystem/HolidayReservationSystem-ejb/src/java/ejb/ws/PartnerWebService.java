@@ -5,14 +5,18 @@
  */
 package ejb.ws;
 
+import ejb.session.stateful.PartnerReservationEntityControllerLocal;
 import ejb.session.stateless.PartnerEntityControllerLocal;
 import entity.PartnerEntity;
+import entity.PartnerReservationEntity;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ReservationNotFoundException;
 
 /**
  *
@@ -23,9 +27,21 @@ import util.exception.InvalidLoginCredentialException;
 public class PartnerWebService {
 
     @EJB
+    private PartnerReservationEntityControllerLocal partnerReservationEntityController;
+
+    @EJB
     private PartnerEntityControllerLocal partnerEntityControllerLocal;
+    
 
     public PartnerEntity partnerLogin(String username, String password) throws InvalidLoginCredentialException{
         return partnerEntityControllerLocal.partnerLogin(username, password);
+    }
+    
+    public PartnerReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException{
+        return partnerReservationEntityController.retrieveReservationById(id);
+    }
+    
+    public List <PartnerReservationEntity> retrieveAllReservations (Long partnerId){
+        return partnerEntityControllerLocal.retrieveAllReservations(partnerId);
     }
 }

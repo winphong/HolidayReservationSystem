@@ -220,4 +220,19 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         }
 
     }
+    
+    @Override
+    public RoomTypeEntity retrieveRoomTypeByTier (int tier) throws RoomTypeNotFoundException{
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.tier:inTier");
+        query.setParameter("inTier", tier);
+
+        try {
+
+            return (RoomTypeEntity) query.getSingleResult();
+
+        } catch (NoResultException | NonUniqueResultException ex) {
+
+            throw new RoomTypeNotFoundException("Room type " + tier + " does not exist!");
+        }
+    }
 }
