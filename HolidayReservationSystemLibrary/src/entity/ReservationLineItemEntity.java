@@ -25,11 +25,14 @@ public class ReservationLineItemEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationLineItemId;
-    private Integer numOfRoomBooked = 0;
-    @Column(scale=2)
+    @Column(nullable = false)
+    private Integer numOfRoomBooked;
+    @Column(scale=2, nullable = false)
     private BigDecimal totalAmount;
+    @Column(nullable = false)
     private RoomTypeEntity roomType;
-    private Boolean isAllocated = Boolean.FALSE;
+    @Column(nullable = false)
+    private Boolean isAllocated;
     
     /*
     @ManyToOne
@@ -42,6 +45,7 @@ public class ReservationLineItemEntity implements Serializable {
     private ReservationEntity reservation;
     
     public ReservationLineItemEntity() {
+        isAllocated = Boolean.FALSE;
     }
 
     public ReservationLineItemEntity(BigDecimal totalAmount, Integer numOfRoom, RoomTypeEntity roomType) {

@@ -7,16 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -31,26 +28,27 @@ public class RoomRateEntity implements Serializable {
     private Long roomRateId;
     @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private Boolean isDisabled;
-    @Column(scale=2)
+    @Column(scale = 2, nullable = false)
     private BigDecimal ratePerNight;
-    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date validFrom;
-    @Temporal (TemporalType.DATE)
+    @Column(nullable = false)
     private Date validTill;
     
-//    @OneToOne
-//    private RoomRatePerNightEntity roomRatePerNightEntity;
     @ManyToOne
     private RoomTypeEntity roomType;
 
     public RoomRateEntity() {
+        this.isDisabled = false;
     }
 
-    public RoomRateEntity(String name, BigDecimal ratePerNight) {
+    public RoomRateEntity(String name, BigDecimal ratePerNight) {   
+        this();
         this.name = name;
         this.ratePerNight = ratePerNight;
-        this.isDisabled = false;
+        
     }
     
     public RoomRateEntity(String name, BigDecimal ratePerNight, Date validFrom, Date validTill) {

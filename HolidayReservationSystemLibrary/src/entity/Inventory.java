@@ -9,10 +9,13 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -25,13 +28,17 @@ public class Inventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventoryId;
+    @Column(nullable = false)
     private Date date;
-    private List<RoomTypeEntity> roomTypes = new ArrayList<>();
-    private Integer totalNumOfRoomAvailable = 0;
-    private List<List<RoomEntity>> availableRoom = new ArrayList<>();
+    @Column(nullable = false)
+    private Integer totalNumOfRoomAvailable;
+    @Column(nullable = false)
+    private List<List<RoomEntity>> availableRoom;
 
     
     public Inventory() {
+        this.totalNumOfRoomAvailable = 0;
+        this.availableRoom = new ArrayList<>();
     }
 
     public Inventory(Date date) {
@@ -71,39 +78,6 @@ public class Inventory implements Serializable {
     public String toString() {
         return "entity.Inventory[ id=" + inventoryId + " ]";
     }
-    
-    // Migrated to InventoryController
-    /*public void updateInventory() {
-        
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.isDisabled = :inBoolean");
-        query.setParameter("inBoolean", Boolean.FALSE);
-        
-        // Get a list of roomTypes that is not disabled
-        roomTypes = (List<RoomTypeEntity>) query.getResultList();
-        // Reset availableRoom to a new ArrayList first before adding to the list again
-        availableRoom = new ArrayList<>();
-        // 
-        totalNumOfRoomAvailable = 0;
-        
-        // For each room type
-        for(RoomTypeEntity roomType : roomTypes) {
-            
-            List<RoomEntity> roomForEachRoomType = null;
-            // Get the list of room
-            List<RoomEntity> rooms = roomType.getRoom();           
-            // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
-            for(RoomEntity room : rooms) {
-                
-                if ( room.getIsDisabled().equals(Boolean.FALSE) && room.getRoomStatus().equals(RoomStatus.VACANT) ) {
-                    roomForEachRoomType.add(room);
-                    totalNumOfRoomAvailable++;
-                }   
-            }
-            // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
-            getAvailableRoom().add(roomForEachRoomType);
-            // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
-        }
-    }*/
 
     /**
      * @return the date
@@ -117,20 +91,6 @@ public class Inventory implements Serializable {
      */
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    /**
-     * @return the roomTypes
-     */
-    public List<RoomTypeEntity> getRoomTypes() {
-        return roomTypes;
-    }
-
-    /**
-     * @param roomTypes the roomTypes to set
-     */
-    public void setRoomTypes(List<RoomTypeEntity> roomTypes) {
-        this.roomTypes = roomTypes;
     }
 
     /**

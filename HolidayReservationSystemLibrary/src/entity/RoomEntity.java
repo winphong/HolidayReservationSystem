@@ -33,8 +33,11 @@ public class RoomEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomStatus roomStatus;
+    @Column(nullable = false)
     private String guest;
+    @Column(nullable = false)
     private Boolean isReady;
+    @Column(nullable = false)
     private Boolean isDisabled;
 
     @ManyToOne

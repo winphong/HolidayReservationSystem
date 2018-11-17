@@ -46,6 +46,7 @@ public class EmployeeEntity implements Serializable {
     private List <WalkinReservationEntity> reservation;
 
     public EmployeeEntity() {
+        this.reservation = new ArrayList<>();
     }
 
     public EmployeeEntity(String firstName, String lastName, String username, String password, EmployeeAccessRight accessRight, String phoneNum, String emailAddress) {
@@ -58,7 +59,6 @@ public class EmployeeEntity implements Serializable {
         this.accessRight = accessRight;
         this.phoneNumber = phoneNum;
         this.email = emailAddress;
-        this.reservation = new ArrayList<>();
     }
     
     

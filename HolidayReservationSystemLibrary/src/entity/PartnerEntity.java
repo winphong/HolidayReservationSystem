@@ -41,10 +41,9 @@ public class PartnerEntity implements Serializable {
     
     @OneToMany(mappedBy="partner")
     private List <PartnerReservationEntity> reservation;
-//    @OneToMany(mappedBy = "partner")
-//    private List <CustomerEntity> customers;
 
     public PartnerEntity() {
+        this.reservation = new ArrayList<>();
     }
 
     public PartnerEntity(String companyName, String userName, String password, String phoneNumber, String companyRegistrationId, String email) {
@@ -55,9 +54,7 @@ public class PartnerEntity implements Serializable {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.companyRegistrationId = companyRegistrationId;
-        this.email = email;
-        this.reservation = new ArrayList<>();
-        
+        this.email = email;        
     }
     
     

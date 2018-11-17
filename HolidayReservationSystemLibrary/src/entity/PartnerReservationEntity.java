@@ -7,9 +7,8 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 
 /**
@@ -21,13 +20,15 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
 
     private static final long serialVersionUID = 1L;
     
+    @Column(nullable = false)
     private String customerFirstName;
+    @Column(nullable = false)
     private String customerLastName;
+    @Column(nullable = false)
     private String customerEmail;
+    @Column(nullable = false, length = 8)
     private String customerContactNumber;
-    
-//    @ManyToOne
-//    private CustomerEntity customer;
+
     @ManyToOne
     private PartnerEntity partner;
 

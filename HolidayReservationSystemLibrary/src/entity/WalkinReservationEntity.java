@@ -27,7 +27,7 @@ public class WalkinReservationEntity extends ReservationEntity implements Serial
     private String guestFirstName;
     @Column(nullable = false)
     private String guestLastName;
-    @Column(length=8, nullable = false, unique = true)
+    @Column(length = 8, nullable = false, unique = true)
     private String guestContactNumber;
     @Column(unique = true)
     private String guestEmail;

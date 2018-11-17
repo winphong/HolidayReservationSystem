@@ -25,10 +25,7 @@ import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomRateEntity;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
 import util.exception.CreateNewRoomException;
 import util.exception.CreateNewRoomRateException;
 import util.exception.ReservationNotFoundException;
@@ -590,24 +587,19 @@ public class HotelOperationModule {
         if (input.length() > 0) {
             newRoomRate.setRatePerNight(new BigDecimal(input));
         }
-        System.out.print("Enter Valid Date From (dd/MM/yyyy, blank if no change): ");
+        System.out.print("Enter Valid Date From (dd/mm/yyyy, blank if no change): ");
         input = scanner.nextLine();
+        LocalDate startFromDate = LocalDate.of(Integer.parseInt(input.substring(6)), Integer.parseInt(input.substring(3, 5)), Integer.parseInt(input.substring(0, 2)));
+        
         if (input.length() > 0) {
-            try {
-                newRoomRate.setValidFrom(new SimpleDateFormat("dd/MM/yyyy").parse(input));
-            } catch (ParseException ex) {
-                System.out.println("Invalid date!");
-            }
+            newRoomRate.setValidFrom(Date.valueOf(startFromDate));
         }
-
+        
         System.out.print("Enter Valid Date Till (dd/MM/yyyy, blank if no change): ");
         input = scanner.nextLine();
+        LocalDate validTillDate = LocalDate.of(Integer.parseInt(input.substring(6)), Integer.parseInt(input.substring(3, 5)), Integer.parseInt(input.substring(0, 2)));
         if (input.length() > 0) {
-            try {
-                newRoomRate.setValidTill(new SimpleDateFormat("dd/MM/yyyy").parse(input));
-            } catch (ParseException ex) {
-                System.out.println("Invalid date!");
-            }
+            newRoomRate.setValidTill(Date.valueOf(validTillDate));
         }
 
         roomRateEntityControllerRemote.updateRoomRate(newRoomRate, roomRate.getRoomRateId());
