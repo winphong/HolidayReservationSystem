@@ -51,6 +51,7 @@ public abstract class ReservationEntity implements Serializable {
 
     public ReservationEntity() {
         this.reservationLineItemEntities = new ArrayList<>();
+        this.rooms = new ArrayList<>();
     }
 
     public ReservationEntity(Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {

@@ -50,6 +50,7 @@ public class RoomEntity implements Serializable {
     public RoomEntity() {
         this.isDisabled = Boolean.FALSE;
         this.roomStatus = VACANT;
+        this.isReady = Boolean.TRUE;
     }
 
     public RoomEntity(String roomNumber) {

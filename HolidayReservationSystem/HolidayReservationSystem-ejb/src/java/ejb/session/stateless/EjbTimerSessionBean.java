@@ -37,10 +37,12 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     private ReservationEntityControllerLocal reservationEntityControllerLocal;
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
-    
-    
-    
+
+    public EjbTimerSessionBean() {
+    }
+
     @Schedule(hour = "2", info = "scheduleEveryday2AM")
+    @Override
     public void allocateRoom() {
         
         LocalDate currentDate = LocalDate.now();

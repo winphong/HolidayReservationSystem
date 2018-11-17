@@ -14,6 +14,7 @@ import ejb.session.stateless.RoomRateEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import javax.ejb.EJB;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import ejb.session.stateless.EjbTimerSessionBeanRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 
@@ -52,10 +53,13 @@ public class Main {
 
     @EJB
     private static EmployeeEntityControllerRemote employeeEntityControllerRemote;
+    
+    @EJB
+    private static EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
 
     
     public static void main(String[] args) throws Exception {
-        MainApp mainApp = new MainApp(guestEntityControllerRemote, reservationEntityControllerRemote, roomRateEntityControllerRemote, roomEntityControllerRemote, roomTypeEntityControllerRemote, partnerEntityControllerRemote, employeeEntityControllerRemote, inventoryControllerRemote, walkinReservationEntityController, onlineReservationEntityController);
+        MainApp mainApp = new MainApp(guestEntityControllerRemote, reservationEntityControllerRemote, roomRateEntityControllerRemote, roomEntityControllerRemote, roomTypeEntityControllerRemote, partnerEntityControllerRemote, employeeEntityControllerRemote, inventoryControllerRemote, walkinReservationEntityController, onlineReservationEntityController, ejbTimerSessionBeanRemote);
         mainApp.runApp();
     }
     

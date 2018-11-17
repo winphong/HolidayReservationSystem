@@ -18,6 +18,7 @@ import util.enumeration.EmployeeAccessRight;
 import util.exception.InvalidAccessRightException;
 import util.exception.InvalidLoginCredentialException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import ejb.session.stateless.EjbTimerSessionBeanRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import util.exception.EmployeeNotFoundException;
@@ -39,6 +40,7 @@ public class MainApp {
     private static PartnerEntityControllerRemote partnerEntityControllerRemote;
     private static EmployeeEntityControllerRemote employeeEntityControllerRemote;
     private static InventoryControllerRemote inventoryControllerRemote;
+    private static EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
 
     private SystemAdministrationModule systemAdministrationModule;
     private HotelOperationModule hotelOperationModule;
@@ -49,7 +51,7 @@ public class MainApp {
     public MainApp() {
     }
 
-    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote) {
+    public MainApp(GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, WalkinReservationEntityControllerRemote walkinReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote) {
         this();
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
@@ -61,6 +63,7 @@ public class MainApp {
         this.inventoryControllerRemote = inventoryControllerRemote;
         this.walkinReservationEntityControllerRemote = walkinReservationEntityControllerRemote;
         this.onlineReservationEntityControllerRemote = onlineReservationEntityControllerRemote;
+        this.ejbTimerSessionBeanRemote = ejbTimerSessionBeanRemote;
     }
 
     /*MainApp(GuestEntityControllerRemote guestEntityControllerRemote, WalkinReservationEntityControllerRemote reservationEntityControllerRemote, RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, PartnerEntityControllerRemote partnerEntityControllerRemote, EmployeeEntityControllerRemote employeeEntityControllerRemote) {
@@ -89,7 +92,7 @@ public class MainApp {
 
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntityControllerRemote, partnerEntityControllerRemote, currentEmployee);
                         hotelOperationModule = new HotelOperationModule(employeeEntityControllerRemote, roomTypeEntityControllerRemote, roomEntityControllerRemote, roomRateEntityControllerRemote, reservationEntityControllerRemote, walkinReservationEntityControllerRemote, currentEmployee);
-                        frontOfficeModule = new FrontOfficeModule(reservationEntityControllerRemote, guestEntityControllerRemote, roomEntityControllerRemote, inventoryControllerRemote, roomTypeEntityControllerRemote, walkinReservationEntityControllerRemote, onlineReservationEntityControllerRemote, currentEmployee);
+                        frontOfficeModule = new FrontOfficeModule(reservationEntityControllerRemote, guestEntityControllerRemote, roomEntityControllerRemote, inventoryControllerRemote, roomTypeEntityControllerRemote, walkinReservationEntityControllerRemote, onlineReservationEntityControllerRemote, currentEmployee, ejbTimerSessionBeanRemote);
                         menuMain();
 
                     } catch (InvalidLoginCredentialException ex) {
