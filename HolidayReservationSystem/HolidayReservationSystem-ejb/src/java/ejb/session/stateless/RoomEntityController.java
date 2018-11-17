@@ -9,6 +9,7 @@ import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
+import entity.WalkinReservationEntity;
 import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.Resource;
@@ -205,16 +206,19 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
                 availableThroughout = Boolean.TRUE;
 
                 for (LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()); date = date.plusDays(1)) {
-
-                    if (!room.getRoomStatus().equals(RoomStatus.VACANT)) {
-                        // If the current reservation end date is the same as new reservation start date, the room is considered available
-                        if (room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
-
-                        } else {
-                            availableThroughout = Boolean.FALSE;
-                            break;
-                        }
+                    
+                    if ( room.getRoomStatus().equals(RoomStatus.MAINTENANCE) ) {
+                        availableThroughout = Boolean.FALSE;
                     }
+//                    if (!room.getRoomStatus().equals(RoomStatus.VACANT)) {
+//                        // If the current reservation end date is the same as new reservation start date, the room is considered available
+//                        if (room.getRoomStatus().equals(RoomStatus.OCCUPIED) && room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
+//
+//                        } else {
+//                            availableThroughout = Boolean.FALSE;
+//                            break;
+//                        }
+//                    }
                 }
                 if (availableThroughout.equals(Boolean.TRUE)) {
 
@@ -239,5 +243,62 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
                 //throw unable to allocate all reserved room exception
             }
         }
+    }
+    
+    @Override
+    public Boolean checkIn(Long reservationId) {
+        
+        ReservationEntity reservation = reservationEntityControllerLocal.retrieveReservationById(reservationId);
+        
+        List<RoomEntity> rooms = reservation.getRooms();
+        
+        Boolean allRoomsReadyForCheckIn = Boolean.TRUE;
+        
+        for(RoomEntity room : rooms) {
+            // If any of the rooms reserved is not ready for check in
+            if ( room.getIsReady().equals(Boolean.FALSE) ) {
+                allRoomsReadyForCheckIn = Boolean.FALSE;
+                break;
+            }
+        }      
+// Should we split out and show which room is available and which room is not??       
+        if ( allRoomsReadyForCheckIn.equals(Boolean.TRUE) ) {     
+            for(RoomEntity room : rooms) {
+                if ( room.getIsReady().equals(Boolean.TRUE) ) {
+                    room.setGuest(((WalkinReservationEntity) reservation).getGuestFirstName() + ((WalkinReservationEntity) reservation).getGuestLastName());
+                    room.setRoomStatus(RoomStatus.OCCUPIED);
+                }
+            }
+            reservationEntityControllerLocal.retrieveReservationById(reservationId).setIsCheckedIn(Boolean.TRUE);
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+    
+    @Override
+    public Boolean checkOut(String roomNumber) throws RoomNotFoundException {
+        
+        RoomEntity room = retrieveRoomByRoomNumber(roomNumber);
+            
+            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) ) {
+                
+                reservationEntityControllerLocal.retrieveReservationById(room.getCurrentReservation().getReservationId()).setIsCheckedIn(Boolean.FALSE);
+                
+                if ( room.getNextReservation() != null ) {
+                    room.setCurrentReservation(room.getNextReservation());
+                    room.setNextReservation(null);
+                } else {
+                    room.setCurrentReservation(null);
+                    room.setRoomStatus(RoomStatus.VACANT);
+                }
+            //  room.getCurrentReservation().getRooms().remove(room);
+                room.setIsReady(Boolean.FALSE);
+                room.setGuest(null);
+                return Boolean.TRUE;
+
+            } else {
+                return Boolean.FALSE;
+            }
     }
 }

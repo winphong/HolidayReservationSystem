@@ -12,15 +12,16 @@ import entity.EmployeeEntity;
 import util.enumeration.EmployeeAccessRight;
 import util.exception.InvalidAccessRightException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
+import ejb.session.stateless.EjbTimerSessionBeanRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.ReservationEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
+import entity.WalkinReservationEntity;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import javax.ejb.EJB;
@@ -48,6 +49,8 @@ public class FrontOfficeModule {
     private WalkinReservationEntityControllerRemote walkInReservationEntityControllerRemote;
     @EJB
     private OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
+    @EJB
+    private EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
     
     private EmployeeEntity currentEmployee;
     
@@ -57,7 +60,7 @@ public class FrontOfficeModule {
     public FrontOfficeModule() {
     }
 
-    public FrontOfficeModule(ReservationEntityControllerRemote reservationEntityControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, WalkinReservationEntityControllerRemote walkInReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, EmployeeEntity currentEmployee) {
+    public FrontOfficeModule(ReservationEntityControllerRemote reservationEntityControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, WalkinReservationEntityControllerRemote walkInReservationEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, EmployeeEntity currentEmployee, EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote) {
         
         this();
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
@@ -67,6 +70,7 @@ public class FrontOfficeModule {
         this.roomTypeEntityControllerRemote = roomTypeEntityControllerRemote;
         this.walkInReservationEntityControllerRemote = walkInReservationEntityControllerRemote;
         this.onlineReservationEntityControllerRemote = onlineReservationEntityControllerRemote;
+        this.ejbTimerSessionBeanRemote = ejbTimerSessionBeanRemote;
         this.currentEmployee = currentEmployee;
     }
 
@@ -87,11 +91,13 @@ public class FrontOfficeModule {
             System.out.println("2: Check-in Guest");
             System.out.println("3: Check-out Guest");
             System.out.println("-----------------------");
-            System.out.println("4: Back\n");
+            System.out.println("4: Allocate Room");
+            System.out.println("-----------------------");
+            System.out.println("5: Back\n");
             System.out.println();
             response = 0;
 
-            while (response < 1 || response > 4) {
+            while (response < 1 || response > 5) {
                 System.out.print("Enter option: ");
 
                 response = scanner.nextInt();
@@ -103,6 +109,8 @@ public class FrontOfficeModule {
                 } else if (response == 3) {
                     guestCheckout();
                 } else if (response == 4) {
+                    allocateRoom();
+                } else if (response == 5) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
@@ -120,7 +128,7 @@ public class FrontOfficeModule {
         System.out.println("*** Merlion Hotel HoRS :: Front Office :: Walk-in Search Room ***\n");
         Scanner scanner = new Scanner(System.in);
         
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/mm");
+        //DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/mm");
         
         System.out.println("Enter start date (dd/mm/yyyy): ");
         String date = scanner.nextLine().trim();
@@ -324,22 +332,11 @@ public class FrontOfficeModule {
         while(true) {
             System.out.print("\nEnter room number to checkout: >");
             String roomNumber = scanner.nextLine().trim();
-            RoomEntity room = roomEntityControllerRemote.retrieveRoomByRoomNumber(roomNumber);
-            
-            if ( room.getRoomStatus().equals(RoomStatus.OCCUPIED) ) {
-                
-                if ( room.getNextReservation() != null ) {
-                    room.setCurrentReservation(room.getNextReservation());
-                    room.setNextReservation(null);
-                } else {
-                    room.setCurrentReservation(null);
-                    room.setRoomStatus(RoomStatus.VACANT);
-                }
-            //  room.getCurrentReservation().getRooms().remove(room);
-                room.setIsReady(Boolean.FALSE);
-                room.setGuest(null);
-                System.out.println("Room " + room.getRoomNumber() + " successfully checked out!");
-// TO-DO: Set timer to change all room to isReady at 2pm
+            System.out.println();
+
+            if ( roomEntityControllerRemote.checkOut(roomNumber) ) {
+
+                System.out.println("Room " + roomNumber + " successfully checked out!");
             } else {
                 System.out.println("\nRoom is not occupied");
             }
@@ -349,5 +346,10 @@ public class FrontOfficeModule {
                 break;
             }
         }
+    }
+    
+    public void allocateRoom() {
+        
+        ejbTimerSessionBeanRemote.allocateRoom();
     }
 }

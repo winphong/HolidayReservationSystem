@@ -46,6 +46,7 @@ public class DataInitializationBean {
     private PartnerEntityControllerLocal partnerEntityControllerLocal;
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
+
     
     @PostConstruct
     public void postConstruct() {        
@@ -57,23 +58,16 @@ public class DataInitializationBean {
         
         if (em.find(RoomTypeEntity.class, new Long(1)) == null){
             initializeRoomType();
-            //initializeRoom();
+//            initializeRoom();
         }
         
-        if (em.find(Inventory.class, new Long(137)) == null) {
+        if (em.find(Inventory.class, new Long(1)) == null) {
             try {
                 initializeInventory();
             } catch (UpdateInventoryException ex) {
                 Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        try {
-            updateInventory();
-        } catch (UpdateInventoryException ex) {
-            Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
     }
 
     public void initializeEmployee(){
@@ -85,6 +79,9 @@ public class DataInitializationBean {
         em.persist(employee);
         
         employee = new EmployeeEntity("Win", "Phong", "frontoffice", "password", EmployeeAccessRight.GUESTRELATIONOFFICER, "31734509", "frontoffice@gmail.com");
+        em.persist(employee);
+        
+        employee = new EmployeeEntity("Win", "Phong", "sales", "password", EmployeeAccessRight.SALESMANAGER, "16161616", "sales@gmail.com");
         em.persist(employee);
     }
     
@@ -101,14 +98,25 @@ public class DataInitializationBean {
         em.persist(roomType);
     }
     
-    /* public void initializeRoom() {
-        
-        RoomEntity room = new RoomEntity("0313");
-        room.setRoomType(roomType);
-        em.persist(room);
-        room = new RoomEntity("Premium Room", "Bagus!", new BigDecimal(24.00), "Double", 2, "Teapot", 2);
-        em.persist(room);
-    } */
+//    public void initializeRoom() {
+//        
+//            RoomEntity room = new RoomEntity("0330");
+//        
+//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
+//            em.persist(room);
+//            room = new RoomEntity("0331");
+//            em.persist(room);
+//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
+//            room = new RoomEntity("0332");
+//            em.persist(room);
+//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
+//            room = new RoomEntity("0440");
+//            em.persist(room);
+//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(2)));
+//            room = new RoomEntity("0441");
+//            em.persist(room);
+//            room.setRoomType(new Long());
+//    } 
     
     public void initializeInventory() throws UpdateInventoryException{
         

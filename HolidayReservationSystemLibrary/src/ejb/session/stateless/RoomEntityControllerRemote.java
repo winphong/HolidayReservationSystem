@@ -29,5 +29,9 @@ public interface RoomEntityControllerRemote {
     public List<RoomEntity> viewAllRoom();
 
     public void walkInAllocateRoom(Long reservationId);
+
+    public Boolean checkIn(Long reservationId);
+
+    public Boolean checkOut(String roomNumber) throws RoomNotFoundException;
     
 }
