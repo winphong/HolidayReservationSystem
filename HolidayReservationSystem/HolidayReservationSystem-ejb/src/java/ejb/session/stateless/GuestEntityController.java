@@ -29,8 +29,7 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
-
-    private GuestEntity guest;
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
@@ -39,16 +38,15 @@ public class GuestEntityController implements GuestEntityControllerRemote, Guest
         em.flush();
         try {
             GuestEntity guest = retrieveGuestByUsername(username);
+            
             if (guest.getPassword().equals(password)) {
                 return guest;
             } else {
                 throw new InvalidLoginCredentialException("Invalid password!");
             }
-
-        } catch (NoResultException | NonUniqueResultException ex) {
-
+            
+        } catch (NoResultException ex) {
             throw new GuestNotFoundException("Invalid guest!");
-
         }
 
     }
