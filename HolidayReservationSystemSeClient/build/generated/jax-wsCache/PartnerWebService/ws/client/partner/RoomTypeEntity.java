@@ -20,17 +20,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="amenities" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="roomTypeId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="roomSize" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="bed" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="reservationItem" type="{http://ws.ejb/}reservationLineItemEntity" minOccurs="0"/>
- *         &lt;element name="room" type="{http://ws.ejb/}roomEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="roomRate" type="{http://ws.ejb/}roomRateEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="roomSize" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
+ *         &lt;element name="amenities" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="tier" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="roomRate" type="{http://ws.ejb/}roomRateEntity" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="reservationItem" type="{http://ws.ejb/}reservationLineItemEntity" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,56 +41,127 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "roomTypeEntity", propOrder = {
-    "amenities",
+    "roomTypeId",
+    "name",
+    "description",
+    "roomSize",
     "bed",
     "capacity",
-    "description",
+    "amenities",
+    "tier",
     "isDisabled",
-    "name",
-    "reservationItem",
-    "room",
     "roomRate",
-    "roomSize",
-    "tier"
+    "reservationItem"
 })
 public class RoomTypeEntity {
 
-    protected String amenities;
+    protected Long roomTypeId;
+    protected String name;
+    protected String description;
+    protected BigDecimal roomSize;
     protected String bed;
     protected Integer capacity;
-    protected String description;
+    protected String amenities;
+    protected Integer tier;
     protected Boolean isDisabled;
-    protected String name;
-    protected ReservationLineItemEntity reservationItem;
-    @XmlElement(nillable = true)
-    protected List<RoomEntity> room;
     @XmlElement(nillable = true)
     protected List<RoomRateEntity> roomRate;
-    protected BigDecimal roomSize;
-    protected Integer tier;
+    protected ReservationLineItemEntity reservationItem;
 
     /**
-     * Gets the value of the amenities property.
+     * Gets the value of the roomTypeId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getRoomTypeId() {
+        return roomTypeId;
+    }
+
+    /**
+     * Sets the value of the roomTypeId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setRoomTypeId(Long value) {
+        this.roomTypeId = value;
+    }
+
+    /**
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getAmenities() {
-        return amenities;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the amenities property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setAmenities(String value) {
-        this.amenities = value;
+    public void setName(String value) {
+        this.name = value;
+    }
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+        this.description = value;
+    }
+
+    /**
+     * Gets the value of the roomSize property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
+     */
+    public BigDecimal getRoomSize() {
+        return roomSize;
+    }
+
+    /**
+     * Sets the value of the roomSize property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
+     */
+    public void setRoomSize(BigDecimal value) {
+        this.roomSize = value;
     }
 
     /**
@@ -142,27 +213,51 @@ public class RoomTypeEntity {
     }
 
     /**
-     * Gets the value of the description property.
+     * Gets the value of the amenities property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getDescription() {
-        return description;
+    public String getAmenities() {
+        return amenities;
     }
 
     /**
-     * Sets the value of the description property.
+     * Sets the value of the amenities property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setDescription(String value) {
-        this.description = value;
+    public void setAmenities(String value) {
+        this.amenities = value;
+    }
+
+    /**
+     * Gets the value of the tier property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getTier() {
+        return tier;
+    }
+
+    /**
+     * Sets the value of the tier property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setTier(Integer value) {
+        this.tier = value;
     }
 
     /**
@@ -187,83 +282,6 @@ public class RoomTypeEntity {
      */
     public void setIsDisabled(Boolean value) {
         this.isDisabled = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the reservationItem property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ReservationLineItemEntity }
-     *     
-     */
-    public ReservationLineItemEntity getReservationItem() {
-        return reservationItem;
-    }
-
-    /**
-     * Sets the value of the reservationItem property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ReservationLineItemEntity }
-     *     
-     */
-    public void setReservationItem(ReservationLineItemEntity value) {
-        this.reservationItem = value;
-    }
-
-    /**
-     * Gets the value of the room property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the room property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRoom().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link RoomEntity }
-     * 
-     * 
-     */
-    public List<RoomEntity> getRoom() {
-        if (room == null) {
-            room = new ArrayList<RoomEntity>();
-        }
-        return this.room;
     }
 
     /**
@@ -296,51 +314,27 @@ public class RoomTypeEntity {
     }
 
     /**
-     * Gets the value of the roomSize property.
+     * Gets the value of the reservationItem property.
      * 
      * @return
      *     possible object is
-     *     {@link BigDecimal }
+     *     {@link ReservationLineItemEntity }
      *     
      */
-    public BigDecimal getRoomSize() {
-        return roomSize;
+    public ReservationLineItemEntity getReservationItem() {
+        return reservationItem;
     }
 
     /**
-     * Sets the value of the roomSize property.
+     * Sets the value of the reservationItem property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigDecimal }
+     *     {@link ReservationLineItemEntity }
      *     
      */
-    public void setRoomSize(BigDecimal value) {
-        this.roomSize = value;
-    }
-
-    /**
-     * Gets the value of the tier property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getTier() {
-        return tier;
-    }
-
-    /**
-     * Sets the value of the tier property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setTier(Integer value) {
-        this.tier = value;
+    public void setReservationItem(ReservationLineItemEntity value) {
+        this.reservationItem = value;
     }
 
 }

@@ -17,11 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ratePerNight" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="roomRateId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="roomType" type="{http://ws.ejb/}roomTypeEntity" minOccurs="0"/>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="ratePerNight" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="validFrom" type="{http://ws.ejb/}date" minOccurs="0"/>
  *         &lt;element name="validTill" type="{http://ws.ejb/}date" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,46 +33,44 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "roomRateEntity", propOrder = {
-    "isDisabled",
-    "name",
-    "ratePerNight",
     "roomRateId",
-    "roomType",
+    "name",
+    "isDisabled",
+    "ratePerNight",
     "validFrom",
     "validTill"
 })
 public class RoomRateEntity {
 
-    protected Boolean isDisabled;
-    protected String name;
-    protected BigDecimal ratePerNight;
     protected Long roomRateId;
-    protected RoomTypeEntity roomType;
+    protected String name;
+    protected Boolean isDisabled;
+    protected BigDecimal ratePerNight;
     protected Date validFrom;
     protected Date validTill;
 
     /**
-     * Gets the value of the isDisabled property.
+     * Gets the value of the roomRateId property.
      * 
      * @return
      *     possible object is
-     *     {@link Boolean }
+     *     {@link Long }
      *     
      */
-    public Boolean isIsDisabled() {
-        return isDisabled;
+    public Long getRoomRateId() {
+        return roomRateId;
     }
 
     /**
-     * Sets the value of the isDisabled property.
+     * Sets the value of the roomRateId property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Boolean }
+     *     {@link Long }
      *     
      */
-    public void setIsDisabled(Boolean value) {
-        this.isDisabled = value;
+    public void setRoomRateId(Long value) {
+        this.roomRateId = value;
     }
 
     /**
@@ -101,6 +98,30 @@ public class RoomRateEntity {
     }
 
     /**
+     * Gets the value of the isDisabled property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsDisabled() {
+        return isDisabled;
+    }
+
+    /**
+     * Sets the value of the isDisabled property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsDisabled(Boolean value) {
+        this.isDisabled = value;
+    }
+
+    /**
      * Gets the value of the ratePerNight property.
      * 
      * @return
@@ -122,54 +143,6 @@ public class RoomRateEntity {
      */
     public void setRatePerNight(BigDecimal value) {
         this.ratePerNight = value;
-    }
-
-    /**
-     * Gets the value of the roomRateId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
-     */
-    public Long getRoomRateId() {
-        return roomRateId;
-    }
-
-    /**
-     * Sets the value of the roomRateId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
-     */
-    public void setRoomRateId(Long value) {
-        this.roomRateId = value;
-    }
-
-    /**
-     * Gets the value of the roomType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RoomTypeEntity }
-     *     
-     */
-    public RoomTypeEntity getRoomType() {
-        return roomType;
-    }
-
-    /**
-     * Sets the value of the roomType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RoomTypeEntity }
-     *     
-     */
-    public void setRoomType(RoomTypeEntity value) {
-        this.roomType = value;
     }
 
     /**

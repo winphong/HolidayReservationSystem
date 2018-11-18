@@ -16,14 +16,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="currentReservation" type="{http://ws.ejb/}reservationEntity" minOccurs="0"/>
- *         &lt;element name="guest" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="isReady" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="nextReservation" type="{http://ws.ejb/}reservationEntity" minOccurs="0"/>
+ *         &lt;element name="roomId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="roomNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="roomStatus" type="{http://ws.ejb/}roomStatus" minOccurs="0"/>
- *         &lt;element name="roomType" type="{http://ws.ejb/}roomTypeEntity" minOccurs="0"/>
+ *         &lt;element name="guest" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="isReady" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="currentReservation" type="{http://ws.ejb/}reservationEntity" minOccurs="0"/>
+ *         &lt;element name="nextReservation" type="{http://ws.ejb/}reservationEntity" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,144 +34,48 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "roomEntity", propOrder = {
-    "currentReservation",
-    "guest",
-    "isDisabled",
-    "isReady",
-    "nextReservation",
+    "roomId",
     "roomNumber",
     "roomStatus",
-    "roomType"
+    "guest",
+    "isReady",
+    "isDisabled",
+    "currentReservation",
+    "nextReservation"
 })
 public class RoomEntity {
 
-    protected ReservationEntity currentReservation;
-    protected String guest;
-    protected Boolean isDisabled;
-    protected Boolean isReady;
-    protected ReservationEntity nextReservation;
+    protected Long roomId;
     protected String roomNumber;
     protected RoomStatus roomStatus;
-    protected RoomTypeEntity roomType;
+    protected String guest;
+    protected Boolean isReady;
+    protected Boolean isDisabled;
+    protected ReservationEntity currentReservation;
+    protected ReservationEntity nextReservation;
 
     /**
-     * Gets the value of the currentReservation property.
+     * Gets the value of the roomId property.
      * 
      * @return
      *     possible object is
-     *     {@link ReservationEntity }
+     *     {@link Long }
      *     
      */
-    public ReservationEntity getCurrentReservation() {
-        return currentReservation;
+    public Long getRoomId() {
+        return roomId;
     }
 
     /**
-     * Sets the value of the currentReservation property.
+     * Sets the value of the roomId property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ReservationEntity }
+     *     {@link Long }
      *     
      */
-    public void setCurrentReservation(ReservationEntity value) {
-        this.currentReservation = value;
-    }
-
-    /**
-     * Gets the value of the guest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGuest() {
-        return guest;
-    }
-
-    /**
-     * Sets the value of the guest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGuest(String value) {
-        this.guest = value;
-    }
-
-    /**
-     * Gets the value of the isDisabled property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsDisabled() {
-        return isDisabled;
-    }
-
-    /**
-     * Sets the value of the isDisabled property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsDisabled(Boolean value) {
-        this.isDisabled = value;
-    }
-
-    /**
-     * Gets the value of the isReady property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsReady() {
-        return isReady;
-    }
-
-    /**
-     * Sets the value of the isReady property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsReady(Boolean value) {
-        this.isReady = value;
-    }
-
-    /**
-     * Gets the value of the nextReservation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ReservationEntity }
-     *     
-     */
-    public ReservationEntity getNextReservation() {
-        return nextReservation;
-    }
-
-    /**
-     * Sets the value of the nextReservation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ReservationEntity }
-     *     
-     */
-    public void setNextReservation(ReservationEntity value) {
-        this.nextReservation = value;
+    public void setRoomId(Long value) {
+        this.roomId = value;
     }
 
     /**
@@ -223,27 +127,123 @@ public class RoomEntity {
     }
 
     /**
-     * Gets the value of the roomType property.
+     * Gets the value of the guest property.
      * 
      * @return
      *     possible object is
-     *     {@link RoomTypeEntity }
+     *     {@link String }
      *     
      */
-    public RoomTypeEntity getRoomType() {
-        return roomType;
+    public String getGuest() {
+        return guest;
     }
 
     /**
-     * Sets the value of the roomType property.
+     * Sets the value of the guest property.
      * 
      * @param value
      *     allowed object is
-     *     {@link RoomTypeEntity }
+     *     {@link String }
      *     
      */
-    public void setRoomType(RoomTypeEntity value) {
-        this.roomType = value;
+    public void setGuest(String value) {
+        this.guest = value;
+    }
+
+    /**
+     * Gets the value of the isReady property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsReady() {
+        return isReady;
+    }
+
+    /**
+     * Sets the value of the isReady property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsReady(Boolean value) {
+        this.isReady = value;
+    }
+
+    /**
+     * Gets the value of the isDisabled property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsDisabled() {
+        return isDisabled;
+    }
+
+    /**
+     * Sets the value of the isDisabled property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsDisabled(Boolean value) {
+        this.isDisabled = value;
+    }
+
+    /**
+     * Gets the value of the currentReservation property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ReservationEntity }
+     *     
+     */
+    public ReservationEntity getCurrentReservation() {
+        return currentReservation;
+    }
+
+    /**
+     * Sets the value of the currentReservation property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ReservationEntity }
+     *     
+     */
+    public void setCurrentReservation(ReservationEntity value) {
+        this.currentReservation = value;
+    }
+
+    /**
+     * Gets the value of the nextReservation property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ReservationEntity }
+     *     
+     */
+    public ReservationEntity getNextReservation() {
+        return nextReservation;
+    }
+
+    /**
+     * Sets the value of the nextReservation property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ReservationEntity }
+     *     
+     */
+    public void setNextReservation(ReservationEntity value) {
+        this.nextReservation = value;
     }
 
 }

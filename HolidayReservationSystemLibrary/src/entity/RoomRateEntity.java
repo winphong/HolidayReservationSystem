@@ -14,11 +14,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author twp10
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class RoomRateEntity implements Serializable {
 
@@ -37,6 +41,7 @@ public class RoomRateEntity implements Serializable {
     @Column
     private Date validTill;
     
+    @XmlTransient
     @ManyToOne
     private RoomTypeEntity roomType;
 
@@ -123,6 +128,7 @@ public class RoomRateEntity implements Serializable {
     /**
      * @return the roomType
      */
+    @XmlTransient
     public RoomTypeEntity getRoomType() {
         return roomType;
     }
