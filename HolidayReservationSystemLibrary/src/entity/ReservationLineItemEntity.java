@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -29,7 +30,7 @@ public class ReservationLineItemEntity implements Serializable {
     private Integer numOfRoomBooked;
     @Column(scale=2, nullable = false)
     private BigDecimal totalAmount;
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
     @Column(nullable = false)
     private Boolean isAllocated;
