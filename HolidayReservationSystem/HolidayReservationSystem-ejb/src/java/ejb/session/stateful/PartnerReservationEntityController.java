@@ -52,9 +52,20 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
+    
     private List<ReservationLineItemEntity> reservationLineItems;
     private Integer totalLineItem;
     private BigDecimal totalAmount;
+
+    public PartnerReservationEntityController() {
+        initialiseState();
+    }
+    
+    private void initialiseState() {
+        reservationLineItems = new ArrayList<>();
+        totalLineItem = 0;
+        totalAmount = new BigDecimal("0.00");
+    }
 
     public List<PartnerReservationEntity> viewAllReservations(PartnerEntity partner) {
 
@@ -197,12 +208,6 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
         initialiseState();
         
         return newReservation;
-    }
-    
-    private void initialiseState() {
-        reservationLineItems = new ArrayList<>();
-        totalLineItem = 0;
-        totalAmount = new BigDecimal("0.00");
     }
     
     private void updateLineItemForCurrentReservationAtInventoryController() {      

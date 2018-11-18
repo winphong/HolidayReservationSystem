@@ -153,12 +153,6 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             }
         }
         
-//        setLineItemsForCurrentReservation(walkInReservationEntityControllerLocal.getReservationLineItems());
-//        
-//        if ( !walkInReservationEntityControllerLocal.getTotalAmount().equals(new BigDecimal("0.00")) ) {
-//            throw new Error("this got error");
-//        }
-        
         // Check through the current "running" reservation
         for(ReservationLineItemEntity reservationLineItem : lineItemsForCurrentReservation ) {
             
@@ -179,44 +173,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
                 availableRoomType.add(listOfRooms.get(0).getRoomType());
             }
         }
-            
-
-        /*// Loop through each room type given by the inventory of booking start date
-        for (List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
-
-            countOfRoomAvailableThroughout = 0;
-
-            // Loop through each room of a particular room type
-            for (RoomEntity room : listOfRooms) {
-
-                availableThroughout = Boolean.TRUE;
-
-                // Loop through the booking date starting from the boking startDate to the booking endDate
-                // From the highlighted line, the function already ensure all the room retrieved will be available for startDate
-                // Therefore, the search loop can start a day after the startDate
-                for (LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date = date.plusDays(1)) {
-
-                    // If the particular room is not available for the entire duration, set availbleThroughout to be false
-                    if (!roomExist(room, date, listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms))) {
-                        availableThroughout = Boolean.FALSE;
-                        break;
-                    }
-                }
-
-                // As long there is enough room that is available throughout to fulfill the numOfRoomRequired
-                // Need to check with reservation also, if reservation exist
-                if (availableThroughout.equals(Boolean.TRUE)) {
-
-                    countOfRoomAvailableThroughout++;
-
-                    if ((countOfRoomAvailableThroughout - numOfRoomOfEachTypeRequiredForReservation.get(listOfRoomsForDifferentRoomTypes.indexOf(listOfRooms))) >= numOfRoomRequired) {
-                        availableRoomType.add(room.getRoomType());
-                        break;
-                    }
-                }
-            }
-            //roomTypeIndex++;
-        } */
+        
         return availableRoomType;
     }
 
