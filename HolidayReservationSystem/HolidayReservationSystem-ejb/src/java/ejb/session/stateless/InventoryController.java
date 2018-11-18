@@ -123,14 +123,9 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         // If use getRoomTypes.get(index).getRoom() will return all room, including those that has been disabled
         List<List<RoomEntity>> listOfRoomsForDifferentRoomTypes = inventory.getAvailableRoom(); // availableRoom is not disable and is vacant
 
-        //Integer roomTypeIndex = 0;
-//        Boolean availableThroughout;
-//        Integer countOfRoomAvailableThroughout;
         // One reservation might have more than one room
         List<ReservationEntity> reservationList = walkInReservationEntityControllerLocal.retrieveReservationByStartAndEndDate(start, end);
         List<ReservationLineItemEntity> reservationLineItems;
-
-        //Integer numOfReservationThatOverlapWithBooking = 0;
         
 //**** Need to create a list to keep track of reservation for room of each type 
         List<Integer> numOfRoomOfEachTypeRequiredForReservation = new ArrayList<>(); // size equal number of type of room available
@@ -144,10 +139,8 @@ public class InventoryController implements InventoryControllerRemote, Inventory
         for (ReservationEntity reservation : reservationList) {
 
             reservationLineItems = reservation.getReservationLineItemEntities();
-
             // For all reservation, check through the reservationLineItem
             for (ReservationLineItemEntity reservationLineItem : reservationLineItems) {
-
                 // Loop through the list, if matches, add the int to another list
                 for(List<RoomEntity> listOfRooms : listOfRoomsForDifferentRoomTypes) {
                     

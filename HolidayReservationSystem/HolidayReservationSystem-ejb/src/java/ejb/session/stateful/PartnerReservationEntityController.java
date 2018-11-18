@@ -98,15 +98,36 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
 
             List<RoomRateEntity> roomRates = roomType.getRoomRate();
             
-            Integer resultIndexForNormalRate = roomRates.indexOf("Normal Rate");
-            Integer resultIndexForPeakRate = roomRates.indexOf("Peak Rate");
-            Integer resultIndexForPromotionRate = roomRates.indexOf("Promotion Rate");
+            Integer resultIndexForNormalRate = -1;
+            Integer resultIndexForPeakRate = -1;
+            Integer resultIndexForPromotionRate = -1;
+            
+            for(RoomRateEntity roomRate : roomRates) {                
+                if ( roomRate.getName().equals("Normal Rate") ) {
+                    resultIndexForNormalRate = roomRates.indexOf(roomRate);
+                } else if ( roomRate.getName().equals("Peak Rate") ) {
+                    resultIndexForPeakRate = roomRates.indexOf(roomRate);
+                } else if ( roomRate.getName().equals("Promotion Rate") ) {
+                    resultIndexForPromotionRate = roomRates.indexOf(roomRate);
+                }
+            }
             
             Date currentDate  = Date.valueOf(date);
             
-            Boolean peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
-            Boolean promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
+            Boolean peakIsValid;
+            Boolean promotionIsValid;
             
+            if ( resultIndexForPeakRate != -1 ) {
+                peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
+            } else {
+                peakIsValid = Boolean.FALSE;
+            }
+            
+            if ( resultIndexForPromotionRate != -1 ) {
+                promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
+            } else {
+                promotionIsValid = Boolean.FALSE;
+            }
             
             if ( resultIndexForNormalRate != -1 && resultIndexForPeakRate != -1 && resultIndexForPromotionRate != 1 ){
                 
@@ -163,7 +184,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
         // *************** roomType might have lazy fetching issue *********************
         reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
         totalLineItem++;
-        totalAmount.add(subTotal);
+        totalAmount = totalAmount.add(subTotal);
         
         // Update the lineItemsForCurrentReservation
         updateLineItemForCurrentReservationAtInventoryController();

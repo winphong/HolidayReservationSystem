@@ -8,6 +8,7 @@ package ejb.session.stateful;
 import ejb.session.stateless.GuestEntityControllerLocal;
 import ejb.session.stateless.InventoryControllerLocal;
 import ejb.session.stateless.ReservationEntityControllerLocal;
+import ejb.session.stateless.RoomRateEntityControllerLocal;
 import ejb.session.stateless.RoomTypeEntityControllerLocal;
 import entity.GuestEntity;
 import entity.OnlineReservationEntity;
@@ -42,6 +43,9 @@ import util.exception.RoomTypeNotFoundException;
 @Remote (OnlineReservationEntityControllerRemote.class)
 
 public class OnlineReservationEntityController implements OnlineReservationEntityControllerRemote, OnlineReservationEntityControllerLocal {
+
+    @EJB
+    private RoomRateEntityControllerLocal roomRateEntityControllerLocal;
 
     @EJB
     private GuestEntityControllerLocal guestEntityControllerLocal;
@@ -89,8 +93,13 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         query.setParameter("inId", id);
 
         try {
-
-            return (OnlineReservationEntity) query.getSingleResult();
+            
+            OnlineReservationEntity onlineReservationEntity = (OnlineReservationEntity) query.getSingleResult();
+            
+            for(ReservationLineItemEntity reservationLineItem : onlineReservationEntity.getReservationLineItemEntities()) {
+            }
+            
+            return onlineReservationEntity;
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
@@ -105,19 +114,40 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         //Calculate total amount from room rate per night
         List<RoomRateEntity> roomRatesForABooking = new ArrayList<>();
         
-        for(LocalDate date = startDate.plusDays(1); !date.isAfter(endDate); date = date.plusDays(1)) {
-
+        for(LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            
             List<RoomRateEntity> roomRates = roomType.getRoomRate();
             
-            Integer resultIndexForNormalRate = roomRates.indexOf("Normal Rate");
-            Integer resultIndexForPeakRate = roomRates.indexOf("Peak Rate");
-            Integer resultIndexForPromotionRate = roomRates.indexOf("Promotion Rate");
+            Integer resultIndexForNormalRate = -1;
+            Integer resultIndexForPeakRate = -1;
+            Integer resultIndexForPromotionRate = -1;
+            
+            for(RoomRateEntity roomRate : roomRates) {                
+                if ( roomRate.getName().equals("Normal Rate") ) {
+                    resultIndexForNormalRate = roomRates.indexOf(roomRate);
+                } else if ( roomRate.getName().equals("Peak Rate") ) {
+                    resultIndexForPeakRate = roomRates.indexOf(roomRate);
+                } else if ( roomRate.getName().equals("Promotion Rate") ) {
+                    resultIndexForPromotionRate = roomRates.indexOf(roomRate);
+                }
+            }
             
             Date currentDate  = Date.valueOf(date);
             
-            Boolean peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
-            Boolean promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
+            Boolean peakIsValid;
+            Boolean promotionIsValid;
             
+            if ( resultIndexForPeakRate != -1 ) {
+                peakIsValid = ( !currentDate.before(roomRates.get(resultIndexForPeakRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPeakRate).getValidTill()));
+            } else {
+                peakIsValid = Boolean.FALSE;
+            }
+            
+            if ( resultIndexForPromotionRate != -1 ) {
+                promotionIsValid = ( !currentDate.before(roomRates.get(resultIndexForPromotionRate).getValidFrom()) && !currentDate.after(roomRates.get(resultIndexForPromotionRate).getValidTill()));
+            } else {
+                promotionIsValid = Boolean.FALSE;
+            }
             
             if ( resultIndexForNormalRate != -1 && resultIndexForPeakRate != -1 && resultIndexForPromotionRate != 1 ){
                 
@@ -166,7 +196,6 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         BigDecimal subTotal = BigDecimal.ZERO;
         
         for (RoomRateEntity roomRatePerNight : roomRatesForABooking) {
-            
             // No need for room rate classes
             subTotal = subTotal.add(roomRatePerNight.getRatePerNight().multiply(new BigDecimal(numOfRoomRequired)));
         }
@@ -174,7 +203,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         // *************** roomType might have lazy fetching issue *********************
         reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
         totalLineItem++;
-        totalAmount.add(subTotal);
+        totalAmount = totalAmount.add(subTotal);
         
         // Update the lineItemsForCurrentReservation
         updateLineItemForCurrentReservationAtInventoryController();

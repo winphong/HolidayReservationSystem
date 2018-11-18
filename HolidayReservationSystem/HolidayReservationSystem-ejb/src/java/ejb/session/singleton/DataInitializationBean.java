@@ -65,6 +65,14 @@ public class DataInitializationBean {
         if (em.find(RoomTypeEntity.class, new Long(1)) == null) {
             initializeRoomType();
         }
+        
+        if (em.find(RoomEntity.class, new Long(1)) == null){
+            initializeRoom();
+        }
+        
+        if (em.find(RoomRateEntity.class, new Long(1))==null){
+            initializeRoomRate();
+        }
 
         if (em.find(Inventory.class, new Long(1)) == null) {
             try {
@@ -72,14 +80,6 @@ public class DataInitializationBean {
             } catch (UpdateInventoryException ex) {
                 Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        if (em.find(RoomRateEntity.class, new Long(1))==null){
-            initializeRoomRate();
-        }
-        
-        if (em.find(RoomEntity.class, new Long(1)) == null){
-            initializeRoom();
         }
     }
 
@@ -132,122 +132,177 @@ public class DataInitializationBean {
 
     public void initializeRoomRate() {
         //Deluxe Room
-        RoomRateEntity roomRate = new RoomRateEntity("Published Rate", new BigDecimal("2000"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(roomRate);
-        roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1800"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(roomRate);
-        //Family Room
-        roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1500"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(roomRate);
-        roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1200"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(roomRate);
-        //Grand Suite
-        roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1200"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(roomRate);
-        roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1000"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(roomRate);
-        //Junior Suite
-        roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1000"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(roomRate);
-        roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("800"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(roomRate);
-        //Premier Room
-        roomRate = new RoomRateEntity("Published Rate", new BigDecimal("800"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(roomRate);
-        roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("500"));
-        roomRate.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(roomRate);
+        try {
+            RoomRateEntity roomRate = new RoomRateEntity("Published Rate", new BigDecimal("2000"));
+            RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Deluxe Room");
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1800"));
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            //Family Room
+            roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1500"));
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Family Room");
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1200"));
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            //Grand Suite
+            roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1200"));
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Grand Suite");
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("1000"));
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            //Junior Suite
+            roomRate = new RoomRateEntity("Published Rate", new BigDecimal("1000"));
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Junior Suite");
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("800"));
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            //Premier Room
+            roomRate = new RoomRateEntity("Published Rate", new BigDecimal("800"));
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Premier Room");
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+            roomRate = new RoomRateEntity("Normal Rate", new BigDecimal("500"));
+            roomRate.setRoomType(roomType);
+            roomType.getRoomRate().add(roomRate);
+            em.persist(roomRate);
+        } catch (RoomTypeNotFoundException ex) {
+                Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void initializeRoom() {
         //Deluxe Room
-        RoomEntity room = new RoomEntity("0101");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(room);
-        room = new RoomEntity("0102");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(room);
-        room = new RoomEntity("0103");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(room);
-        room = new RoomEntity("0104");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(room);
-        room = new RoomEntity("0105");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(1)));
-        em.persist(room);
-        //Family Room
-        room = new RoomEntity("0201");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(room);
-        room = new RoomEntity("0202");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(room);
-        room = new RoomEntity("0203");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(room);
-        room = new RoomEntity("0204");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(room);
-        room = new RoomEntity("0205");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(2)));
-        em.persist(room);
-        //Grand Suite
-        room = new RoomEntity("0301");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(room);
-        room = new RoomEntity("0302");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(room);
-        room = new RoomEntity("0303");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(room);
-        room = new RoomEntity("0304");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(room);
-        room = new RoomEntity("0305");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(3)));
-        em.persist(room);
-        //Junior Suite
-        room = new RoomEntity("0401");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(room);
-        room = new RoomEntity("0402");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(room);
-        room = new RoomEntity("0403");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(room);
-        room = new RoomEntity("0404");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(room);
-        room = new RoomEntity("0405");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(4)));
-        em.persist(room);
-        //Premier Room
-        room = new RoomEntity("0501");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(room);
-        room = new RoomEntity("0502");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(room);
-        room = new RoomEntity("0503");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(room);
-        room = new RoomEntity("0504");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(room);
-        room = new RoomEntity("0505");
-        room.setRoomType(em.find(RoomTypeEntity.class, new Long(5)));
-        em.persist(room);
+        try {
+            RoomEntity room = new RoomEntity("0101");
+            RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Deluxe Room");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0102");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0103");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0104");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0105");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            //Family Room
+            room = new RoomEntity("0201");
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Family Room");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0202");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0203");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0204");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0205");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            //Grand Suite
+            room = new RoomEntity("0301");
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Grand Suite");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0302");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0303");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0304");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0305");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            //Junior Suite
+            room = new RoomEntity("0401");
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Junior Suite");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0402");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0403");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0404");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0405");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            //Premier Room
+            room = new RoomEntity("0501");
+            roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName("Premier Room");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0502");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0503");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0504");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+            room = new RoomEntity("0505");
+            room.setRoomType(roomType);
+            roomType.getRoom().add(room);
+            em.persist(room);
+        
+        } catch (RoomTypeNotFoundException ex) {
+                Logger.getLogger(DataInitializationBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

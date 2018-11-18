@@ -276,8 +276,8 @@ public class GuestMainApp {
         }
     }
 
-    private void searchRoomAgain(LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName,
-            String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
+    /* private void searchRoomAgain(LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName,
+        String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
 
         System.out.println("*** Merlion Hotel HoRS :: Front Office :: Walk-in Search Room ***\n");
         Scanner scanner = new Scanner(System.in);
@@ -352,7 +352,7 @@ public class GuestMainApp {
 //            System.out.println();
 
         }
-    }
+    } */
 
     private void viewReservationDetails() {
         System.out.println("*** Merlion Hotel HoRS Reservation Client :: View My Reservation Details***\n");
@@ -364,12 +364,14 @@ public class GuestMainApp {
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
 
-            List<ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
+            List<ReservationLineItemEntity> reservationLineItems = reservation.getReservationLineItemEntities();
             System.out.println("Reservation Details: ");
             System.out.println("-------------------------");
             System.out.printf("%20s%20s%15s\n", "Room Type", "Number of Rooms", "Total Amount");
-            for (ReservationLineItemEntity item : items) {
-                System.out.printf("%20s%20s%15s\n", item.getRoomType(), item.getNumOfRoomBooked(), item.getTotalAmount());
+            for (ReservationLineItemEntity reservationLineItem : reservationLineItems) {
+                
+                
+                System.out.printf("%20s%20s%15s\n", reservationLineItem.getRoomType().getName(), reservationLineItem.getNumOfRoomBooked(), reservationLineItem.getTotalAmount());
             }
 
             System.out.println();
