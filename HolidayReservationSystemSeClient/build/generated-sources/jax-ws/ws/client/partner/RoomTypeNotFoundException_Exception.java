@@ -10,8 +10,8 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.2
  * 
  */
-@WebFault(name = "InvalidLoginCredentialException", targetNamespace = "http://ws.ejb/")
-public class InvalidLoginCredentialException_Exception
+@WebFault(name = "RoomTypeNotFoundException", targetNamespace = "http://ws.ejb/")
+public class RoomTypeNotFoundException_Exception
     extends java.lang.Exception
 {
 
@@ -19,14 +19,14 @@ public class InvalidLoginCredentialException_Exception
      * Java type that goes as soapenv:Fault detail element.
      * 
      */
-    private InvalidLoginCredentialException faultInfo;
+    private RoomTypeNotFoundException faultInfo;
 
     /**
      * 
      * @param faultInfo
      * @param message
      */
-    public InvalidLoginCredentialException_Exception(String message, InvalidLoginCredentialException faultInfo) {
+    public RoomTypeNotFoundException_Exception(String message, RoomTypeNotFoundException faultInfo) {
         super(message);
         this.faultInfo = faultInfo;
     }
@@ -37,7 +37,7 @@ public class InvalidLoginCredentialException_Exception
      * @param cause
      * @param message
      */
-    public InvalidLoginCredentialException_Exception(String message, InvalidLoginCredentialException faultInfo, Throwable cause) {
+    public RoomTypeNotFoundException_Exception(String message, RoomTypeNotFoundException faultInfo, Throwable cause) {
         super(message, cause);
         this.faultInfo = faultInfo;
     }
@@ -45,9 +45,9 @@ public class InvalidLoginCredentialException_Exception
     /**
      * 
      * @return
-     *     returns fault bean: ws.client.partner.InvalidLoginCredentialException
+     *     returns fault bean: ws.client.partner.RoomTypeNotFoundException
      */
-    public InvalidLoginCredentialException getFaultInfo() {
+    public RoomTypeNotFoundException getFaultInfo() {
         return faultInfo;
     }
 

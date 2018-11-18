@@ -12,7 +12,7 @@ import javax.xml.ws.WebFault;
  */
 @WebFault(name = "ReservationNotFoundException", targetNamespace = "http://ws.ejb/")
 public class ReservationNotFoundException_Exception
-    extends Exception
+    extends java.lang.Exception
 {
 
     /**

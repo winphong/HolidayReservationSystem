@@ -5,6 +5,7 @@
  */
 package ejb.session.stateful;
 
+import ejb.session.stateless.GuestEntityControllerLocal;
 import ejb.session.stateless.InventoryControllerLocal;
 import ejb.session.stateless.ReservationEntityControllerLocal;
 import ejb.session.stateless.RoomTypeEntityControllerLocal;
@@ -29,6 +30,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.ReservationNotFoundException;
+import util.exception.RoomRateNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 
 /**
@@ -40,6 +42,9 @@ import util.exception.RoomTypeNotFoundException;
 @Remote (OnlineReservationEntityControllerRemote.class)
 
 public class OnlineReservationEntityController implements OnlineReservationEntityControllerRemote, OnlineReservationEntityControllerLocal {
+
+    @EJB
+    private GuestEntityControllerLocal guestEntityControllerLocal;
 
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
@@ -97,7 +102,6 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
     public void reserveRoom(String roomTypeName, LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception {
         
         RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName(roomTypeName);
-        
         //Calculate total amount from room rate per night
         List<RoomRateEntity> roomRatesForABooking = new ArrayList<>();
         
@@ -155,7 +159,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
             
             } else {                
                 // To be edited
-                throw new Exception("No room rate");
+                throw new RoomRateNotFoundException("No room rate");
             }
         }
         
@@ -171,6 +175,9 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         reservationLineItems.add(new ReservationLineItemEntity(subTotal, numOfRoomRequired, roomType));
         totalLineItem++;
         totalAmount.add(subTotal);
+        
+        // Update the lineItemsForCurrentReservation
+        updateLineItemForCurrentReservationAtInventoryController();
     }
     
     @Override
@@ -183,4 +190,8 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
         
         return newReservation;
     }
+    
+    private void updateLineItemForCurrentReservationAtInventoryController() {      
+        inventoryControllerLocal.setLineItemsForCurrentReservation(reservationLineItems);
+    } 
 }

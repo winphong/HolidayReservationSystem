@@ -130,11 +130,9 @@ public class FrontOfficeModule {
 
         //DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/mm");
         System.out.println("Enter start date (dd/mm/yyyy): ");
-        String date = scanner.nextLine().trim();
-        LocalDate startDate = LocalDate.of(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3, 5)), Integer.parseInt(date.substring(0, 2)));
+        String startDate = scanner.nextLine().trim();
         System.out.println("Enter end date (dd/mm/yyyy): ");
-        date = scanner.nextLine().trim();
-        LocalDate endDate = LocalDate.of(Integer.parseInt(date.substring(6)), Integer.parseInt(date.substring(3, 5)), Integer.parseInt(date.substring(0, 2)));
+        String endDate = scanner.nextLine().trim();
         System.out.println("Enter number of rooms required: ");
         Integer numOfRoomRequired = scanner.nextInt();
 
@@ -156,7 +154,7 @@ public class FrontOfficeModule {
         }
     }
 
-    private void makeReservation(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception {
+    private void makeReservation(String startDate, String endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -172,13 +170,14 @@ public class FrontOfficeModule {
         String guestContactNumber = scanner.nextLine().trim();
         System.out.print("Enter email: ");
         String guestEmail = scanner.nextLine().trim();
-
+        LocalDate start = LocalDate.of(Integer.parseInt(startDate.substring(6)), Integer.parseInt(startDate.substring(3, 5)), Integer.parseInt(startDate.substring(0, 2)));
+            LocalDate end = LocalDate.of(Integer.parseInt(endDate.substring(6)), Integer.parseInt(endDate.substring(3, 5)), Integer.parseInt(endDate.substring(0, 2)));
         //ReservationEntity newReservation = new WalkinReservationEntity();
         try {
 
             RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
 
-            walkInReservationEntityControllerRemote.reserveRoom(roomType, startDate, endDate, numOfRoomRequired);
+            walkInReservationEntityControllerRemote.reserveRoom(roomType, start, end, numOfRoomRequired);
 
         } catch (RoomTypeNotFoundException ex) {
 
@@ -194,7 +193,7 @@ public class FrontOfficeModule {
         } else {
 
             System.out.println("\nChecking out!!");
-            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName,
+            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), start, end, guestFirstName,
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
@@ -204,7 +203,7 @@ public class FrontOfficeModule {
         }
     }
 
-    private void searchRoomAgain(LocalDate startDate, LocalDate endDate, String guestFirstName, String guestLastName,
+    private void searchRoomAgain(String startDate, String endDate, String guestFirstName, String guestLastName,
             String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
 
         System.out.println("*** Merlion Hotel HoRS :: Front Office :: Walk-in Search Room ***\n");
@@ -225,13 +224,14 @@ public class FrontOfficeModule {
 
         System.out.print("\nReserve room? (Y/N) > ");
         String response = scanner.next().toUpperCase();
-
+        LocalDate start = LocalDate.of(Integer.parseInt(startDate.substring(6)), Integer.parseInt(startDate.substring(3, 5)), Integer.parseInt(startDate.substring(0, 2)));
+            LocalDate end = LocalDate.of(Integer.parseInt(endDate.substring(6)), Integer.parseInt(endDate.substring(3, 5)), Integer.parseInt(endDate.substring(0, 2)));
         if (response.equalsIgnoreCase("Y")) {
             makeReservationAgain(startDate, endDate, numOfRoomRequired, guestFirstName, guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
 
         } else {
             System.out.println("\nChecking out!!");
-            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName,
+            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), start, end, guestFirstName,
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
@@ -241,19 +241,21 @@ public class FrontOfficeModule {
         }
     }
 
-    private void makeReservationAgain(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired, String guestFirstName,
+    private void makeReservationAgain(String startDate, String endDate, Integer numOfRoomRequired, String guestFirstName,
             String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("\nSelect available room type: >");
         String roomTypeName = scanner.nextLine().trim();
+        LocalDate start = LocalDate.of(Integer.parseInt(startDate.substring(6)), Integer.parseInt(startDate.substring(3, 5)), Integer.parseInt(startDate.substring(0, 2)));
+            LocalDate end = LocalDate.of(Integer.parseInt(endDate.substring(6)), Integer.parseInt(endDate.substring(3, 5)), Integer.parseInt(endDate.substring(0, 2)));
 
         //ReservationEntity newReservation = new WalkinReservationEntity();
         try {
 
             RoomTypeEntity roomType = roomTypeEntityControllerRemote.retrieveRoomTypeByName(roomTypeName);
 
-            walkInReservationEntityControllerRemote.reserveRoom(roomType, startDate, endDate, numOfRoomRequired);
+            walkInReservationEntityControllerRemote.reserveRoom(roomType, start, end, numOfRoomRequired);
 
         } catch (RoomTypeNotFoundException ex) {
 
@@ -269,7 +271,7 @@ public class FrontOfficeModule {
         } else {
 
             System.out.println("\nChecking out!!");
-            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), startDate, endDate, guestFirstName,
+            ReservationEntity newReservation = walkInReservationEntityControllerRemote.checkOut(currentEmployee.getEmployeeId(), start, end, guestFirstName,
                     guestLastName, guestIdentificationNumber, guestContactNumber, guestEmail);
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;

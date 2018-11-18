@@ -51,6 +51,78 @@ public interface PartnerWebService {
 
     /**
      * 
+     * @param arg3
+     * @param arg2
+     * @param arg5
+     * @param arg4
+     * @param arg1
+     * @param arg0
+     * @param arg7
+     * @param arg6
+     * @return
+     *     returns ws.client.partner.ReservationEntity
+     * @throws Exception_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "checkOut", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.CheckOut")
+    @ResponseWrapper(localName = "checkOutResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.CheckOutResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/checkOutRequest", output = "http://ws.ejb/PartnerWebService/checkOutResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://ws.ejb/PartnerWebService/checkOut/Fault/Exception")
+    })
+    public ReservationEntity checkOut(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Long arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        String arg3,
+        @WebParam(name = "arg4", targetNamespace = "")
+        String arg4,
+        @WebParam(name = "arg5", targetNamespace = "")
+        String arg5,
+        @WebParam(name = "arg6", targetNamespace = "")
+        String arg6,
+        @WebParam(name = "arg7", targetNamespace = "")
+        String arg7)
+        throws Exception_Exception
+    ;
+
+    /**
+     * 
+     * @param arg3
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns java.lang.Boolean
+     * @throws Exception_Exception
+     * @throws RoomTypeNotFoundException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "reserveRoom", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.ReserveRoom")
+    @ResponseWrapper(localName = "reserveRoomResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.ReserveRoomResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/reserveRoomRequest", output = "http://ws.ejb/PartnerWebService/reserveRoomResponse", fault = {
+        @FaultAction(className = RoomTypeNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/reserveRoom/Fault/RoomTypeNotFoundException"),
+        @FaultAction(className = Exception_Exception.class, value = "http://ws.ejb/PartnerWebService/reserveRoom/Fault/Exception")
+    })
+    public Boolean reserveRoom(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        Integer arg3)
+        throws Exception_Exception, RoomTypeNotFoundException_Exception
+    ;
+
+    /**
+     * 
      * @param arg0
      * @return
      *     returns java.util.List<ws.client.partner.PartnerReservationEntity>
@@ -82,6 +154,47 @@ public interface PartnerWebService {
         @WebParam(name = "arg0", targetNamespace = "")
         Long arg0)
         throws ReservationNotFoundException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns java.util.List<ws.client.partner.RoomTypeEntity>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "searchAvailableRoom", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.SearchAvailableRoom")
+    @ResponseWrapper(localName = "searchAvailableRoomResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.SearchAvailableRoomResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/searchAvailableRoomRequest", output = "http://ws.ejb/PartnerWebService/searchAvailableRoomResponse")
+    public List<RoomTypeEntity> searchAvailableRoom(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        Integer arg2);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns ws.client.partner.RoomTypeEntity
+     * @throws RoomTypeNotFoundException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "retrieveRoomTypeByName", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveRoomTypeByName")
+    @ResponseWrapper(localName = "retrieveRoomTypeByNameResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveRoomTypeByNameResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/retrieveRoomTypeByNameRequest", output = "http://ws.ejb/PartnerWebService/retrieveRoomTypeByNameResponse", fault = {
+        @FaultAction(className = RoomTypeNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/retrieveRoomTypeByName/Fault/RoomTypeNotFoundException")
+    })
+    public RoomTypeEntity retrieveRoomTypeByName(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0)
+        throws RoomTypeNotFoundException_Exception
     ;
 
 }

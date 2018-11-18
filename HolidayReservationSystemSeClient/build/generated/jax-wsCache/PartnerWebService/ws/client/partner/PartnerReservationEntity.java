@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="customerContactNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="customerEmail" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="customerFirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="customerIdentificationNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="customerLastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="partner" type="{http://ws.ejb/}partnerEntity" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
     "customerContactNumber",
     "customerEmail",
     "customerFirstName",
+    "customerIdentificationNumber",
     "customerLastName",
     "partner"
 })
@@ -44,6 +46,7 @@ public class PartnerReservationEntity
     protected String customerContactNumber;
     protected String customerEmail;
     protected String customerFirstName;
+    protected String customerIdentificationNumber;
     protected String customerLastName;
     protected PartnerEntity partner;
 
@@ -117,6 +120,30 @@ public class PartnerReservationEntity
      */
     public void setCustomerFirstName(String value) {
         this.customerFirstName = value;
+    }
+
+    /**
+     * Gets the value of the customerIdentificationNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCustomerIdentificationNumber() {
+        return customerIdentificationNumber;
+    }
+
+    /**
+     * Sets the value of the customerIdentificationNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCustomerIdentificationNumber(String value) {
+        this.customerIdentificationNumber = value;
     }
 
     /**

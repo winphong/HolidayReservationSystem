@@ -7,7 +7,10 @@ package ejb.session.stateless;
 
 import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
+import entity.ReservationLineItemEntity;
+import java.math.BigDecimal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -27,9 +30,18 @@ import util.exception.InvalidLoginCredentialException;
 @Remote (PartnerEntityControllerRemote.class)
 public class PartnerEntityController implements PartnerEntityControllerRemote, PartnerEntityControllerLocal {
 
+    @EJB
+    private ReservationEntityControllerLocal reservationEntityControllerLocal;
+
+    @EJB
+    private InventoryControllerLocal inventoryControllerLocal;
+
+    @EJB
+    private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal;
+
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
-    private PartnerEntity partner;
+    
 
     public PartnerEntity createNewPartner(PartnerEntity newPartner) {
         
@@ -102,4 +114,6 @@ public class PartnerEntityController implements PartnerEntityControllerRemote, P
         PartnerEntity partner = retrievePartnerById(partnerId);
         return partner.getReservation();
     }
+    
+    
 }

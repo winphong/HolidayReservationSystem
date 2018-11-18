@@ -12,7 +12,7 @@ import javax.xml.ws.WebFault;
  */
 @WebFault(name = "InvalidLoginCredentialException", targetNamespace = "http://ws.ejb/")
 public class InvalidLoginCredentialException_Exception
-    extends Exception
+    extends java.lang.Exception
 {
 
     /**

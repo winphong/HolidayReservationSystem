@@ -10,8 +10,8 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.2
  * 
  */
-@WebFault(name = "InvalidLoginCredentialException", targetNamespace = "http://ws.ejb/")
-public class InvalidLoginCredentialException_Exception
+@WebFault(name = "Exception", targetNamespace = "http://ws.ejb/")
+public class Exception_Exception
     extends java.lang.Exception
 {
 
@@ -19,14 +19,14 @@ public class InvalidLoginCredentialException_Exception
      * Java type that goes as soapenv:Fault detail element.
      * 
      */
-    private InvalidLoginCredentialException faultInfo;
+    private ws.client.partner.Exception faultInfo;
 
     /**
      * 
      * @param faultInfo
      * @param message
      */
-    public InvalidLoginCredentialException_Exception(String message, InvalidLoginCredentialException faultInfo) {
+    public Exception_Exception(String message, ws.client.partner.Exception faultInfo) {
         super(message);
         this.faultInfo = faultInfo;
     }
@@ -37,7 +37,7 @@ public class InvalidLoginCredentialException_Exception
      * @param cause
      * @param message
      */
-    public InvalidLoginCredentialException_Exception(String message, InvalidLoginCredentialException faultInfo, Throwable cause) {
+    public Exception_Exception(String message, ws.client.partner.Exception faultInfo, Throwable cause) {
         super(message, cause);
         this.faultInfo = faultInfo;
     }
@@ -45,9 +45,9 @@ public class InvalidLoginCredentialException_Exception
     /**
      * 
      * @return
-     *     returns fault bean: ws.client.partner.InvalidLoginCredentialException
+     *     returns fault bean: ws.client.partner.Exception
      */
-    public InvalidLoginCredentialException getFaultInfo() {
+    public ws.client.partner.Exception getFaultInfo() {
         return faultInfo;
     }
 

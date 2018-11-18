@@ -7,6 +7,8 @@ package ejb.session.stateless;
 
 import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
+import entity.ReservationEntity;
+import java.time.LocalDate;
 import java.util.List;
 import util.exception.InvalidLoginCredentialException;
 
