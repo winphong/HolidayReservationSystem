@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlTransient;
 import util.enumeration.RoomStatus;
 import static util.enumeration.RoomStatus.VACANT;
 
@@ -39,6 +40,7 @@ public class RoomEntity implements Serializable {
     @Column(nullable = false)
     private Boolean isDisabled;
 
+    @XmlTransient
     @ManyToOne
     private RoomTypeEntity roomType;
     
