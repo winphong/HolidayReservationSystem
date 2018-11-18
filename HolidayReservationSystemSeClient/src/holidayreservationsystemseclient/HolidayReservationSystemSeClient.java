@@ -277,8 +277,8 @@ public class HolidayReservationSystemSeClient {
         Long id = scanner.nextLong(); 
         try {
             PartnerReservationEntity reservation = retrieveReservationById(id);
-            System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
-            System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate().toString(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
+            System.out.printf("%20s%15s\n", "Reservation Id", "Total Amount");
+            System.out.printf("%20s%15s\n", reservation.getReservationId(), reservation.getTotalAmount());
 
             List<ReservationLineItemEntity> items = retrieveItemsByReservationId(reservation.getReservationId());
             System.out.println("Reservation Details: ");
@@ -302,9 +302,9 @@ public class HolidayReservationSystemSeClient {
         List<PartnerReservationEntity> reservations = retrieveAllReservations(currentPartner.getPartnerId());
         if (reservations.size() > 0) {
             System.out.println();
-            System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
+            System.out.printf("%20s%15s\n", "Reservation Id", "Total Amount");
             for (PartnerReservationEntity reservation : reservations) {
-                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate().toString(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
+                System.out.printf("%20s%15s\n", reservation.getReservationId(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
