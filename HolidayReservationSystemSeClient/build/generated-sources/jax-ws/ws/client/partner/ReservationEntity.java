@@ -23,9 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="bookingDate" type="{http://ws.ejb/}date" minOccurs="0"/>
  *         &lt;element name="endDate" type="{http://ws.ejb/}date" minOccurs="0"/>
+ *         &lt;element name="isAllocated" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="isCheckedIn" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="isNotAllocated" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="isUpgraded" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="reservationId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="reservationLineItemEntities" type="{http://ws.ejb/}reservationLineItemEntity" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="rooms" type="{http://ws.ejb/}roomEntity" maxOccurs="unbounded" minOccurs="0"/>
@@ -43,9 +42,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "reservationEntity", propOrder = {
     "bookingDate",
     "endDate",
+    "isAllocated",
     "isCheckedIn",
-    "isNotAllocated",
-    "isUpgraded",
     "reservationId",
     "reservationLineItemEntities",
     "rooms",
@@ -59,9 +57,8 @@ public abstract class ReservationEntity {
 
     protected Date bookingDate;
     protected Date endDate;
+    protected Boolean isAllocated;
     protected Boolean isCheckedIn;
-    protected Boolean isNotAllocated;
-    protected Boolean isUpgraded;
     protected Long reservationId;
     @XmlElement(nillable = true)
     protected List<ReservationLineItemEntity> reservationLineItemEntities;
@@ -119,6 +116,30 @@ public abstract class ReservationEntity {
     }
 
     /**
+     * Gets the value of the isAllocated property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsAllocated() {
+        return isAllocated;
+    }
+
+    /**
+     * Sets the value of the isAllocated property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsAllocated(Boolean value) {
+        this.isAllocated = value;
+    }
+
+    /**
      * Gets the value of the isCheckedIn property.
      * 
      * @return
@@ -140,54 +161,6 @@ public abstract class ReservationEntity {
      */
     public void setIsCheckedIn(Boolean value) {
         this.isCheckedIn = value;
-    }
-
-    /**
-     * Gets the value of the isNotAllocated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsNotAllocated() {
-        return isNotAllocated;
-    }
-
-    /**
-     * Sets the value of the isNotAllocated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsNotAllocated(Boolean value) {
-        this.isNotAllocated = value;
-    }
-
-    /**
-     * Gets the value of the isUpgraded property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsUpgraded() {
-        return isUpgraded;
-    }
-
-    /**
-     * Sets the value of the isUpgraded property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsUpgraded(Boolean value) {
-        this.isUpgraded = value;
     }
 
     /**

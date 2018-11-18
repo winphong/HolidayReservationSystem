@@ -32,7 +32,9 @@ public class RoomRateEntity implements Serializable {
     private Boolean isDisabled;
     @Column(scale = 2, nullable = false)
     private BigDecimal ratePerNight;
+    @Column
     private Date validFrom;
+    @Column
     private Date validTill;
     
     @ManyToOne

@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="roomStatus">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="VACANT"/>
+ *     &lt;enumeration value="ALLOCATED"/>
  *     &lt;enumeration value="OCCUPIED"/>
  *     &lt;enumeration value="MAINTENANCE"/>
  *   &lt;/restriction>
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 public enum RoomStatus {
 
     VACANT,
+    ALLOCATED,
     OCCUPIED,
     MAINTENANCE;
 

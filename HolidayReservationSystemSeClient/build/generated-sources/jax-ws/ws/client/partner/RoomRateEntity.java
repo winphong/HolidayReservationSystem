@@ -4,9 +4,7 @@ package ws.client.partner;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -24,8 +22,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="ratePerNight" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="roomRateId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="roomType" type="{http://ws.ejb/}roomTypeEntity" minOccurs="0"/>
- *         &lt;element name="validFrom" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="validTill" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="validFrom" type="{http://ws.ejb/}date" minOccurs="0"/>
+ *         &lt;element name="validTill" type="{http://ws.ejb/}date" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -51,10 +49,8 @@ public class RoomRateEntity {
     protected BigDecimal ratePerNight;
     protected Long roomRateId;
     protected RoomTypeEntity roomType;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar validFrom;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar validTill;
+    protected Date validFrom;
+    protected Date validTill;
 
     /**
      * Gets the value of the isDisabled property.
@@ -181,10 +177,10 @@ public class RoomRateEntity {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Date }
      *     
      */
-    public XMLGregorianCalendar getValidFrom() {
+    public Date getValidFrom() {
         return validFrom;
     }
 
@@ -193,10 +189,10 @@ public class RoomRateEntity {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Date }
      *     
      */
-    public void setValidFrom(XMLGregorianCalendar value) {
+    public void setValidFrom(Date value) {
         this.validFrom = value;
     }
 
@@ -205,10 +201,10 @@ public class RoomRateEntity {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Date }
      *     
      */
-    public XMLGregorianCalendar getValidTill() {
+    public Date getValidTill() {
         return validTill;
     }
 
@@ -217,10 +213,10 @@ public class RoomRateEntity {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Date }
      *     
      */
-    public void setValidTill(XMLGregorianCalendar value) {
+    public void setValidTill(Date value) {
         this.validTill = value;
     }
 
