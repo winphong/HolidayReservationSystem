@@ -12,8 +12,6 @@ import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
@@ -184,7 +182,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     // Reserve room is still needed because guest can walkin and reserve for future date
     // Once reserve room, we need to allocate room for the guest if the start date of reservation is equal to current date
-    @Override
+/*    @Override
     public void walkInAllocateRoom(Long reservationId) throws ReservationNotFoundException {
 
         // Retrieve the current reservation
@@ -253,7 +251,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         }
 
     }
-
+*/
     @Override
     public Boolean checkIn(Long reservationId) throws ReservationNotFoundException {
 
@@ -303,11 +301,13 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
                 if (room.getNextReservation() != null) {
                     room.setCurrentReservation(room.getNextReservation());
                     room.setNextReservation(null);
+                    room.setRoomStatus(RoomStatus.ALLOCATED);
                 } else {
                     room.setCurrentReservation(null);
                     room.setRoomStatus(RoomStatus.VACANT);
                 }
                 //  room.getCurrentReservation().getRooms().remove(room);
+
                 room.setIsReady(Boolean.FALSE);
                 room.setGuest(null);
                 return Boolean.TRUE;

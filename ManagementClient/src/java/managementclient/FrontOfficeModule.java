@@ -17,18 +17,13 @@ import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
 import entity.ReservationEntity;
-import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import util.enumeration.RoomStatus;
-import util.exception.CheckInException;
 import util.exception.ReservationNotFoundException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
@@ -92,8 +87,9 @@ public class FrontOfficeModule {
             System.out.println("3: Check-out Guest");
             System.out.println("-----------------------");
             System.out.println("4: Allocate Room");
+            System.out.println("5: Make room ready");
             System.out.println("-----------------------");
-            System.out.println("5: Back\n");
+            System.out.println("6: Back\n");
             System.out.println();
             response = 0;
 
@@ -111,13 +107,15 @@ public class FrontOfficeModule {
                 } else if (response == 4) {
                     allocateRoom();
                 } else if (response == 5) {
+                    finishUpHouseKeeping();
+                } else if (response == 6) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 4) {
+            if (response == 6) {
                 break;
             }
         }
@@ -198,7 +196,7 @@ public class FrontOfficeModule {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -236,7 +234,7 @@ public class FrontOfficeModule {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -281,25 +279,20 @@ public class FrontOfficeModule {
         }
     }
 
-    public void guestCheckin() {
+    public void guestCheckin() throws ReservationNotFoundException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Reservation ID: ");
         Long reservationId = scanner.nextLong();
-        scanner.nextLine();
-        System.out.print("Name of guest: ");
-        String guestName = scanner.nextLine().trim();
+       
+        ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
 
-        Boolean checkIn;
         try {
-            checkIn = reservationEntityControllerRemote.checkIn(reservationId, guestName);
-            if (checkIn) {
-                System.out.println("Check In Successful!");
+            if ( roomEntityControllerRemote.checkIn(reservationId) ) {
+                System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestFirstName() + "has been successfully checked in");
             } else {
-                System.out.println("Error checking in!");
+                System.out.println("Not all rooms ready for check in");
             }
-        } catch (CheckInException ex) {
-            System.out.println("Error checking in: " + ex.getMessage());
         } catch (ReservationNotFoundException ex) {
             System.out.println("Error checking in: Reservation not found!");
         }
@@ -335,9 +328,12 @@ public class FrontOfficeModule {
             }
         }
     }
-
-    public void allocateRoom() {
-
+    
+    private void allocateRoom() {
         ejbTimerSessionBeanRemote.allocateRoom();
+    }
+    
+    private void finishUpHouseKeeping() {
+        ejbTimerSessionBeanRemote.finishUpHousekeeping();
     }
 }

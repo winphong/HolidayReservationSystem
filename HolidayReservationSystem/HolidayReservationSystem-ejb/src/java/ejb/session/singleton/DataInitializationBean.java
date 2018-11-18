@@ -58,7 +58,6 @@ public class DataInitializationBean {
         
         if (em.find(RoomTypeEntity.class, new Long(1)) == null){
             initializeRoomType();
-//            initializeRoom();
         }
         
         if (em.find(Inventory.class, new Long(1)) == null) {
@@ -98,26 +97,6 @@ public class DataInitializationBean {
         em.persist(roomType);
     }
     
-//    public void initializeRoom() {
-//        
-//            RoomEntity room = new RoomEntity("0330");
-//        
-//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
-//            em.persist(room);
-//            room = new RoomEntity("0331");
-//            em.persist(room);
-//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
-//            room = new RoomEntity("0332");
-//            em.persist(room);
-//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(1)));
-//            room = new RoomEntity("0440");
-//            em.persist(room);
-//            room.setRoomType(roomTypeEntityController.retrieveRoomTypeById(new Long(2)));
-//            room = new RoomEntity("0441");
-//            em.persist(room);
-//            room.setRoomType(new Long());
-//    } 
-    
     public void initializeInventory() throws UpdateInventoryException{
         
         Inventory inventory;
@@ -135,7 +114,7 @@ public class DataInitializationBean {
         }
     }
     
-    private void updateInventory() throws UpdateInventoryException {
+    /* private void updateInventory() throws UpdateInventoryException {
         
         try{
             inventoryControllerLocal.updateAllInventory();
@@ -143,5 +122,5 @@ public class DataInitializationBean {
         catch (Exception ex){
             throw new UpdateInventoryException(System.err.toString());
         }
-    }
+    } */
 }

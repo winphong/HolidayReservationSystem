@@ -31,16 +31,19 @@ public class RoomTypeEntity implements Serializable {
     private Long roomTypeId;
     @Column(unique = true, nullable = false)
     private String name;
+    @Column(nullable = false, length = 512)
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false, scale = 2) // What is size for again??
     private BigDecimal size;
     @Column(nullable = false)
     private String bed;
     @Column(nullable = false)
     private Integer capacity;
+    @Column(nullable = false)
     private String amenities;
     @Column(unique = true, nullable = false)
     private Integer tier;
+    @Column(nullable = false)
     private Boolean isDisabled;
     
     @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
@@ -56,6 +59,7 @@ public class RoomTypeEntity implements Serializable {
     }
 
     public RoomTypeEntity(String name, String description, BigDecimal size, String bed, Integer capacity, String amenities, Integer tier) {
+        this();
         this.name = name;
         this.description = description;
         this.size = size;

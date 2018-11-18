@@ -18,8 +18,6 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
@@ -243,7 +241,7 @@ public class ReservationEntityController implements ReservationEntityControllerR
     }
 
     @Override
-    public ReservationLineItemEntity retrieveItemById(Long id) throws ReservationLineItemNotFoundException {
+    public ReservationLineItemEntity retrieveReservationLineItemById(Long id) throws ReservationLineItemNotFoundException {
         ReservationLineItemEntity reservationItem = em.find(ReservationLineItemEntity.class, id);
 
         if (reservationItem != null) {

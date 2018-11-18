@@ -7,8 +7,6 @@ package ejb.session.stateless;
 
 import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
-import entity.ReservationLineItemEntity;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Local;

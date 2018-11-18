@@ -38,10 +38,11 @@ public abstract class ReservationEntity implements Serializable {
     private Date endDate;
     @Column (nullable = false)
     private Date bookingDate;
-    private Boolean isCheckedIn = false;
-    private Boolean isNotAllocated = false;
-    private Boolean isUpgraded = false;
-    @Column (scale = 2)
+    @Column (nullable = false)
+    private Boolean isCheckedIn;
+    @Column (nullable = false)
+    private Boolean isNotAllocated;
+    @Column (nullable = false, scale = 2)
     private BigDecimal totalAmount;
     
     @OneToMany(mappedBy = "reservation")
@@ -51,12 +52,13 @@ public abstract class ReservationEntity implements Serializable {
     private List<RoomEntity> rooms;
 
     public ReservationEntity() {
+        this.isNotAllocated = Boolean.TRUE;
+        totalAmount = new BigDecimal("0");
         this.reservationLineItemEntities = new ArrayList<>();
         this.rooms = new ArrayList<>();
     }
 
     public ReservationEntity(Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {
-        
         this();
         this.bookingDate = Date.valueOf(LocalDate.now());
         this.startDate = startDate;
@@ -208,20 +210,5 @@ public abstract class ReservationEntity implements Serializable {
      */
     public void setIsNotAllocated(Boolean isNotAllocated) {
         this.isNotAllocated = isNotAllocated;
-    }
-
-    /**
-     * @return the isUpgraded
-     */
-    public Boolean getIsUpgraded() {
-        return isUpgraded;
-    }
-
-    /**
-     * @param isUpgraded the isUpgraded to set
-     */
-    public void setIsUpgraded(Boolean isUpgraded) {
-        this.isUpgraded = isUpgraded;
-    }
-    
+    }    
 }

@@ -166,8 +166,9 @@ public class MainApp {
                         }
                         else if (currentEmployee.getAccessRight() != EmployeeAccessRight.OPERATIONMANAGER){
                             hotelOperationModule.menuHotelOperationSales();
+                        } else {
+                            hotelOperationModule.menuHotelOperation();
                         }
-                        hotelOperationModule.menuHotelOperation();
                     } catch (InvalidAccessRightException ex) {
                         System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
                     }
