@@ -5,13 +5,24 @@
  */
 package restful;
 
+import datamodel.ConverterRsp;
 import datamodel.PartnerLoginRsp;
+import datamodel.PartnerReserveRoomRsp;
+import datamodel.PartnerSearchRoomRsp;
+import datamodel.ReserveRoomRsp;
+import datamodel.RetrieveRoomTypeRsp;
 import datamodel.ViewAllReservationsRsp;
 import datamodel.ViewReservationDetailsRsp;
 import ejb.session.stateful.PartnerReservationEntityControllerLocal;
+import ejb.session.stateless.InventoryControllerLocal;
 import ejb.session.stateless.PartnerEntityControllerLocal;
+import ejb.session.stateless.RoomTypeEntityControllerLocal;
 import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
+import entity.ReservationEntity;
+import entity.RoomTypeEntity;
+import static entity.RoomTypeEntity_.room;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,16 +31,15 @@ import javax.naming.NamingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.ReservationNotFoundException;
+import util.exception.RoomTypeNotFoundException;
 
 /**
  * REST Web Service
@@ -44,7 +54,8 @@ public class PartnerResource {
     
     private PartnerEntityControllerLocal partnerEntityControllerLocal = lookupPartnerEntityControllerLocal();
     private PartnerReservationEntityControllerLocal partnerReservationEntityControllerLocal = lookupPartnerReservationEntityControllerLocal();
-
+    private InventoryControllerLocal inventoryControllerLocal = lookupInventoryControllerLocal();
+    private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal = lookupRoomTypeEntityControllerLocal();
     /**
      * Creates a new instance of PartnerResource
      */
@@ -82,14 +93,38 @@ public class PartnerResource {
         ViewReservationDetailsRsp viewReservationDetailsRsp = new ViewReservationDetailsRsp(reservation);
         return Response.status(Response.Status.OK).entity(viewReservationDetailsRsp).build();
     }
-//    /**
-//     * PUT method for updating or creating an instance of PartnerResource
-//     * @param content representation for the resource
-//     */
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_XML)
-//    public void putXml(String content) {
-//    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public Response searchAvailableRoom(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("numOfRoomRequired")Integer numOfRoomRequired){
+        List <RoomTypeEntity> availableRooms = inventoryControllerLocal.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
+        PartnerSearchRoomRsp partnerSearchRoomRsp = new PartnerSearchRoomRsp(availableRooms);
+        return Response.status(Response.Status.OK).entity(partnerSearchRoomRsp).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public Response retrieveRoomTypeByName (@QueryParam("name")String name) throws RoomTypeNotFoundException{
+        RoomTypeEntity roomType = roomTypeEntityControllerLocal.retrieveRoomTypeByName(name);
+        RetrieveRoomTypeRsp retrieveRoomTypeRsp = new RetrieveRoomTypeRsp(roomType);
+        return Response.status(Response.Status.OK).entity(retrieveRoomTypeRsp).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public Response checkOut (@QueryParam("partnerId")Long partnerId, @QueryParam("customerFirstName")String customerFirstName, @QueryParam("customerLastName")String customerLastName, @QueryParam("customerIdentificationNumber")String customerIdentificationNumber, @QueryParam("customerContactNumber")String customerContactNumber, @QueryParam("customerEmail")String customerEmail, @QueryParam("startDate") String startDate, @QueryParam("endDate")String endDate) throws Exception{
+        ReservationEntity reservation = partnerReservationEntityControllerLocal.checkOut(partnerId, customerFirstName, customerLastName, customerIdentificationNumber, customerContactNumber, customerEmail, startDate, endDate);
+        PartnerReserveRoomRsp partnerReserveRoomRsp = new PartnerReserveRoomRsp(reservation);
+        return Response.status(Response.Status.OK).entity(partnerReserveRoomRsp).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public Response reserveRoom(@QueryParam("roomTypeName")String roomTypeName, @QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("numOfRoomRequired")Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception{
+        Boolean reserve = partnerReservationEntityControllerLocal.reserveRoom(roomTypeName, startDate, endDate, numOfRoomRequired);
+        ReserveRoomRsp reserveRoomRsp = new ReserveRoomRsp(reserve);
+        return Response.status(Response.Status.OK).entity(reserveRoomRsp).build();
+    }
 
     private PartnerEntityControllerLocal lookupPartnerEntityControllerLocal() {
         try {
@@ -105,6 +140,26 @@ public class PartnerResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (PartnerReservationEntityControllerLocal) c.lookup("java:global/HolidayReservationSystem/HolidayReservationSystem-ejb/PartnerReservationEntityController!ejb.session.stateful.PartnerReservationEntityControllerLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    private InventoryControllerLocal lookupInventoryControllerLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (InventoryControllerLocal) c.lookup("java:global/HolidayReservationSystem/HolidayReservationSystem-ejb/InventoryController!ejb.session.stateless.InventoryControllerLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    private RoomTypeEntityControllerLocal lookupRoomTypeEntityControllerLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (RoomTypeEntityControllerLocal) c.lookup("java:global/HolidayReservationSystem/HolidayReservationSystem-ejb/RoomTypeEntityController!ejb.session.stateless.RoomTypeEntityControllerLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

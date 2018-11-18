@@ -16,7 +16,7 @@ import util.exception.UpdateInventoryException;
  */
 public interface InventoryControllerRemote {
 
-    public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired);
+    public List<RoomTypeEntity> searchAvailableRoom(String startDate, String endDate, Integer numOfRoomRequired);
 
     public void updateAllInventory() throws UpdateInventoryException;
     

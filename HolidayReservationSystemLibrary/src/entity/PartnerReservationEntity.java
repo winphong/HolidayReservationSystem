@@ -28,18 +28,21 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
     private String customerEmail;
     @Column(nullable = false, length = 8)
     private String customerContactNumber;
-
+    @Column(nullable = false, length = 9)
+    private String customerIdentificationNumber;
+    
     @ManyToOne
     private PartnerEntity partner;
 
     public PartnerReservationEntity() {
     }
 
-    public PartnerReservationEntity(PartnerEntity partner, String customerFirstName, String customerLastName, String customerEmail, String customerContactNumber, Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {
+    public PartnerReservationEntity(String customerFirstName, String customerLastName, String customerIdentificationNumber, String customerEmail, String customerContactNumber, Date bookingDate, Date startDate, Date endDate, Boolean isCheckedIn) {
         super(bookingDate, startDate, endDate, isCheckedIn);
         this.partner = partner;
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
+        this.customerIdentificationNumber = customerIdentificationNumber;
         this.customerEmail = customerEmail;
         this.customerContactNumber = customerContactNumber;
     }
@@ -155,6 +158,20 @@ public class PartnerReservationEntity extends ReservationEntity implements Seria
      */
     public void setCustomerContactNumber(String customerContactNumber) {
         this.customerContactNumber = customerContactNumber;
+    }
+
+    /**
+     * @return the customerIdentificationNumber
+     */
+    public String getCustomerIdentificationNumber() {
+        return customerIdentificationNumber;
+    }
+
+    /**
+     * @param customerIdentificationNumber the customerIdentificationNumber to set
+     */
+    public void setCustomerIdentificationNumber(String customerIdentificationNumber) {
+        this.customerIdentificationNumber = customerIdentificationNumber;
     }
 
     

@@ -113,11 +113,13 @@ public class InventoryController implements InventoryControllerRemote, Inventory
     // Check from startDate to endDate whether there is any available room
     // Check each room and each date and make sure there is atleast one that is 
     @Override
-    public List<RoomTypeEntity> searchAvailableRoom(LocalDate startDate, LocalDate endDate, Integer numOfRoomRequired) {
-
+    public List<RoomTypeEntity> searchAvailableRoom(String startDate, String endDate, Integer numOfRoomRequired) {
+        
+        LocalDate start = LocalDate.of(Integer.parseInt(startDate.substring(6)), Integer.parseInt(startDate.substring(3, 5)), Integer.parseInt(startDate.substring(0, 2)));
+        LocalDate end = LocalDate.of(Integer.parseInt(endDate.substring(6)), Integer.parseInt(endDate.substring(3, 5)), Integer.parseInt(endDate.substring(0, 2)));
         List<RoomTypeEntity> availableRoomType = new ArrayList<>();
         
-        Inventory inventory = getInventoryByDate(Date.valueOf(startDate));
+        Inventory inventory = getInventoryByDate(Date.valueOf(start));
 
         // Get using getAvailableRoom will return room that is not disabled
         // If use getRoomTypes.get(index).getRoom() will return all room, including those that has been disabled
@@ -127,7 +129,7 @@ public class InventoryController implements InventoryControllerRemote, Inventory
 //        Boolean availableThroughout;
 //        Integer countOfRoomAvailableThroughout;
         // One reservation might have more than one room
-        List<ReservationEntity> reservationList = walkInReservationEntityControllerLocal.retrieveReservationByStartAndEndDate(startDate, endDate);
+        List<ReservationEntity> reservationList = walkInReservationEntityControllerLocal.retrieveReservationByStartAndEndDate(start, end);
         List<ReservationLineItemEntity> reservationLineItems;
 
         //Integer numOfReservationThatOverlapWithBooking = 0;

@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Inventory;
 import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
+import entity.RoomTypeEntity;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,4 +32,5 @@ public interface InventoryControllerLocal {
 
     public void setLineItemsForCurrentReservation(List<ReservationLineItemEntity> lineItemsForCurrentReservation);
     
+    public List<RoomTypeEntity> searchAvailableRoom(String startDate, String endDate, Integer numOfRoomRequired);
 }
