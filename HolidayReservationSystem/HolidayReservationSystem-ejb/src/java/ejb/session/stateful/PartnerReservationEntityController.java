@@ -79,7 +79,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
     @Override
     public PartnerReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException {
 
-        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.id=:inId");
+        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.reservationId=:inId");
         query.setParameter("inId", reservationId);
 
         try {

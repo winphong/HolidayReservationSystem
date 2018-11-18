@@ -19,11 +19,15 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author twp10
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance (strategy=InheritanceType.JOINED)
 public abstract class ReservationEntity implements Serializable {
@@ -44,10 +48,10 @@ public abstract class ReservationEntity implements Serializable {
     private Boolean isAllocated;
     @Column (nullable = false, scale = 2)
     private BigDecimal totalAmount;
-    
+    @XmlTransient
     @OneToMany(mappedBy = "reservation")
     private List<ReservationLineItemEntity> reservationLineItemEntities;
-
+    @XmlTransient
     @OneToMany(mappedBy = "currentReservation")
     private List<RoomEntity> rooms;
 
@@ -187,6 +191,7 @@ public abstract class ReservationEntity implements Serializable {
     /**
      * @return the rooms
      */
+    @XmlTransient
     public List<RoomEntity> getRooms() {
         return rooms;
     }

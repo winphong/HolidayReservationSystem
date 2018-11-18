@@ -5,7 +5,8 @@
  */
 package holidayreservationsystemseclient;
 
-import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 import ws.client.partner.Exception_Exception;
@@ -273,18 +274,18 @@ public class HolidayReservationSystemSeClient {
         System.out.println("*** Merlion Hotel Holiday Reservation System :: View Partner Reservation Details***\n");
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Reservation Id: ");
-        Long id = scanner.nextLong();
+        Long id = scanner.nextLong(); 
         try {
             PartnerReservationEntity reservation = retrieveReservationById(id);
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
-            System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
+            System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate().toString(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
 
-            List<ReservationLineItemEntity> items = reservation.getReservationLineItemEntities();
+            List<ReservationLineItemEntity> items = retrieveItemsByReservationId(reservation.getReservationId());
             System.out.println("Reservation Details: ");
             System.out.println("-------------------------");
             System.out.printf("%20s%20s%15s\n", "Room Type", "Number of Rooms", "Total Amount");
             for (ReservationLineItemEntity item : items) {
-                System.out.printf("%20s%20s%15s\n", item.getRoomType(), item.getNumOfRoomBooked(), item.getTotalAmount());
+                System.out.printf("%20s%20s%15s\n", item.getRoomType().getName(), item.getNumOfRoomBooked(), item.getTotalAmount());
             }
 
             System.out.println();
@@ -303,7 +304,7 @@ public class HolidayReservationSystemSeClient {
             System.out.println();
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             for (PartnerReservationEntity reservation : reservations) {
-                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
+                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate().toString(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
@@ -355,4 +356,11 @@ public class HolidayReservationSystemSeClient {
         return port.checkOut(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
+    private static java.util.List<ws.client.partner.ReservationLineItemEntity> retrieveItemsByReservationId(java.lang.Long arg0) throws ReservationNotFoundException_Exception {
+        ws.client.partner.HolidayReservationSystemWebService service = new ws.client.partner.HolidayReservationSystemWebService();
+        ws.client.partner.PartnerWebService port = service.getPartnerWebServicePort();
+        return port.retrieveItemsByReservationId(arg0);
+    }
+
+    
 }

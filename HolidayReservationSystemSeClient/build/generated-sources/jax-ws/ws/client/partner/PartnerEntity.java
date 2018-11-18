@@ -1,11 +1,8 @@
 
 package ws.client.partner;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -19,14 +16,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="companyName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="companyRegistrationId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="partnerId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="companyName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="phoneNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="reservation" type="{http://ws.ejb/}partnerReservationEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="userName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="companyRegistrationId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,26 +33,47 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "partnerEntity", propOrder = {
-    "companyName",
-    "companyRegistrationId",
-    "email",
     "partnerId",
+    "companyName",
+    "username",
     "password",
     "phoneNumber",
-    "reservation",
-    "userName"
+    "companyRegistrationId",
+    "email"
 })
 public class PartnerEntity {
 
-    protected String companyName;
-    protected String companyRegistrationId;
-    protected String email;
     protected Long partnerId;
+    protected String companyName;
+    protected String username;
     protected String password;
     protected String phoneNumber;
-    @XmlElement(nillable = true)
-    protected List<PartnerReservationEntity> reservation;
-    protected String userName;
+    protected String companyRegistrationId;
+    protected String email;
+
+    /**
+     * Gets the value of the partnerId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    /**
+     * Sets the value of the partnerId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setPartnerId(Long value) {
+        this.partnerId = value;
+    }
 
     /**
      * Gets the value of the companyName property.
@@ -83,75 +100,27 @@ public class PartnerEntity {
     }
 
     /**
-     * Gets the value of the companyRegistrationId property.
+     * Gets the value of the username property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCompanyRegistrationId() {
-        return companyRegistrationId;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * Sets the value of the companyRegistrationId property.
+     * Sets the value of the username property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCompanyRegistrationId(String value) {
-        this.companyRegistrationId = value;
-    }
-
-    /**
-     * Gets the value of the email property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets the value of the email property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEmail(String value) {
-        this.email = value;
-    }
-
-    /**
-     * Gets the value of the partnerId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
-     */
-    public Long getPartnerId() {
-        return partnerId;
-    }
-
-    /**
-     * Sets the value of the partnerId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
-     */
-    public void setPartnerId(Long value) {
-        this.partnerId = value;
+    public void setUsername(String value) {
+        this.username = value;
     }
 
     /**
@@ -203,56 +172,51 @@ public class PartnerEntity {
     }
 
     /**
-     * Gets the value of the reservation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the reservation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getReservation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link PartnerReservationEntity }
-     * 
-     * 
-     */
-    public List<PartnerReservationEntity> getReservation() {
-        if (reservation == null) {
-            reservation = new ArrayList<PartnerReservationEntity>();
-        }
-        return this.reservation;
-    }
-
-    /**
-     * Gets the value of the userName property.
+     * Gets the value of the companyRegistrationId property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getUserName() {
-        return userName;
+    public String getCompanyRegistrationId() {
+        return companyRegistrationId;
     }
 
     /**
-     * Sets the value of the userName property.
+     * Sets the value of the companyRegistrationId property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setUserName(String value) {
-        this.userName = value;
+    public void setCompanyRegistrationId(String value) {
+        this.companyRegistrationId = value;
+    }
+
+    /**
+     * Gets the value of the email property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets the value of the email property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEmail(String value) {
+        this.email = value;
     }
 
 }

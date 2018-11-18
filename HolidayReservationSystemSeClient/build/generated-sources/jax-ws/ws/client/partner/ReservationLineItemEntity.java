@@ -17,16 +17,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="reservationLineItemId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="numOfRoomBooked" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="totalAmount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
+ *         &lt;element name="roomType" type="{http://ws.ejb/}roomTypeEntity" minOccurs="0"/>
  *         &lt;element name="isAllocated" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="isUpgraded" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="numOfFailureUpgrade" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="numOfRoomBooked" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="numOfSuccesfulNormalAllocation" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="numOfSuccesfulUpgrade" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="reservation" type="{http://ws.ejb/}reservationEntity" minOccurs="0"/>
- *         &lt;element name="reservationLineItemId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="roomType" type="{http://ws.ejb/}roomTypeEntity" minOccurs="0"/>
- *         &lt;element name="totalAmount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
+ *         &lt;element name="numOfFailureUpgrade" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,29 +36,123 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "reservationLineItemEntity", propOrder = {
+    "reservationLineItemId",
+    "numOfRoomBooked",
+    "totalAmount",
+    "roomType",
     "isAllocated",
     "isUpgraded",
-    "numOfFailureUpgrade",
-    "numOfRoomBooked",
     "numOfSuccesfulNormalAllocation",
     "numOfSuccesfulUpgrade",
-    "reservation",
-    "reservationLineItemId",
-    "roomType",
-    "totalAmount"
+    "numOfFailureUpgrade"
 })
 public class ReservationLineItemEntity {
 
+    protected Long reservationLineItemId;
+    protected Integer numOfRoomBooked;
+    protected BigDecimal totalAmount;
+    protected RoomTypeEntity roomType;
     protected Boolean isAllocated;
     protected Boolean isUpgraded;
-    protected Integer numOfFailureUpgrade;
-    protected Integer numOfRoomBooked;
     protected Integer numOfSuccesfulNormalAllocation;
     protected Integer numOfSuccesfulUpgrade;
-    protected ReservationEntity reservation;
-    protected Long reservationLineItemId;
-    protected RoomTypeEntity roomType;
-    protected BigDecimal totalAmount;
+    protected Integer numOfFailureUpgrade;
+
+    /**
+     * Gets the value of the reservationLineItemId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getReservationLineItemId() {
+        return reservationLineItemId;
+    }
+
+    /**
+     * Sets the value of the reservationLineItemId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setReservationLineItemId(Long value) {
+        this.reservationLineItemId = value;
+    }
+
+    /**
+     * Gets the value of the numOfRoomBooked property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getNumOfRoomBooked() {
+        return numOfRoomBooked;
+    }
+
+    /**
+     * Sets the value of the numOfRoomBooked property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setNumOfRoomBooked(Integer value) {
+        this.numOfRoomBooked = value;
+    }
+
+    /**
+     * Gets the value of the totalAmount property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
+     */
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * Sets the value of the totalAmount property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
+     */
+    public void setTotalAmount(BigDecimal value) {
+        this.totalAmount = value;
+    }
+
+    /**
+     * Gets the value of the roomType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link RoomTypeEntity }
+     *     
+     */
+    public RoomTypeEntity getRoomType() {
+        return roomType;
+    }
+
+    /**
+     * Sets the value of the roomType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RoomTypeEntity }
+     *     
+     */
+    public void setRoomType(RoomTypeEntity value) {
+        this.roomType = value;
+    }
 
     /**
      * Gets the value of the isAllocated property.
@@ -107,54 +200,6 @@ public class ReservationLineItemEntity {
      */
     public void setIsUpgraded(Boolean value) {
         this.isUpgraded = value;
-    }
-
-    /**
-     * Gets the value of the numOfFailureUpgrade property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getNumOfFailureUpgrade() {
-        return numOfFailureUpgrade;
-    }
-
-    /**
-     * Sets the value of the numOfFailureUpgrade property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setNumOfFailureUpgrade(Integer value) {
-        this.numOfFailureUpgrade = value;
-    }
-
-    /**
-     * Gets the value of the numOfRoomBooked property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getNumOfRoomBooked() {
-        return numOfRoomBooked;
-    }
-
-    /**
-     * Sets the value of the numOfRoomBooked property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setNumOfRoomBooked(Integer value) {
-        this.numOfRoomBooked = value;
     }
 
     /**
@@ -206,99 +251,27 @@ public class ReservationLineItemEntity {
     }
 
     /**
-     * Gets the value of the reservation property.
+     * Gets the value of the numOfFailureUpgrade property.
      * 
      * @return
      *     possible object is
-     *     {@link ReservationEntity }
+     *     {@link Integer }
      *     
      */
-    public ReservationEntity getReservation() {
-        return reservation;
+    public Integer getNumOfFailureUpgrade() {
+        return numOfFailureUpgrade;
     }
 
     /**
-     * Sets the value of the reservation property.
+     * Sets the value of the numOfFailureUpgrade property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ReservationEntity }
+     *     {@link Integer }
      *     
      */
-    public void setReservation(ReservationEntity value) {
-        this.reservation = value;
-    }
-
-    /**
-     * Gets the value of the reservationLineItemId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
-     */
-    public Long getReservationLineItemId() {
-        return reservationLineItemId;
-    }
-
-    /**
-     * Sets the value of the reservationLineItemId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
-     */
-    public void setReservationLineItemId(Long value) {
-        this.reservationLineItemId = value;
-    }
-
-    /**
-     * Gets the value of the roomType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RoomTypeEntity }
-     *     
-     */
-    public RoomTypeEntity getRoomType() {
-        return roomType;
-    }
-
-    /**
-     * Sets the value of the roomType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RoomTypeEntity }
-     *     
-     */
-    public void setRoomType(RoomTypeEntity value) {
-        this.roomType = value;
-    }
-
-    /**
-     * Gets the value of the totalAmount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    /**
-     * Sets the value of the totalAmount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setTotalAmount(BigDecimal value) {
-        this.totalAmount = value;
+    public void setNumOfFailureUpgrade(Integer value) {
+        this.numOfFailureUpgrade = value;
     }
 
 }

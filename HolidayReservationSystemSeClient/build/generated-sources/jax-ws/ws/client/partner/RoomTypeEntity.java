@@ -2,11 +2,8 @@
 package ws.client.partner;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -29,8 +26,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="amenities" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="tier" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="isDisabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="roomRate" type="{http://ws.ejb/}roomRateEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="reservationItem" type="{http://ws.ejb/}reservationLineItemEntity" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -49,9 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     "capacity",
     "amenities",
     "tier",
-    "isDisabled",
-    "roomRate",
-    "reservationItem"
+    "isDisabled"
 })
 public class RoomTypeEntity {
 
@@ -64,9 +57,6 @@ public class RoomTypeEntity {
     protected String amenities;
     protected Integer tier;
     protected Boolean isDisabled;
-    @XmlElement(nillable = true)
-    protected List<RoomRateEntity> roomRate;
-    protected ReservationLineItemEntity reservationItem;
 
     /**
      * Gets the value of the roomTypeId property.
@@ -282,59 +272,6 @@ public class RoomTypeEntity {
      */
     public void setIsDisabled(Boolean value) {
         this.isDisabled = value;
-    }
-
-    /**
-     * Gets the value of the roomRate property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the roomRate property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRoomRate().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link RoomRateEntity }
-     * 
-     * 
-     */
-    public List<RoomRateEntity> getRoomRate() {
-        if (roomRate == null) {
-            roomRate = new ArrayList<RoomRateEntity>();
-        }
-        return this.roomRate;
-    }
-
-    /**
-     * Gets the value of the reservationItem property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ReservationLineItemEntity }
-     *     
-     */
-    public ReservationLineItemEntity getReservationItem() {
-        return reservationItem;
-    }
-
-    /**
-     * Sets the value of the reservationItem property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ReservationLineItemEntity }
-     *     
-     */
-    public void setReservationItem(ReservationLineItemEntity value) {
-        this.reservationItem = value;
     }
 
 }

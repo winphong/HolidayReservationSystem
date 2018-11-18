@@ -8,7 +8,6 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,9 +54,11 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RoomEntity> room;
     
+    @XmlTransient
     @OneToMany(mappedBy="roomType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RoomRateEntity> roomRate;
     
+    @XmlTransient
     @OneToOne(mappedBy="roomType")
     private ReservationLineItemEntity reservationItem;
 
@@ -237,6 +238,7 @@ public class RoomTypeEntity implements Serializable {
     /**
      * @return the roomRate
      */
+    @XmlTransient
     public List<RoomRateEntity> getRoomRate() {
         return roomRate;
     }
@@ -251,6 +253,7 @@ public class RoomTypeEntity implements Serializable {
     /**
      * @return the reservationItem
      */
+    @XmlTransient
     public ReservationLineItemEntity getReservationItem() {
         return reservationItem;
     }

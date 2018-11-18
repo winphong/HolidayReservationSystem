@@ -16,11 +16,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;extension base="{http://ws.ejb/}reservationEntity">
  *       &lt;sequence>
- *         &lt;element name="customerContactNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="customerEmail" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="customerFirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="customerIdentificationNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="customerLastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="customerEmail" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="customerContactNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="customerIdentificationNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="partner" type="{http://ws.ejb/}partnerEntity" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -32,46 +32,70 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "partnerReservationEntity", propOrder = {
-    "customerContactNumber",
-    "customerEmail",
     "customerFirstName",
-    "customerIdentificationNumber",
     "customerLastName",
+    "customerEmail",
+    "customerContactNumber",
+    "customerIdentificationNumber",
     "partner"
 })
 public class PartnerReservationEntity
     extends ReservationEntity
 {
 
-    protected String customerContactNumber;
-    protected String customerEmail;
     protected String customerFirstName;
-    protected String customerIdentificationNumber;
     protected String customerLastName;
+    protected String customerEmail;
+    protected String customerContactNumber;
+    protected String customerIdentificationNumber;
     protected PartnerEntity partner;
 
     /**
-     * Gets the value of the customerContactNumber property.
+     * Gets the value of the customerFirstName property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCustomerContactNumber() {
-        return customerContactNumber;
+    public String getCustomerFirstName() {
+        return customerFirstName;
     }
 
     /**
-     * Sets the value of the customerContactNumber property.
+     * Sets the value of the customerFirstName property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCustomerContactNumber(String value) {
-        this.customerContactNumber = value;
+    public void setCustomerFirstName(String value) {
+        this.customerFirstName = value;
+    }
+
+    /**
+     * Gets the value of the customerLastName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    /**
+     * Sets the value of the customerLastName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCustomerLastName(String value) {
+        this.customerLastName = value;
     }
 
     /**
@@ -99,27 +123,27 @@ public class PartnerReservationEntity
     }
 
     /**
-     * Gets the value of the customerFirstName property.
+     * Gets the value of the customerContactNumber property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCustomerFirstName() {
-        return customerFirstName;
+    public String getCustomerContactNumber() {
+        return customerContactNumber;
     }
 
     /**
-     * Sets the value of the customerFirstName property.
+     * Sets the value of the customerContactNumber property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCustomerFirstName(String value) {
-        this.customerFirstName = value;
+    public void setCustomerContactNumber(String value) {
+        this.customerContactNumber = value;
     }
 
     /**
@@ -144,30 +168,6 @@ public class PartnerReservationEntity
      */
     public void setCustomerIdentificationNumber(String value) {
         this.customerIdentificationNumber = value;
-    }
-
-    /**
-     * Gets the value of the customerLastName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCustomerLastName() {
-        return customerLastName;
-    }
-
-    /**
-     * Sets the value of the customerLastName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCustomerLastName(String value) {
-        this.customerLastName = value;
     }
 
     /**

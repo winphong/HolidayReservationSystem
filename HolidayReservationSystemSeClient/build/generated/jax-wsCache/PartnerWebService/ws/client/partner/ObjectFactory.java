@@ -27,12 +27,14 @@ public class ObjectFactory {
     private final static QName _PartnerLogin_QNAME = new QName("http://ws.ejb/", "partnerLogin");
     private final static QName _SearchAvailableRoom_QNAME = new QName("http://ws.ejb/", "searchAvailableRoom");
     private final static QName _CheckOut_QNAME = new QName("http://ws.ejb/", "checkOut");
+    private final static QName _RetrieveItemsByReservationIdResponse_QNAME = new QName("http://ws.ejb/", "retrieveItemsByReservationIdResponse");
     private final static QName _RetrieveReservationByIdResponse_QNAME = new QName("http://ws.ejb/", "retrieveReservationByIdResponse");
     private final static QName _ReserveRoomResponse_QNAME = new QName("http://ws.ejb/", "reserveRoomResponse");
     private final static QName _ReservationNotFoundException_QNAME = new QName("http://ws.ejb/", "ReservationNotFoundException");
     private final static QName _PartnerLoginResponse_QNAME = new QName("http://ws.ejb/", "partnerLoginResponse");
     private final static QName _SearchAvailableRoomResponse_QNAME = new QName("http://ws.ejb/", "searchAvailableRoomResponse");
     private final static QName _RetrieveAllReservationsResponse_QNAME = new QName("http://ws.ejb/", "retrieveAllReservationsResponse");
+    private final static QName _RetrieveItemsByReservationId_QNAME = new QName("http://ws.ejb/", "retrieveItemsByReservationId");
     private final static QName _ReserveRoom_QNAME = new QName("http://ws.ejb/", "reserveRoom");
     private final static QName _RetrieveReservationById_QNAME = new QName("http://ws.ejb/", "retrieveReservationById");
     private final static QName _CheckOutResponse_QNAME = new QName("http://ws.ejb/", "checkOutResponse");
@@ -163,6 +165,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RetrieveItemsByReservationId }
+     * 
+     */
+    public RetrieveItemsByReservationId createRetrieveItemsByReservationId() {
+        return new RetrieveItemsByReservationId();
+    }
+
+    /**
      * Create an instance of {@link SearchAvailableRoomResponse }
      * 
      */
@@ -184,6 +194,14 @@ public class ObjectFactory {
      */
     public CheckOut createCheckOut() {
         return new CheckOut();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveItemsByReservationIdResponse }
+     * 
+     */
+    public RetrieveItemsByReservationIdResponse createRetrieveItemsByReservationIdResponse() {
+        return new RetrieveItemsByReservationIdResponse();
     }
 
     /**
@@ -216,22 +234,6 @@ public class ObjectFactory {
      */
     public PartnerEntity createPartnerEntity() {
         return new PartnerEntity();
-    }
-
-    /**
-     * Create an instance of {@link RoomRateEntity }
-     * 
-     */
-    public RoomRateEntity createRoomRateEntity() {
-        return new RoomRateEntity();
-    }
-
-    /**
-     * Create an instance of {@link RoomEntity }
-     * 
-     */
-    public RoomEntity createRoomEntity() {
-        return new RoomEntity();
     }
 
     /**
@@ -275,6 +277,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.ejb/", name = "checkOut")
     public JAXBElement<CheckOut> createCheckOut(CheckOut value) {
         return new JAXBElement<CheckOut>(_CheckOut_QNAME, CheckOut.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RetrieveItemsByReservationIdResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.ejb/", name = "retrieveItemsByReservationIdResponse")
+    public JAXBElement<RetrieveItemsByReservationIdResponse> createRetrieveItemsByReservationIdResponse(RetrieveItemsByReservationIdResponse value) {
+        return new JAXBElement<RetrieveItemsByReservationIdResponse>(_RetrieveItemsByReservationIdResponse_QNAME, RetrieveItemsByReservationIdResponse.class, null, value);
     }
 
     /**
@@ -329,6 +340,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.ejb/", name = "retrieveAllReservationsResponse")
     public JAXBElement<RetrieveAllReservationsResponse> createRetrieveAllReservationsResponse(RetrieveAllReservationsResponse value) {
         return new JAXBElement<RetrieveAllReservationsResponse>(_RetrieveAllReservationsResponse_QNAME, RetrieveAllReservationsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RetrieveItemsByReservationId }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.ejb/", name = "retrieveItemsByReservationId")
+    public JAXBElement<RetrieveItemsByReservationId> createRetrieveItemsByReservationId(RetrieveItemsByReservationId value) {
+        return new JAXBElement<RetrieveItemsByReservationId>(_RetrieveItemsByReservationId_QNAME, RetrieveItemsByReservationId.class, null, value);
     }
 
     /**

@@ -8,10 +8,12 @@ package ejb.ws;
 import ejb.session.stateful.PartnerReservationEntityControllerLocal;
 import ejb.session.stateless.InventoryControllerLocal;
 import ejb.session.stateless.PartnerEntityControllerLocal;
+import ejb.session.stateless.ReservationEntityControllerLocal;
 import ejb.session.stateless.RoomTypeEntityControllerLocal;
 import entity.PartnerEntity;
 import entity.PartnerReservationEntity;
 import entity.ReservationEntity;
+import entity.ReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +33,9 @@ import util.exception.RoomTypeNotFoundException;
 @WebService(serviceName = "HolidayReservationSystemWebService")
 @Stateless()
 public class PartnerWebService {
+
+    @EJB
+    private ReservationEntityControllerLocal reservationEntityControllerLocal;
 
     @EJB
     private RoomTypeEntityControllerLocal roomTypeEntityControllerLocal;
@@ -71,5 +76,9 @@ public class PartnerWebService {
     
     public Boolean reserveRoom(String roomTypeName, String startDate, String endDate, Integer numOfRoomRequired) throws RoomTypeNotFoundException, Exception{
         return partnerReservationEntityControllerLocal.reserveRoom(roomTypeName, startDate, endDate, numOfRoomRequired);
+    }
+    
+    public List<ReservationLineItemEntity> retrieveItemsByReservationId(Long reservationId) throws ReservationNotFoundException{
+        return reservationEntityControllerLocal.retrieveItemsByReservationId(reservationId);
     }
 }

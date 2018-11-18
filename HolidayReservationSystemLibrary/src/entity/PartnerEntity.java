@@ -14,11 +14,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author twp10
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class PartnerEntity implements Serializable {
 
@@ -39,6 +43,7 @@ public class PartnerEntity implements Serializable {
     @Column(unique = true)
     private String email;
     
+    @XmlTransient
     @OneToMany(mappedBy="partner")
     private List <PartnerReservationEntity> reservation;
 

@@ -14,11 +14,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Asus
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class ReservationLineItemEntity implements Serializable {
 
@@ -43,6 +47,7 @@ public class ReservationLineItemEntity implements Serializable {
     @Column (nullable = false)
     private Integer numOfFailureUpgrade;
 
+    @XmlTransient
     @ManyToOne
     private ReservationEntity reservation;
     
@@ -111,6 +116,7 @@ public class ReservationLineItemEntity implements Serializable {
     /**
      * @return the reservation
      */
+    @XmlTransient
     public ReservationEntity getReservation() {
         return reservation;
     }
