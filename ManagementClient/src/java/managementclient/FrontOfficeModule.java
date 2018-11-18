@@ -137,6 +137,8 @@ public class FrontOfficeModule {
         List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
 
         Integer index = 1;
+        
+        System.out.println("Available Room Type(s)");
 
         for (RoomTypeEntity availableRoomType : availableRoomTypes) {
 
@@ -156,7 +158,7 @@ public class FrontOfficeModule {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("\nSelect available room type: >");
+        System.out.print("\nSelect available room type: ");
         String roomTypeName = scanner.nextLine().trim();
         System.out.print("Enter first name: ");
         String guestFirstName = scanner.nextLine().trim();
@@ -211,9 +213,11 @@ public class FrontOfficeModule {
         Integer numOfRoomRequired = scanner.nextInt();
 
         List<RoomTypeEntity> availableRoomTypes = inventoryControllerRemote.searchAvailableRoom(startDate, endDate, numOfRoomRequired);
-
+        
         Integer index = 1;
+        
 
+        System.out.println("Available Room Type(s):");
         for (RoomTypeEntity availableRoomType : availableRoomTypes) {
 
             System.out.println(availableRoomType.getName());
@@ -329,7 +333,7 @@ public class FrontOfficeModule {
         }
     }
     
-    private void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException {
+    private void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException, Exception {
         ejbTimerSessionBeanRemote.allocateRoom();
     }
     

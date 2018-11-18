@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -30,7 +28,7 @@ public class Inventory implements Serializable {
     private Long inventoryId;
     @Column(nullable = false)
     private Date date;
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private Integer totalNumOfRoomAvailable;
     @Column(nullable = false)
     private List<List<RoomEntity>> availableRoom;

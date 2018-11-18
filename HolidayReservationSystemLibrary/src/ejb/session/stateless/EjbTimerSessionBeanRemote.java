@@ -16,10 +16,10 @@ import util.exception.RoomTypeNotFoundException;
 @Remote
 public interface EjbTimerSessionBeanRemote {
 
-    public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException;
+    public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException, Exception;
 
     public void finishUpHousekeeping();
 
-    public void allocateRoom(Long reservationId) throws ReservationNotFoundException, RoomTypeNotFoundException;
+    public void allocateRoom(Long reservationId) throws ReservationNotFoundException, RoomTypeNotFoundException, Exception;
     
 }
