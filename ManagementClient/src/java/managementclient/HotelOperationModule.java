@@ -196,8 +196,8 @@ public class HotelOperationModule {
         RoomTypeEntity currentRoomTypeEntity;
         try {
             currentRoomTypeEntity = roomTypeEntityControllerRemote.retrieveRoomTypeByName(name);
-            System.out.printf("%15s%20s%20s%10s%10s%10s%40s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
-            System.out.printf("%15s%20s%20s%10s%10s%10s%40s%8s%15s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getRoomSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
+            System.out.printf("%12s%15s%32s%10s%30s%10s%40s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
+            System.out.printf("%12s%15s%32s%10s%30s%10s%40s%8s%15s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getRoomSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
             System.out.println("------------------------");
             System.out.println("1: Update Room Type");
             System.out.println("2: Delete Room Type");
@@ -312,9 +312,9 @@ public class HotelOperationModule {
         List<RoomTypeEntity> roomTypes = roomTypeEntityControllerRemote.viewAllRoomType();
         if (roomTypes.size() > 0) {
             System.out.println();
-            System.out.printf("%15s%20s%20s%10s%10s%10s%40s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
+            System.out.printf("%12s%15s%32s%10s%30s%10s%40s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
             for (RoomTypeEntity roomType : roomTypes) {
-                System.out.printf("%15s%20s%20s%10s%10s%10s%40s%8s%15s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getRoomSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
+                System.out.printf("%12s%15s%32s%10s%30s%10s%40s%8s%15s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getRoomSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
