@@ -138,10 +138,10 @@ public class HolidayReservationSystemSeClient {
         String customerFirstName = scanner.nextLine().trim();
         System.out.print("Enter customer last name: ");
         String customerLastName = scanner.nextLine().trim();
-        System.out.print("Enter customer identification number: ");
-        String customerIdentificationNumber = scanner.nextLine().trim();
         System.out.print("Enter customer contact number: ");
         String customerContactNumber = scanner.nextLine().trim();
+        System.out.print("Enter customer identification number: ");
+        String customerIdentificationNumber = scanner.nextLine().trim();
         System.out.print("Enter customer email: ");
         String customerEmail = scanner.nextLine().trim();
         System.out.println("Enter number of rooms required: ");
@@ -226,7 +226,7 @@ public class HolidayReservationSystemSeClient {
         String response = scanner.nextLine().trim();
 
         if (response.equalsIgnoreCase("Y")) {
-            searchRoomAgain(customerFirstName, customerLastName, customerIdentificationNumber, customerContactNumber, customerEmail);
+            searchRoomAgain(startDate, endDate, customerFirstName, customerLastName, customerIdentificationNumber, customerContactNumber, customerEmail);
         } else {
 
             System.out.println("\nChecking out!!");
@@ -337,12 +337,6 @@ public class HolidayReservationSystemSeClient {
         return port.retrieveRoomTypeByName(arg0);
     }
 
-    private static ReservationEntity checkOut(java.lang.Long arg0, java.lang.String arg1, java.lang.String arg2, java.lang.String arg3, java.lang.String arg4, java.lang.String arg5, java.lang.String arg6, java.lang.String arg7) throws Exception_Exception {
-        ws.client.partner.HolidayReservationSystemWebService service = new ws.client.partner.HolidayReservationSystemWebService();
-        ws.client.partner.PartnerWebService port = service.getPartnerWebServicePort();
-        return port.checkOut(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-    }
-
     private static Boolean reserveRoom(java.lang.String arg0, java.lang.String arg1, java.lang.String arg2, java.lang.Integer arg3) throws Exception_Exception, RoomTypeNotFoundException_Exception {
         ws.client.partner.HolidayReservationSystemWebService service = new ws.client.partner.HolidayReservationSystemWebService();
         ws.client.partner.PartnerWebService port = service.getPartnerWebServicePort();
@@ -353,6 +347,12 @@ public class HolidayReservationSystemSeClient {
         ws.client.partner.HolidayReservationSystemWebService service = new ws.client.partner.HolidayReservationSystemWebService();
         ws.client.partner.PartnerWebService port = service.getPartnerWebServicePort();
         return port.searchAvailableRoom(arg0, arg1, arg2);
+    }
+
+    private static ReservationEntity checkOut(java.lang.Long arg0, java.lang.String arg1, java.lang.String arg2, java.lang.String arg3, java.lang.String arg4, java.lang.String arg5, java.lang.String arg6, java.lang.String arg7) throws Exception_Exception {
+        ws.client.partner.HolidayReservationSystemWebService service = new ws.client.partner.HolidayReservationSystemWebService();
+        ws.client.partner.PartnerWebService port = service.getPartnerWebServicePort();
+        return port.checkOut(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
 }

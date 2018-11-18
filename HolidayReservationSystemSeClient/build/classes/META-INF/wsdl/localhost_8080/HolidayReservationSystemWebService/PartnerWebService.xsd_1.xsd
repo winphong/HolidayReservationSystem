@@ -67,9 +67,8 @@
 <xs:sequence>
 <xs:element name="bookingDate" type="tns:date" minOccurs="0"/>
 <xs:element name="endDate" type="tns:date" minOccurs="0"/>
+<xs:element name="isAllocated" type="xs:boolean" minOccurs="0"/>
 <xs:element name="isCheckedIn" type="xs:boolean" minOccurs="0"/>
-<xs:element name="isNotAllocated" type="xs:boolean" minOccurs="0"/>
-<xs:element name="isUpgraded" type="xs:boolean" minOccurs="0"/>
 <xs:element name="reservationId" type="xs:long" minOccurs="0"/>
 <xs:element name="reservationLineItemEntities" type="tns:reservationLineItemEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="rooms" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
@@ -97,7 +96,12 @@
 
 <xs:complexType name="reservationLineItemEntity">
 <xs:sequence>
+<xs:element name="isAllocated" type="xs:boolean" minOccurs="0"/>
+<xs:element name="isUpgraded" type="xs:boolean" minOccurs="0"/>
+<xs:element name="numOfFailureUpgrade" type="xs:int" minOccurs="0"/>
 <xs:element name="numOfRoomBooked" type="xs:int" minOccurs="0"/>
+<xs:element name="numOfSuccesfulNormalAllocation" type="xs:int" minOccurs="0"/>
+<xs:element name="numOfSuccesfulUpgrade" type="xs:int" minOccurs="0"/>
 <xs:element name="reservation" type="tns:reservationEntity" minOccurs="0"/>
 <xs:element name="reservationLineItemId" type="xs:long" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
@@ -116,7 +120,7 @@
 <xs:element name="reservationItem" type="tns:reservationLineItemEntity" minOccurs="0"/>
 <xs:element name="room" type="tns:roomEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="roomRate" type="tns:roomRateEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-<xs:element name="size" type="xs:decimal" minOccurs="0"/>
+<xs:element name="roomSize" type="xs:decimal" minOccurs="0"/>
 <xs:element name="tier" type="xs:int" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
@@ -141,8 +145,8 @@
 <xs:element name="ratePerNight" type="xs:decimal" minOccurs="0"/>
 <xs:element name="roomRateId" type="xs:long" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomTypeEntity" minOccurs="0"/>
-<xs:element name="validFrom" type="xs:dateTime" minOccurs="0"/>
-<xs:element name="validTill" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="validFrom" type="tns:date" minOccurs="0"/>
+<xs:element name="validTill" type="tns:date" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -203,6 +207,24 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="retrieveReservationById">
+<xs:sequence>
+<xs:element name="arg0" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrieveReservationByIdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partnerReservationEntity" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ReservationNotFoundException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="partnerLogin">
 <xs:sequence>
 <xs:element name="arg0" type="xs:string" minOccurs="0"/>
@@ -237,27 +259,10 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="retrieveReservationById">
-<xs:sequence>
-<xs:element name="arg0" type="xs:long" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="retrieveReservationByIdResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partnerReservationEntity" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="ReservationNotFoundException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:simpleType name="roomStatus">
 <xs:restriction base="xs:string">
 <xs:enumeration value="VACANT"/>
+<xs:enumeration value="ALLOCATED"/>
 <xs:enumeration value="OCCUPIED"/>
 <xs:enumeration value="MAINTENANCE"/>
 </xs:restriction>

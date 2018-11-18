@@ -171,7 +171,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
     }
     
     @Override
-    public ReservationEntity checkOut(Long partnerId, String customerFirstName, String customerLastName, String customerIdentificationNumber, String customerContactNumber, String customerEmail, String startDate, String endDate) throws Exception {
+    public ReservationEntity checkOut(Long partnerId, String customerFirstName, String customerLastName, String customerContactNumber, String customerIdentificationNumber, String customerEmail, String startDate, String endDate) throws Exception {
         LocalDate start = LocalDate.of(Integer.parseInt(startDate.substring(6)), Integer.parseInt(startDate.substring(3, 5)), Integer.parseInt(startDate.substring(0, 2)));
         LocalDate end = LocalDate.of(Integer.parseInt(endDate.substring(6)), Integer.parseInt(endDate.substring(3, 5)), Integer.parseInt(endDate.substring(0, 2)));
         String identity = "Partner";

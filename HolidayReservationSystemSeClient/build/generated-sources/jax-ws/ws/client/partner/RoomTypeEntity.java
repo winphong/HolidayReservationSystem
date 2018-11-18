@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="reservationItem" type="{http://ws.ejb/}reservationLineItemEntity" minOccurs="0"/>
  *         &lt;element name="room" type="{http://ws.ejb/}roomEntity" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="roomRate" type="{http://ws.ejb/}roomRateEntity" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="size" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
+ *         &lt;element name="roomSize" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="tier" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlType;
     "reservationItem",
     "room",
     "roomRate",
-    "size",
+    "roomSize",
     "tier"
 })
 public class RoomTypeEntity {
@@ -66,7 +66,7 @@ public class RoomTypeEntity {
     protected List<RoomEntity> room;
     @XmlElement(nillable = true)
     protected List<RoomRateEntity> roomRate;
-    protected BigDecimal size;
+    protected BigDecimal roomSize;
     protected Integer tier;
 
     /**
@@ -296,27 +296,27 @@ public class RoomTypeEntity {
     }
 
     /**
-     * Gets the value of the size property.
+     * Gets the value of the roomSize property.
      * 
      * @return
      *     possible object is
      *     {@link BigDecimal }
      *     
      */
-    public BigDecimal getSize() {
-        return size;
+    public BigDecimal getRoomSize() {
+        return roomSize;
     }
 
     /**
-     * Sets the value of the size property.
+     * Sets the value of the roomSize property.
      * 
      * @param value
      *     allowed object is
      *     {@link BigDecimal }
      *     
      */
-    public void setSize(BigDecimal value) {
-        this.size = value;
+    public void setRoomSize(BigDecimal value) {
+        this.roomSize = value;
     }
 
     /**
