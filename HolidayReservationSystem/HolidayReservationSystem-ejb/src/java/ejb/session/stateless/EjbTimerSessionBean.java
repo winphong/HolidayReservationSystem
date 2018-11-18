@@ -43,7 +43,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     public EjbTimerSessionBean() {
     }
 
-    @Schedule(hour = "2", info = "scheduleEveryday2AM")
+    @Schedule(hour = "2", info = "AllocatRoomEverydayAt2AM")
     @Override
     public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException, Exception {
 
@@ -117,7 +117,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
 //                            reservation.setIsUpgraded(true);
 //                        }
                         // If all room in reservation has been successfully allocated, break
-                        if ( ((Integer)reservation.getRooms().size()).equals(reservationLineItem.getNumOfRoomBooked()) ) {
+                        if ( (reservationLineItem.getNumOfSuccesfulNormalAllocation() + reservationLineItem.getNumOfSuccesfulUpgrade()) == reservationLineItem.getNumOfRoomBooked() ) {
                             reservationLineItem.setIsAllocated(Boolean.TRUE);
                             reservation.setIsAllocated(Boolean.TRUE);
                             break;
@@ -208,7 +208,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                     reservation.getRooms().add(room);
             
             // If all room in reservation has been successfully allocated, break
-                    if ( ((Integer)reservation.getRooms().size()).equals(reservationLineItem.getNumOfRoomBooked())) {
+                    if (  (reservationLineItem.getNumOfSuccesfulNormalAllocation() + reservationLineItem.getNumOfSuccesfulUpgrade()) == reservationLineItem.getNumOfRoomBooked() ) {
                         reservationLineItem.setIsAllocated(Boolean.TRUE);
                         reservation.setIsAllocated(Boolean.TRUE);
                         break;
@@ -234,7 +234,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
         }
     }
 
-    @Schedule(hour = "14", info = "scheduleEveryday2PM")
+    @Schedule(hour = "14", info = "makeAllRoomReadyAt2PM")
     @Override
     public void finishUpHousekeeping() {
 
@@ -253,10 +253,10 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
         }
     }
 
-    @Schedule(hour = "0", info = "scheduleEveryday12AM")
+    @Schedule(hour = "0", info = "createNewInventoryEverydayAt12AM")
     public void createNewInventory() {
 
-        Inventory inventory = new Inventory(Date.valueOf(LocalDate.now().plusYears(7).plusDays(1)));
+        Inventory inventory = new Inventory(Date.valueOf(LocalDate.now().plusYears(1).plusDays(1)));
         em.persist(inventory);
         em.flush();
         

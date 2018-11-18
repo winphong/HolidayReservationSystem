@@ -87,10 +87,10 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
     }
     
     @Override
-    public OnlineReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException {
+    public OnlineReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException {
 
-        Query query = em.createQuery("SELECT ore FROM ReservationEntity ore WHERE ore.reservationId = :inId");
-        query.setParameter("inId", id);
+        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.reservationId = :inId");
+        query.setParameter("inId", reservationId);
 
         try {
             
@@ -103,7 +103,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
-            throw new ReservationNotFoundException("Reservation " + id + "does not exist!");
+            throw new ReservationNotFoundException("Reservation " + reservationId + "does not exist!");
         }
     }
 
