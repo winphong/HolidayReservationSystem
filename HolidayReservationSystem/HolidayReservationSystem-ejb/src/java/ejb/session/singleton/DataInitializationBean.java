@@ -104,7 +104,7 @@ public class DataInitializationBean {
         
         Inventory inventory;
         
-        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusYears(1)); date = date.plusDays(1)) {      
+        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusDays(100)); date = date.plusDays(1)) {      
             inventory = new Inventory(Date.valueOf(date));
             em.persist(inventory);
         }
