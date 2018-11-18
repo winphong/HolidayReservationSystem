@@ -45,7 +45,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
 
     @Schedule(hour = "2", info = "scheduleEveryday2AM")
     @Override
-    public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException{
+    public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException, Exception {
 
         LocalDate currentDate = LocalDate.now();
         // Get list of reservations for current date
@@ -137,6 +137,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                     } else if ( reservationLineItem.getRoomType().getTier().equals(roomTypeEntityControllerLocal.retrieveHighestRoomTier()) ) {
 
                         reservationLineItem.setNumOfFailureUpgrade(reservationLineItem.getNumOfRoomBooked() - reservationLineItem.getNumOfSuccesfulUpgrade() - reservationLineItem.getNumOfSuccesfulNormalAllocation());
+                        throw new Exception("Not all room of the reservation line item has been allocated");
                     }
                 }
             }        
@@ -145,7 +146,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
     
                             //***********This is for upgrading allocation of room*****************//
     @Override
-    public void allocateRoom(Long reservationId) throws ReservationNotFoundException, RoomTypeNotFoundException {
+    public void allocateRoom(Long reservationId) throws ReservationNotFoundException, RoomTypeNotFoundException, Exception {
         
         ReservationEntity reservation = null;
         
@@ -227,6 +228,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                 } else if ( reservationLineItem.getRoomType().getTier().equals(roomTypeEntityControllerLocal.retrieveHighestRoomTier()) ) {
                     
                     reservationLineItem.setNumOfFailureUpgrade(reservationLineItem.getNumOfRoomBooked() - reservationLineItem.getNumOfSuccesfulUpgrade() - reservationLineItem.getNumOfSuccesfulNormalAllocation());
+                    throw new Exception("Not all room of the reservation line item has been allocated");
                 }
             }
         }

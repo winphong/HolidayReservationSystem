@@ -234,9 +234,10 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         }
     }
     
+    @Override
     public Integer retrieveHighestRoomTier() {
         
-        Query query = em.createQuery("SELECT MAX(rt.tier) FROM RoomTypeEntity rt");
+        Query query = em.createQuery("SELECT MAX(rt.tier) FROM RoomTypeEntity rt, RoomEntity r WHERE r.roomType.roomTypeId = rt.roomTypeId");
         
         return (Integer) query.getSingleResult();
     }

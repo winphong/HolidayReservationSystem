@@ -22,10 +22,8 @@ import javax.persistence.Query;
 import ejb.session.stateful.WalkinReservationEntityControllerLocal;
 import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import util.enumeration.RoomStatus;
 import util.exception.UpdateInventoryException;
 
 /**
@@ -269,14 +267,13 @@ public class InventoryController implements InventoryControllerRemote, Inventory
             rooms = roomType.getRoom();
             // Loop through the list of room and check for room that is not disabled and add to the list of roomForEachRoomType
             for (RoomEntity room : rooms) {
-                // Not disable and vacant
+                // Not disable 
                 if (room.getIsDisabled().equals(Boolean.FALSE)) {
                     roomForEachRoomType.add(room);
-                    totalNumOfRoomAvailable++;
                 }
             }
+            totalNumOfRoomAvailable += roomForEachRoomType.size();
             inventory.getAvailableRoom().add(roomForEachRoomType);
-            // Iterate by the index (roomForEachRoomType will correspond the to RoomType at any give index)
         }
         // Add the list of roomForEachRoomType to the list of availableRoom (which is a list of availableRoom consisting lists of all room for the particular roomType
         inventory.setTotalNumOfRoomAvailable(totalNumOfRoomAvailable);
