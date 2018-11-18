@@ -159,8 +159,8 @@ public interface PartnerWebService {
      * @param arg0
      * @return
      *     returns java.lang.Boolean
-     * @throws Exception_Exception
      * @throws RoomTypeNotFoundException_Exception
+     * @throws Exception_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")

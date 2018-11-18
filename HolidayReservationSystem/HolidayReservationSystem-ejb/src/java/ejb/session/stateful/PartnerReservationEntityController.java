@@ -56,13 +56,9 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
     private Integer totalLineItem;
     private BigDecimal totalAmount;
 
-    public void persist(Object object) {
-        em.persist(object);
-    }
-
     public List<PartnerReservationEntity> viewAllReservations(PartnerEntity partner) {
 
-        Query query = em.createQuery("SELECT pr FROM PartnerReservationEntity pr WHERE pr.partner =:inPartner");
+        Query query = em.createQuery("SELECT pr FROM PartnerReservationEntity pr WHERE pr.partner = :inPartner");
         query.setParameter("inPartner", partner);
         List<PartnerReservationEntity> reservations = (List<PartnerReservationEntity>) query.getResultList();
 
@@ -70,10 +66,10 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
     }
     
     @Override
-    public PartnerReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException {
+    public PartnerReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException {
 
-        Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.id=:inId");
-        query.setParameter("inId", id);
+        Query query = em.createQuery("SELECT r FROM ReservationEntity r WHERE r.id=:inId");
+        query.setParameter("inId", reservationId);
 
         try {
 
@@ -81,7 +77,7 @@ public class PartnerReservationEntityController implements PartnerReservationEnt
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
-            throw new ReservationNotFoundException("Reservation " + id + "does not exist!");
+            throw new ReservationNotFoundException("Reservation " + reservationId + "does not exist!");
         }
     }
     

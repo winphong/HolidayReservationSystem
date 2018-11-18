@@ -33,14 +33,14 @@ import util.exception.RoomTypeNotFoundException;
  */
 public class GuestMainApp {
 
-    private static ReservationEntityControllerRemote reservationEntityControllerRemote;
-    private static RoomRateEntityControllerRemote roomRateEntityControllerRemote;
-    private static RoomEntityControllerRemote roomEntityControllerRemote;
-    private static RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
-    private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
-    private static InventoryControllerRemote inventoryControllerRemote;
-    private static GuestEntityControllerRemote guestEntityControllerRemote;
-    private static EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
+    private ReservationEntityControllerRemote reservationEntityControllerRemote;
+    private RoomRateEntityControllerRemote roomRateEntityControllerRemote;
+    private RoomEntityControllerRemote roomEntityControllerRemote;
+    private RoomTypeEntityControllerRemote roomTypeEntityControllerRemote;
+    private OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
+    private InventoryControllerRemote inventoryControllerRemote;
+    private GuestEntityControllerRemote guestEntityControllerRemote;
+    private EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
 
     private GuestEntity currentGuest;
 
@@ -77,10 +77,10 @@ public class GuestMainApp {
 
                 if (response == 1) {
                     try {
-                        guestLogin();
-                        System.out.println("Login successful!\n");
-                        menuMain();
-
+                        if ( guestLogin() ) {
+                            System.out.println("Login successful!\n");
+                            menuMain();
+                        }
                     } catch (InvalidLoginCredentialException ex) {
                         System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
                     }
@@ -99,7 +99,7 @@ public class GuestMainApp {
         }
     }
 
-    private void guestLogin() throws InvalidLoginCredentialException {
+    private Boolean guestLogin() throws InvalidLoginCredentialException {
         Scanner scanner = new Scanner(System.in);
         String username = "";
         String password = "";
@@ -113,11 +113,17 @@ public class GuestMainApp {
         if (username.length() > 0 && password.length() > 0) {
             try {
                 currentGuest = guestEntityControllerRemote.guestLogin(username, password);
+                return Boolean.TRUE;
             } catch (GuestNotFoundException ex) {
                 System.out.println("Guest with username " + username + "does not exist!");
+                return Boolean.FALSE;
+            } catch (InvalidLoginCredentialException ex) {
+                System.out.println("Invalid login credential");
+                return Boolean.FALSE;
             }
         } else {
-            throw new InvalidLoginCredentialException("Missing login credential!");
+            System.out.println("Missing login credential!");
+            return Boolean.FALSE;
         }
     }
 
