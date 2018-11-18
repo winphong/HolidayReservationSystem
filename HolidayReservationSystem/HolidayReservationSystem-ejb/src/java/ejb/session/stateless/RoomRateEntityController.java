@@ -8,7 +8,9 @@ package ejb.session.stateless;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.EJBContext;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -35,6 +37,9 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
 
     @PersistenceContext(unitName = "HolidayReservationSystem-ejbPU")
     private EntityManager em;
+    
+    @Resource
+    private EJBContext eJBContext;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -52,6 +57,8 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
 
             return newRoomRate;
         } catch (Exception ex) {
+            
+            eJBContext.setRollbackOnly();
             throw new CreateNewRoomRateException("Error creating new room rate: " + ex.getMessage());
         }
     }
@@ -59,7 +66,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
     @Override
     public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException {
 
-        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name=:inName");
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name = :inName");
         query.setParameter("inName", name);
 
         try {
@@ -72,6 +79,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
         }
     }
 
+    @Override
     public RoomRateEntity retrieveRoomRateById(Long id) throws RoomRateNotFoundException {
 
         Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomRateId =:inId");
@@ -129,6 +137,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
 
     }
 
+    @Override
     public List<RoomRateEntity> viewAllRoomRate() {
 
         Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr");

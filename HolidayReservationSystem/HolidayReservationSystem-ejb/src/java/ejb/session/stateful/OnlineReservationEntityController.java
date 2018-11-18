@@ -70,7 +70,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
     @Override
     public List<OnlineReservationEntity> viewAllReservationsOfGuest(GuestEntity guest) {
 
-        Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.guest =:inGuest");
+        Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.guest = :inGuest");
         query.setParameter("inGuest", guest);
         List<OnlineReservationEntity> reservations = (List<OnlineReservationEntity>) query.getResultList();
 
@@ -80,7 +80,7 @@ public class OnlineReservationEntityController implements OnlineReservationEntit
     @Override
     public OnlineReservationEntity retrieveReservationById(Long id) throws ReservationNotFoundException {
 
-        Query query = em.createQuery("SELECT ore FROM OnlineReservationEntity ore WHERE ore.onlineReservationId=:inId");
+        Query query = em.createQuery("SELECT ore FROM ReservationEntity ore WHERE ore.reservationId = :inId");
         query.setParameter("inId", id);
 
         try {

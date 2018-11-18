@@ -9,8 +9,6 @@ import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -38,6 +36,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
     @EJB
     private InventoryControllerLocal inventoryControllerLocal;
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -67,13 +66,12 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
 
             throw new RoomTypeNotFoundException("Room type of Id" + roomTypeId + " does not exist!");
         }
-
     }
 
     @Override
     public RoomTypeEntity retrieveRoomTypeByName(String name) throws RoomTypeNotFoundException {
 
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.name=:inName");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.name = :inName");
         query.setParameter("inName", name);
 
         try {
@@ -98,8 +96,8 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             if (roomType.getDescription() != null) {
                 roomTypeToUpdate.setDescription(roomType.getDescription());
             }
-            if (roomType.getSize() != null) {
-                roomTypeToUpdate.setSize(roomType.getSize());
+            if (roomType.getRoomSize() != null) {
+                roomTypeToUpdate.setRoomSize(roomType.getRoomSize());
             }
             if (roomType.getCapacity() != null) {
                 roomTypeToUpdate.setCapacity(roomType.getCapacity());
@@ -189,6 +187,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         return roomTypes;
     }
 
+    @Override
     public void updateTier(int tier) {
 
         List<RoomTypeEntity> roomTypes = viewAllRoomType();
@@ -216,7 +215,7 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             roomType.getRoom().size();
             return roomType.getRoom();
         }
-        catch (Exception ex){
+        catch (RoomTypeNotFoundException ex){
             throw new RoomTypeNotFoundException(ex.getMessage());
         }
 
@@ -228,12 +227,17 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
         query.setParameter("inTier", tier);
 
         try {
-
             return (RoomTypeEntity) query.getSingleResult();
 
-        } catch (NoResultException | NonUniqueResultException ex) {
-
-            throw new RoomTypeNotFoundException("Room type " + tier + " does not exist!");
+        } catch (NoResultException ex) {
+            throw new RoomTypeNotFoundException("Room type of tier " + tier + " does not exist!");
         }
+    }
+    
+    public Integer retrieveHighestRoomTier() {
+        
+        Query query = em.createQuery("SELECT MAX(rt.tier) FROM RoomTypeEntity rt");
+        
+        return (Integer) query.getSingleResult();
     }
 }

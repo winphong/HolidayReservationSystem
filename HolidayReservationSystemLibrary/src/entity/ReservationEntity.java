@@ -41,7 +41,7 @@ public abstract class ReservationEntity implements Serializable {
     @Column (nullable = false)
     private Boolean isCheckedIn;
     @Column (nullable = false)
-    private Boolean isNotAllocated;
+    private Boolean isAllocated;
     @Column (nullable = false, scale = 2)
     private BigDecimal totalAmount;
     
@@ -52,8 +52,8 @@ public abstract class ReservationEntity implements Serializable {
     private List<RoomEntity> rooms;
 
     public ReservationEntity() {
-        this.isNotAllocated = Boolean.TRUE;
-        totalAmount = new BigDecimal("0");
+        this.isAllocated = Boolean.FALSE;
+        this.totalAmount = new BigDecimal(0);
         this.reservationLineItemEntities = new ArrayList<>();
         this.rooms = new ArrayList<>();
     }
@@ -201,14 +201,15 @@ public abstract class ReservationEntity implements Serializable {
     /**
      * @return the isNotAllocated
      */
-    public Boolean getIsNotAllocated() {
-        return isNotAllocated;
+    public Boolean getIsAllocated() {
+        return isAllocated;
     }
 
     /**
      * @param isNotAllocated the isNotAllocated to set
      */
-    public void setIsNotAllocated(Boolean isNotAllocated) {
-        this.isNotAllocated = isNotAllocated;
+    public void setIsAllocated(Boolean isNotAllocated) {
+        this.isAllocated = isNotAllocated;
     }    
+
 }

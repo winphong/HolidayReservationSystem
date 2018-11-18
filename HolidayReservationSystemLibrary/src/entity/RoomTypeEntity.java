@@ -33,8 +33,8 @@ public class RoomTypeEntity implements Serializable {
     private String name;
     @Column(nullable = false, length = 512)
     private String description;
-    @Column(nullable = false, scale = 2) // What is size for again??
-    private BigDecimal size;
+    @Column(nullable = false, scale = 2) // What is roomSize for again??
+    private BigDecimal roomSize;
     @Column(nullable = false)
     private String bed;
     @Column(nullable = false)
@@ -62,7 +62,7 @@ public class RoomTypeEntity implements Serializable {
         this();
         this.name = name;
         this.description = description;
-        this.size = size;
+        this.roomSize = size;
         this.bed = bed;
         this.capacity = capacity;
         this.amenities = amenities;
@@ -130,17 +130,17 @@ public class RoomTypeEntity implements Serializable {
     }
 
     /**
-     * @return the size
+     * @return the roomSize
      */
-    public BigDecimal getSize() {
-        return size;
+    public BigDecimal getRoomSize() {
+        return roomSize;
     }
 
     /**
-     * @param size the size to set
+     * @param roomSize the roomSize to set
      */
-    public void setSize(BigDecimal size) {
-        this.size = size;
+    public void setRoomSize(BigDecimal roomSize) {
+        this.roomSize = roomSize;
     }
 
     /**

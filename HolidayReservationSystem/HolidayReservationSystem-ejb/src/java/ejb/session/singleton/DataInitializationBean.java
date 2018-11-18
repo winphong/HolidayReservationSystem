@@ -73,14 +73,11 @@ public class DataInitializationBean {
         //system admin
         EmployeeEntity employee = new EmployeeEntity("Win", "Phong", "sysadmin", "password", EmployeeAccessRight.SYSTEMADMINISTRATOR, "12345678", "sysadmin1@gmail.com");
         em.persist(employee);
-        
-        employee = new EmployeeEntity("Win", "Phong", "opmanager", "password", EmployeeAccessRight.OPERATIONMANAGER, "86195650", "opmanager@gmail.com");
+        employee = new EmployeeEntity("Wei", "Xiang", "opmanager", "password", EmployeeAccessRight.OPERATIONMANAGER, "86195650", "opmanager@gmail.com");
         em.persist(employee);
-        
-        employee = new EmployeeEntity("Win", "Phong", "frontoffice", "password", EmployeeAccessRight.GUESTRELATIONOFFICER, "31734509", "frontoffice@gmail.com");
-        em.persist(employee);
-        
-        employee = new EmployeeEntity("Win", "Phong", "sales", "password", EmployeeAccessRight.SALESMANAGER, "16161616", "sales@gmail.com");
+        employee = new EmployeeEntity("Kai", "Ming", "frontoffice", "password", EmployeeAccessRight.GUESTRELATIONOFFICER, "31734509", "frontoffice@gmail.com");
+        em.persist(employee);        
+        employee = new EmployeeEntity("Jun", "Jie", "sales", "password", EmployeeAccessRight.SALESMANAGER, "16161616", "sales@gmail.com");
         em.persist(employee);
     }
     
@@ -91,17 +88,23 @@ public class DataInitializationBean {
     }
     
     public void initializeRoomType() {
-        RoomTypeEntity roomType = new RoomTypeEntity("Deluxe Room", "A comfortable yet affordable room for you and your loved ones", new BigDecimal(12.00), "Double", 2, "TV and Hot tub", 1);
+        RoomTypeEntity roomType = new RoomTypeEntity("Deluxe Room", "This is a Deluxe Room", new BigDecimal(12.00), "Two Single Bed", 2, "Teapot and TV", 1);
         em.persist(roomType);
-        roomType = new RoomTypeEntity("Premium Room", "Bagus!", new BigDecimal(24.00), "Double", 2, "Teapot", 2);
+        roomType = new RoomTypeEntity("Premier Room", "This is a Premier Room!", new BigDecimal(24.00), "One King Sized Bed", 2, "TV and Bath Tub", 2);
         em.persist(roomType);
+        roomType = new RoomTypeEntity("Family Room", "This is a Family Room", new BigDecimal(48.00), "One King Sized Bed and Two Single Bed", 4, "Refrigerator and TV", 3);
+        em.persist(roomType);
+        roomType = new RoomTypeEntity("Junior Suite", "This is a Junior Suite", new BigDecimal(48.00), "One King Sized Bed", 2, "Kitchenette and Bath Tub", 4);
+        em.persist(roomType);
+        roomType = new RoomTypeEntity("Grand Suite", "This is a Grand Suite", new BigDecimal(60.00), "One King Sized Bed", 2, "Living Room and Kitchenette", 5);
+        em.persist(roomType);       
     }
     
     public void initializeInventory() throws UpdateInventoryException{
         
         Inventory inventory;
         
-        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusWeeks(1)); date = date.plusDays(1)) {      
+        for(LocalDate date = LocalDate.now(); !date.isAfter(LocalDate.now().plusYears(1)); date = date.plusDays(1)) {      
             inventory = new Inventory(Date.valueOf(date));
             em.persist(inventory);
         }
@@ -113,14 +116,4 @@ public class DataInitializationBean {
             throw new UpdateInventoryException(System.err.toString());
         }
     }
-    
-    /* private void updateInventory() throws UpdateInventoryException {
-        
-        try{
-            inventoryControllerLocal.updateAllInventory();
-        }
-        catch (Exception ex){
-            throw new UpdateInventoryException(System.err.toString());
-        }
-    } */
 }

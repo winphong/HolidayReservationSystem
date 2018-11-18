@@ -6,6 +6,7 @@
 package reservationclient;
 
 import ejb.session.stateful.OnlineReservationEntityControllerRemote;
+import ejb.session.stateless.EjbTimerSessionBeanRemote;
 import ejb.session.stateless.GuestEntityControllerRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
@@ -19,7 +20,6 @@ import entity.ReservationLineItemEntity;
 import entity.RoomTypeEntity;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import util.exception.GuestNotFoundException;
@@ -40,13 +40,14 @@ public class GuestMainApp {
     private static OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote;
     private static InventoryControllerRemote inventoryControllerRemote;
     private static GuestEntityControllerRemote guestEntityControllerRemote;
+    private static EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote;
 
     private GuestEntity currentGuest;
 
     public GuestMainApp() {
     }
 
-    public GuestMainApp(RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote) {
+    public GuestMainApp(RoomRateEntityControllerRemote roomRateEntityControllerRemote, RoomEntityControllerRemote roomEntityControllerRemote, RoomTypeEntityControllerRemote roomTypeEntityControllerRemote, OnlineReservationEntityControllerRemote onlineReservationEntityControllerRemote, InventoryControllerRemote inventoryControllerRemote, GuestEntityControllerRemote guestEntityControllerRemote, ReservationEntityControllerRemote reservationEntityControllerRemote, EjbTimerSessionBeanRemote ejbTimerSessionBeanRemote) {
         this();
         this.roomRateEntityControllerRemote = roomRateEntityControllerRemote;
         this.roomEntityControllerRemote = roomEntityControllerRemote;
@@ -55,6 +56,7 @@ public class GuestMainApp {
         this.inventoryControllerRemote = inventoryControllerRemote;
         this.guestEntityControllerRemote = guestEntityControllerRemote;
         this.reservationEntityControllerRemote = reservationEntityControllerRemote;
+        this.ejbTimerSessionBeanRemote = ejbTimerSessionBeanRemote;
     }
 
     public void runApp() throws Exception {
@@ -278,7 +280,7 @@ public class GuestMainApp {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -314,7 +316,7 @@ public class GuestMainApp {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -351,7 +353,7 @@ public class GuestMainApp {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }

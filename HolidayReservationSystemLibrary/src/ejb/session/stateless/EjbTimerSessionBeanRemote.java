@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import javax.ejb.Remote;
 import util.exception.ReservationNotFoundException;
+import util.exception.RoomTypeNotFoundException;
 
 /**
  *
@@ -15,10 +16,10 @@ import util.exception.ReservationNotFoundException;
 @Remote
 public interface EjbTimerSessionBeanRemote {
 
-    public void allocateRoom();
+    public void allocateRoom() throws ReservationNotFoundException, RoomTypeNotFoundException;
 
     public void finishUpHousekeeping();
 
-    public void allocateRoom(Long reservationId)  throws ReservationNotFoundException;
+    public void allocateRoom(Long reservationId) throws ReservationNotFoundException, RoomTypeNotFoundException;
     
 }

@@ -33,19 +33,24 @@ public class ReservationLineItemEntity implements Serializable {
     private RoomTypeEntity roomType;
     @Column(nullable = false)
     private Boolean isAllocated;
-    
-    /*
-    @ManyToOne
-    private RoomTypeEntity roomType;
-    @OneToMany (mappedBy = "reservationlineitem")
-    private List<RoomRatePerNightEntity> roomRatePerNight;
-    */
-    
+    @Column (nullable = false)
+    private Boolean isUpgraded;
+    @Column (nullable = false)
+    private Integer numOfSuccesfulNormalAllocation;
+    @Column (nullable = false)
+    private Integer numOfSuccesfulUpgrade;
+    @Column (nullable = false)
+    private Integer numOfFailureUpgrade;
+
     @ManyToOne
     private ReservationEntity reservation;
     
     public ReservationLineItemEntity() {
-        isAllocated = Boolean.FALSE;
+        this.numOfSuccesfulNormalAllocation = 0;
+        this.numOfSuccesfulUpgrade = 0;
+        this.numOfFailureUpgrade = 0;
+        this.isAllocated = Boolean.FALSE;
+        this.isUpgraded = Boolean.FALSE;
     }
 
     public ReservationLineItemEntity(BigDecimal totalAmount, Integer numOfRoom, RoomTypeEntity roomType) {
@@ -157,5 +162,61 @@ public class ReservationLineItemEntity implements Serializable {
      */
     public void setIsAllocated(Boolean isAllocated) {
         this.isAllocated = isAllocated;
+    }
+
+    /**
+     * @return the isUpgraded
+     */
+    public Boolean getIsUpgraded() {
+        return isUpgraded;
+    }
+
+    /**
+     * @param isUpgraded the isUpgraded to set
+     */
+    public void setIsUpgraded(Boolean isUpgraded) {
+        this.isUpgraded = isUpgraded;
+    }
+
+    /**
+     * @return the numOfSuccesfulUpgrade
+     */
+    public Integer getNumOfSuccesfulUpgrade() {
+        return numOfSuccesfulUpgrade;
+    }
+
+    /**
+     * @param numOfSuccesfulUpgrade the numOfSuccesfulUpgrade to set
+     */
+    public void setNumOfSuccesfulUpgrade(Integer numOfSuccesfulUpgrade) {
+        this.numOfSuccesfulUpgrade = numOfSuccesfulUpgrade;
+    }
+
+    /**
+     * @return the numOfFailureUpgrade
+     */
+    public Integer getNumOfFailureUpgrade() {
+        return numOfFailureUpgrade;
+    }
+
+    /**
+     * @param numOfFailureUpgrade the numOfFailureUpgrade to set
+     */
+    public void setNumOfFailureUpgrade(Integer numOfFailureUpgrade) {
+        this.numOfFailureUpgrade = numOfFailureUpgrade;
+    }
+
+    /**
+     * @return the numOfSuccesfulNormalAllocation
+     */
+    public Integer getNumOfSuccesfulNormalAllocation() {
+        return numOfSuccesfulNormalAllocation;
+    }
+
+    /**
+     * @param numOfSuccesfulNormalAllocation the numOfSuccesfulNormalAllocation to set
+     */
+    public void setNumOfSuccesfulNormalAllocation(Integer numOfSuccesfulNormalAllocation) {
+        this.numOfSuccesfulNormalAllocation = numOfSuccesfulNormalAllocation;
     }
 }

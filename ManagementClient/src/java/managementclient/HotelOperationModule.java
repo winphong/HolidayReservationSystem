@@ -21,14 +21,13 @@ import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import ejb.session.stateful.WalkinReservationEntityControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
-import entity.ReservationEntity;
 import entity.ReservationLineItemEntity;
 import entity.RoomRateEntity;
 import java.sql.Date;
 import java.time.LocalDate;
 import util.exception.CreateNewRoomException;
 import util.exception.CreateNewRoomRateException;
-import util.exception.ReservationNotFoundException;
+import util.exception.ReservationLineItemNotFoundException;
 import util.exception.RoomRateNotFoundException;
 import util.exception.UpdateInventoryException;
 
@@ -61,7 +60,7 @@ public class HotelOperationModule {
     }
 
     // For operation manager
-    public void menuHotelOperation() {
+    public void menuHotelOperation() throws ReservationLineItemNotFoundException {
 
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
@@ -198,7 +197,7 @@ public class HotelOperationModule {
         try {
             currentRoomTypeEntity = roomTypeEntityControllerRemote.retrieveRoomTypeByName(name);
             System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
-            System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
+            System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", currentRoomTypeEntity.getRoomTypeId(), currentRoomTypeEntity.getName(), currentRoomTypeEntity.getDescription(), currentRoomTypeEntity.getRoomSize(), currentRoomTypeEntity.getBed(), currentRoomTypeEntity.getCapacity(), currentRoomTypeEntity.getAmenities(), currentRoomTypeEntity.getTier(), currentRoomTypeEntity.getIsDisabled());
             System.out.println("------------------------");
             System.out.println("1: Update Room Type");
             System.out.println("2: Delete Room Type");
@@ -242,7 +241,7 @@ public class HotelOperationModule {
             System.out.print("Enter Size (blank if no change): ");
             input = scanner.nextLine().trim();
             if (input.length() > 0) {
-                updateRoomType.setSize(new BigDecimal(input));
+                updateRoomType.setRoomSize(new BigDecimal(input));
             }
 
             System.out.print("Enter Bed (blank if no change): ");
@@ -315,7 +314,7 @@ public class HotelOperationModule {
             System.out.println();
             System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", "Room Type Id", "Name", "Description", "Size", "Bed", "Capacity", "Amenities", "Tier", "Is Disabled");
             for (RoomTypeEntity roomType : roomTypes) {
-                System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
+                System.out.printf("%15s%20s%50s%10s%10s%10s%20s%8s%15s\n", roomType.getRoomTypeId(), roomType.getName(), roomType.getDescription(), roomType.getRoomSize(), roomType.getBed(), roomType.getCapacity(), roomType.getAmenities(), roomType.getTier(), roomType.getIsDisabled());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
@@ -450,41 +449,46 @@ public class HotelOperationModule {
     }
 
     //to be modified
-    public void doViewRoomAllocationExceptionReport() {
+    public void doViewRoomAllocationExceptionReport() throws ReservationLineItemNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel HoRS :: Hotel Operation :: View Room Allocation Exception Report ***\n");
         System.out.println();
         System.out.println("*** Exception: Upgraded to Next Higher Room Type ***\n");
         System.out.println();
+        
         try {
-            List <ReservationEntity> upgraded= reservationEntityControllerRemote.retrieveFirstException();
-            for (ReservationEntity reservation: upgraded){
-                System.out.printf("%18s%15s%15s%20s%18s\n", "Reservation Id", "Booked From", "Booked Until", "Room Type", "Number of Rooms");
-                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservation(reservation.getReservationId());
-                for (ReservationLineItemEntity item: items){
-                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
-                }
+            List <ReservationLineItemEntity> listOfSuccessfulUpgrade = reservationEntityControllerRemote.retrieveFirstException();
+            System.out.printf("%24s%15s%15s%35s\n", "Reservation Line Item Id", "Start Date", "End Date", "Number of Successful Room Upgrade");
+            for (ReservationLineItemEntity successfullUpgrade : listOfSuccessfulUpgrade){
+                System.out.printf("%24s%15s%15s%35s\n", successfullUpgrade.getReservationLineItemId(), successfullUpgrade.getReservation().getStartDate(),
+                        successfullUpgrade.getReservation().getEndDate(), successfullUpgrade.getNumOfSuccesfulUpgrade());
+//                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservationId(reservation.getReservationId());
+//                for (ReservationLineItemEntity item: items){
+//                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
+//                }
                 System.out.println();
             }
-        } catch (ReservationNotFoundException ex) {
+        } catch (ReservationLineItemNotFoundException ex) {
            System.out.println("No exceptions found.");
         }
+        
         System.out.println();
         System.out.println("*** Exception: No Upgrade Available ***\n");
         System.out.println();
-        try {
-            List <ReservationEntity> failed= reservationEntityControllerRemote.retrieveSecondException();
-            for (ReservationEntity reservation: failed){
-                System.out.printf("%18s%15s%15s%20s%18s\n", "Reservation Id", "Booked From", "Booked Until", "Room Type", "Number of Rooms");
-                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservation(reservation.getReservationId());
-                for (ReservationLineItemEntity item: items){
-                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
-                }
-                System.out.println();
-            }
-        } catch (ReservationNotFoundException ex) {
-           System.out.println("No exceptions found.");
+        
+        List <ReservationLineItemEntity> listOfFailureUpgrade = reservationEntityControllerRemote.retrieveSecondException();
+        System.out.printf("%24s%15s%15s%35s\n", "Reservation Line Item Id", "Start Date", "End Date", "Number of Failure Room Upgrade");
+        for (ReservationLineItemEntity failureUpgrade : listOfFailureUpgrade){
+            System.out.printf("%24s%15s%15s%35s\n", failureUpgrade.getReservationLineItemId(), failureUpgrade.getReservation().getStartDate(),
+                        failureUpgrade.getReservation().getEndDate(), failureUpgrade.getNumOfFailureUpgrade());
+            
+//                List <ReservationLineItemEntity> items = reservationEntityControllerRemote.retrieveItemsByReservationId(reservation.getReservationId());
+//                for (ReservationLineItemEntity item: items){
+//                    System.out.printf("%18s%15s%15s%20s%18s\n", item.getReservation(), reservation.getStartDate(), reservation.getEndDate(), item.getRoomType(), item.getNumOfRoomBooked());
+//                }
+            System.out.println();
         }
+    
         System.out.print("Press any key to continue...: ");
         scanner.nextLine();
         System.out.println();

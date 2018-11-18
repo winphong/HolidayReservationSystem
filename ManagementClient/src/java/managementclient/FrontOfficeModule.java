@@ -183,7 +183,7 @@ public class FrontOfficeModule {
             System.err.println(ex.getMessage());
         }
 
-        System.out.print("\nWould you to reserve another room? (Y/N): ");
+        System.out.print("\nWould you to reserve another room? (Y/N): > ");
         String response = scanner.nextLine().trim();
 
         if (response.equalsIgnoreCase("Y")) {
@@ -243,7 +243,7 @@ public class FrontOfficeModule {
             String guestLastName, String guestIdentificationNumber, String guestContactNumber, String guestEmail) throws RoomTypeNotFoundException, Exception {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("\nSelect available room type: >");
+        System.out.print("\nSelect available room type: > ");
         String roomTypeName = scanner.nextLine().trim();
 
         //ReservationEntity newReservation = new WalkinReservationEntity();
@@ -272,7 +272,7 @@ public class FrontOfficeModule {
 
             // If the reservation's start date = current date, the call walkInAllocateRoom method;
             if (newReservation.getStartDate().equals(Date.valueOf(LocalDate.now()))) {
-                roomEntityControllerRemote.walkInAllocateRoom(newReservation.getReservationId());
+                ejbTimerSessionBeanRemote.allocateRoom(newReservation.getReservationId());
             }
         }
     }
@@ -287,7 +287,7 @@ public class FrontOfficeModule {
 
         try {
             if ( roomEntityControllerRemote.checkIn(reservationId) ) {
-                System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestFirstName() + "has been successfully checked in");
+                System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestLastName() + " has been successfully checked in");
             } else {
                 System.out.println("Not all rooms ready for check in");
             }
@@ -306,7 +306,7 @@ public class FrontOfficeModule {
         // set to Allocated
         while (true) {
             try {
-                System.out.print("\nEnter room number to checkout: >");
+                System.out.print("\nEnter room number to checkout: > ");
                 String roomNumber = scanner.nextLine().trim();
                 System.out.println();
                 
@@ -316,7 +316,7 @@ public class FrontOfficeModule {
                 } else {
                     System.out.println("\nRoom is not occupied");
                 }
-                System.out.print("Do you wish to perform another check out? (Y/N): >");
+                System.out.print("Do you wish to perform another check out? (Y/N): > ");
                 String response = scanner.nextLine().trim();
                 if (response.equalsIgnoreCase("N")) {
                     break;

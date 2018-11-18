@@ -10,7 +10,7 @@ import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import java.util.List;
 import javax.ejb.Remote;
-import util.exception.CheckInException;
+import util.exception.ReservationLineItemNotFoundException;
 import util.exception.ReservationNotFoundException;
 
 /**
@@ -22,13 +22,11 @@ public interface ReservationEntityControllerRemote {
  
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationNotFoundException;
 
-    public List<RoomEntity> retrieveRoomsByReservation(Long reservationId) throws ReservationNotFoundException;
+    public List<RoomEntity> retrieveRoomsByReservationId(Long reservationId) throws ReservationNotFoundException;
 
-    public Boolean checkIn(Long reservationId, String guest) throws CheckInException, ReservationNotFoundException;
+    public List<ReservationLineItemEntity> retrieveFirstException() throws ReservationLineItemNotFoundException;
 
-    public List<ReservationEntity> retrieveFirstException() throws ReservationNotFoundException;
+    public List<ReservationLineItemEntity> retrieveItemsByReservationId(Long reservationId) throws ReservationNotFoundException;
 
-    public List<ReservationLineItemEntity> retrieveItemsByReservation(Long id) throws ReservationNotFoundException;
-
-    public List<ReservationEntity> retrieveSecondException() throws ReservationNotFoundException;
+    public List<ReservationLineItemEntity> retrieveSecondException() throws ReservationLineItemNotFoundException;
 }

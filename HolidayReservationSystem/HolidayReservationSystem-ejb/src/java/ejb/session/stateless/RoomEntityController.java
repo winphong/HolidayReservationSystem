@@ -123,6 +123,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
         RoomEntity room = em.find(RoomEntity.class, roomId);
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
         roomType.getRoom().remove(room);
+        room.setRoomType(null);
         em.remove(room);
 
         // If room is already disabled, the room is already not in the inventory
@@ -142,7 +143,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     @Override
     public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomNotFoundException {
 
-        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomNumber=:inRoomNumber");
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomNumber= :inRoomNumber");
         query.setParameter("inRoomNumber", roomNumber);
 
         try {
@@ -157,7 +158,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
 
     public RoomEntity retrieveRoomById(Long id) throws RoomNotFoundException {
 
-        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomId =:inId");
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomId = :inId");
         query.setParameter("inId", id);
 
         try {
