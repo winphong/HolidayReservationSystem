@@ -53,59 +53,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CheckOut }
-     * 
-     */
-    public CheckOut createCheckOut() {
-        return new CheckOut();
-    }
-
-    /**
-     * Create an instance of {@link CheckOutResponse }
-     * 
-     */
-    public CheckOutResponse createCheckOutResponse() {
-        return new CheckOutResponse();
-    }
-
-    /**
-     * Create an instance of {@link SearchAvailableRoom }
-     * 
-     */
-    public SearchAvailableRoom createSearchAvailableRoom() {
-        return new SearchAvailableRoom();
-    }
-
-    /**
      * Create an instance of {@link Exception }
      * 
      */
     public Exception createException() {
         return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveAllReservations }
-     * 
-     */
-    public RetrieveAllReservations createRetrieveAllReservations() {
-        return new RetrieveAllReservations();
-    }
-
-    /**
-     * Create an instance of {@link PartnerLoginResponse }
-     * 
-     */
-    public PartnerLoginResponse createPartnerLoginResponse() {
-        return new PartnerLoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveItemsByReservationId }
-     * 
-     */
-    public RetrieveItemsByReservationId createRetrieveItemsByReservationId() {
-        return new RetrieveItemsByReservationId();
     }
 
     /**
@@ -117,11 +69,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RoomTypeEntity }
+     * Create an instance of {@link RetrieveItemsByReservationIdResponse }
      * 
      */
-    public RoomTypeEntity createRoomTypeEntity() {
-        return new RoomTypeEntity();
+    public RetrieveItemsByReservationIdResponse createRetrieveItemsByReservationIdResponse() {
+        return new RetrieveItemsByReservationIdResponse();
     }
 
     /**
@@ -133,35 +85,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReservationNotFoundException }
+     * Create an instance of {@link RoomTypeEntity }
      * 
      */
-    public ReservationNotFoundException createReservationNotFoundException() {
-        return new ReservationNotFoundException();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveItemsByReservationIdResponse }
-     * 
-     */
-    public RetrieveItemsByReservationIdResponse createRetrieveItemsByReservationIdResponse() {
-        return new RetrieveItemsByReservationIdResponse();
-    }
-
-    /**
-     * Create an instance of {@link ReserveRoom }
-     * 
-     */
-    public ReserveRoom createReserveRoom() {
-        return new ReserveRoom();
-    }
-
-    /**
-     * Create an instance of {@link RoomTypeNotFoundException }
-     * 
-     */
-    public RoomTypeNotFoundException createRoomTypeNotFoundException() {
-        return new RoomTypeNotFoundException();
+    public RoomTypeEntity createRoomTypeEntity() {
+        return new RoomTypeEntity();
     }
 
     /**
@@ -181,6 +109,118 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CheckOutResponse }
+     * 
+     */
+    public CheckOutResponse createCheckOutResponse() {
+        return new CheckOutResponse();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveAllReservations }
+     * 
+     */
+    public RetrieveAllReservations createRetrieveAllReservations() {
+        return new RetrieveAllReservations();
+    }
+
+    /**
+     * Create an instance of {@link InvalidLoginCredentialException }
+     * 
+     */
+    public InvalidLoginCredentialException createInvalidLoginCredentialException() {
+        return new InvalidLoginCredentialException();
+    }
+
+    /**
+     * Create an instance of {@link CheckOut }
+     * 
+     */
+    public CheckOut createCheckOut() {
+        return new CheckOut();
+    }
+
+    /**
+     * Create an instance of {@link ReserveRoomResponse }
+     * 
+     */
+    public ReserveRoomResponse createReserveRoomResponse() {
+        return new ReserveRoomResponse();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveReservationByIdResponse }
+     * 
+     */
+    public RetrieveReservationByIdResponse createRetrieveReservationByIdResponse() {
+        return new RetrieveReservationByIdResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReserveRoom }
+     * 
+     */
+    public ReserveRoom createReserveRoom() {
+        return new ReserveRoom();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveItemsByReservationId }
+     * 
+     */
+    public RetrieveItemsByReservationId createRetrieveItemsByReservationId() {
+        return new RetrieveItemsByReservationId();
+    }
+
+    /**
+     * Create an instance of {@link SearchAvailableRoomResponse }
+     * 
+     */
+    public SearchAvailableRoomResponse createSearchAvailableRoomResponse() {
+        return new SearchAvailableRoomResponse();
+    }
+
+    /**
+     * Create an instance of {@link PartnerLoginResponse }
+     * 
+     */
+    public PartnerLoginResponse createPartnerLoginResponse() {
+        return new PartnerLoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link RoomTypeNotFoundException }
+     * 
+     */
+    public RoomTypeNotFoundException createRoomTypeNotFoundException() {
+        return new RoomTypeNotFoundException();
+    }
+
+    /**
+     * Create an instance of {@link ReservationNotFoundException }
+     * 
+     */
+    public ReservationNotFoundException createReservationNotFoundException() {
+        return new ReservationNotFoundException();
+    }
+
+    /**
+     * Create an instance of {@link SearchAvailableRoom }
+     * 
+     */
+    public SearchAvailableRoom createSearchAvailableRoom() {
+        return new SearchAvailableRoom();
+    }
+
+    /**
+     * Create an instance of {@link PartnerReservationEntity }
+     * 
+     */
+    public PartnerReservationEntity createPartnerReservationEntity() {
+        return new PartnerReservationEntity();
+    }
+
+    /**
      * Create an instance of {@link ReservationLineItemEntity }
      * 
      */
@@ -197,22 +237,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RetrieveRoomTypeByNameResponse }
-     * 
-     */
-    public RetrieveRoomTypeByNameResponse createRetrieveRoomTypeByNameResponse() {
-        return new RetrieveRoomTypeByNameResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveReservationByIdResponse }
-     * 
-     */
-    public RetrieveReservationByIdResponse createRetrieveReservationByIdResponse() {
-        return new RetrieveReservationByIdResponse();
-    }
-
-    /**
      * Create an instance of {@link Date }
      * 
      */
@@ -221,35 +245,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReserveRoomResponse }
+     * Create an instance of {@link RetrieveRoomTypeByNameResponse }
      * 
      */
-    public ReserveRoomResponse createReserveRoomResponse() {
-        return new ReserveRoomResponse();
-    }
-
-    /**
-     * Create an instance of {@link PartnerReservationEntity }
-     * 
-     */
-    public PartnerReservationEntity createPartnerReservationEntity() {
-        return new PartnerReservationEntity();
-    }
-
-    /**
-     * Create an instance of {@link SearchAvailableRoomResponse }
-     * 
-     */
-    public SearchAvailableRoomResponse createSearchAvailableRoomResponse() {
-        return new SearchAvailableRoomResponse();
-    }
-
-    /**
-     * Create an instance of {@link InvalidLoginCredentialException }
-     * 
-     */
-    public InvalidLoginCredentialException createInvalidLoginCredentialException() {
-        return new InvalidLoginCredentialException();
+    public RetrieveRoomTypeByNameResponse createRetrieveRoomTypeByNameResponse() {
+        return new RetrieveRoomTypeByNameResponse();
     }
 
     /**

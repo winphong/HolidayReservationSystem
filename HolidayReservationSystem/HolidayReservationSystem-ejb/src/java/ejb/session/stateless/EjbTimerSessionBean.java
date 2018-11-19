@@ -88,7 +88,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                     for(LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()) ; date = date.plusDays(1)) {                       
                         
                         if ( room.getRoomStatus().equals(RoomStatus.MAINTENANCE) 
-                                || room.getRoomStatus().equals(RoomStatus.OCCUPIED) && !room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {
+                                || room.getRoomStatus().equals(RoomStatus.OCCUPIED) && !room.getCurrentReservation().getEndDate().equals(reservation.getStartDate()) || room.getIsDisabled().equals(Boolean.TRUE)) {
                             
                             availableThroughout = Boolean.FALSE;
                             break;
@@ -181,7 +181,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanRemote, EjbTimerS
                 for(LocalDate date = reservation.getStartDate().toLocalDate(); !date.isAfter(reservation.getEndDate().toLocalDate()) ; date = date.plusDays(1)) {
                     
                     if ( room.getRoomStatus().equals(RoomStatus.MAINTENANCE)
-                            || room.getRoomStatus().equals(RoomStatus.OCCUPIED) && !room.getCurrentReservation().getEndDate().equals(reservation.getStartDate())) {                       
+                            || room.getRoomStatus().equals(RoomStatus.OCCUPIED) && !room.getCurrentReservation().getEndDate().equals(reservation.getStartDate()) || room.getIsDisabled().equals(Boolean.TRUE)) {                       
                         
                         availableThroughout = Boolean.FALSE;
                         break;

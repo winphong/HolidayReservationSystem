@@ -30,16 +30,21 @@ public interface PartnerWebService {
      * 
      * @param arg0
      * @return
-     *     returns java.util.List<ws.client.partner.PartnerReservationEntity>
+     *     returns java.util.List<ws.client.partner.ReservationLineItemEntity>
+     * @throws ReservationNotFoundException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "retrieveAllReservations", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveAllReservations")
-    @ResponseWrapper(localName = "retrieveAllReservationsResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveAllReservationsResponse")
-    @Action(input = "http://ws.ejb/PartnerWebService/retrieveAllReservationsRequest", output = "http://ws.ejb/PartnerWebService/retrieveAllReservationsResponse")
-    public List<PartnerReservationEntity> retrieveAllReservations(
+    @RequestWrapper(localName = "retrieveItemsByReservationId", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveItemsByReservationId")
+    @ResponseWrapper(localName = "retrieveItemsByReservationIdResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveItemsByReservationIdResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationIdRequest", output = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationIdResponse", fault = {
+        @FaultAction(className = ReservationNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationId/Fault/ReservationNotFoundException")
+    })
+    public List<ReservationLineItemEntity> retrieveItemsByReservationId(
         @WebParam(name = "arg0", targetNamespace = "")
-        Long arg0);
+        Long arg0)
+        throws ReservationNotFoundException_Exception
+    ;
 
     /**
      * 
@@ -59,26 +64,6 @@ public interface PartnerWebService {
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0)
         throws RoomTypeNotFoundException_Exception
-    ;
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns ws.client.partner.PartnerReservationEntity
-     * @throws ReservationNotFoundException_Exception
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "retrieveReservationById", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveReservationById")
-    @ResponseWrapper(localName = "retrieveReservationByIdResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveReservationByIdResponse")
-    @Action(input = "http://ws.ejb/PartnerWebService/retrieveReservationByIdRequest", output = "http://ws.ejb/PartnerWebService/retrieveReservationByIdResponse", fault = {
-        @FaultAction(className = ReservationNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/retrieveReservationById/Fault/ReservationNotFoundException")
-    })
-    public PartnerReservationEntity retrieveReservationById(
-        @WebParam(name = "arg0", targetNamespace = "")
-        Long arg0)
-        throws ReservationNotFoundException_Exception
     ;
 
     /**
@@ -106,21 +91,36 @@ public interface PartnerWebService {
      * 
      * @param arg0
      * @return
-     *     returns java.util.List<ws.client.partner.ReservationLineItemEntity>
+     *     returns ws.client.partner.PartnerReservationEntity
      * @throws ReservationNotFoundException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "retrieveItemsByReservationId", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveItemsByReservationId")
-    @ResponseWrapper(localName = "retrieveItemsByReservationIdResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveItemsByReservationIdResponse")
-    @Action(input = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationIdRequest", output = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationIdResponse", fault = {
-        @FaultAction(className = ReservationNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/retrieveItemsByReservationId/Fault/ReservationNotFoundException")
+    @RequestWrapper(localName = "retrieveReservationById", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveReservationById")
+    @ResponseWrapper(localName = "retrieveReservationByIdResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveReservationByIdResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/retrieveReservationByIdRequest", output = "http://ws.ejb/PartnerWebService/retrieveReservationByIdResponse", fault = {
+        @FaultAction(className = ReservationNotFoundException_Exception.class, value = "http://ws.ejb/PartnerWebService/retrieveReservationById/Fault/ReservationNotFoundException")
     })
-    public List<ReservationLineItemEntity> retrieveItemsByReservationId(
+    public PartnerReservationEntity retrieveReservationById(
         @WebParam(name = "arg0", targetNamespace = "")
         Long arg0)
         throws ReservationNotFoundException_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.util.List<ws.client.partner.PartnerReservationEntity>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "retrieveAllReservations", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveAllReservations")
+    @ResponseWrapper(localName = "retrieveAllReservationsResponse", targetNamespace = "http://ws.ejb/", className = "ws.client.partner.RetrieveAllReservationsResponse")
+    @Action(input = "http://ws.ejb/PartnerWebService/retrieveAllReservationsRequest", output = "http://ws.ejb/PartnerWebService/retrieveAllReservationsResponse")
+    public List<PartnerReservationEntity> retrieveAllReservations(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Long arg0);
 
     /**
      * 

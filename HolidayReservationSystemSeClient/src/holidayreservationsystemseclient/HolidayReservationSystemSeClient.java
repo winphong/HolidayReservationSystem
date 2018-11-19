@@ -5,9 +5,9 @@
  */
 package holidayreservationsystemseclient;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import ws.client.partner.Exception_Exception;
 import ws.client.partner.InvalidLoginCredentialException_Exception;
@@ -27,11 +27,11 @@ public class HolidayReservationSystemSeClient {
 
     private static PartnerEntity currentPartner;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ReservationNotFoundException_Exception {
         runApp();
     }
 
-    public static void runApp() {
+    public static void runApp() throws ReservationNotFoundException_Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
@@ -88,7 +88,7 @@ public class HolidayReservationSystemSeClient {
         }
     }
 
-    private static void menuMain() {
+    private static void menuMain() throws ReservationNotFoundException_Exception {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
@@ -283,9 +283,9 @@ public class HolidayReservationSystemSeClient {
             List<ReservationLineItemEntity> items = retrieveItemsByReservationId(reservation.getReservationId());
             System.out.println("Reservation Details: ");
             System.out.println("-------------------------");
-            System.out.printf("%20s%20s%15s\n", "Room Type", "Number of Rooms", "Total Amount");
+            System.out.printf("%20s%20s%40s%40s%15s\n", "Room Type", "Number of Rooms", "Start Date", "End Date", "Total Amount");
             for (ReservationLineItemEntity item : items) {
-                System.out.printf("%20s%20s%15s\n", item.getRoomType().getName(), item.getNumOfRoomBooked(), item.getTotalAmount());
+                System.out.printf("%20s%20s%40s%40s%15s\n", item.getRoomType().getName(), item.getNumOfRoomBooked(), reservation.getStartDate(), reservation.getEndDate(), item.getTotalAmount());
             }
 
             System.out.println();
@@ -296,15 +296,20 @@ public class HolidayReservationSystemSeClient {
         }
     }
 
-    private static void viewAllReservations() {
+    private static void viewAllReservations() throws ReservationNotFoundException_Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Merlion Hotel Holiday Reservation System :: View All Partner Reservations***\n");
         List<PartnerReservationEntity> reservations = retrieveAllReservations(currentPartner.getPartnerId());
         if (reservations.size() > 0) {
             System.out.println();
-            System.out.printf("%20s%15s\n", "Reservation Id", "Total Amount");
+            System.out.printf("%20s%30s%40s%40s%15s\n", "Reservation Id", "Total Number of Room", "Start Date", "End Date", "Total Amount");
             for (PartnerReservationEntity reservation : reservations) {
-                System.out.printf("%20s%15s\n", reservation.getReservationId(), reservation.getTotalAmount());
+                List<ReservationLineItemEntity> items = retrieveItemsByReservationId(reservation.getReservationId());
+                Integer totalNumOfRoom = 0;
+                for (ReservationLineItemEntity item : items) {
+                     totalNumOfRoom = totalNumOfRoom + item.getNumOfRoomBooked();
+                }
+                System.out.printf("%20s%30s%40s%40s%15s\n", reservation.getReservationId(), totalNumOfRoom, reservation.getStartDate(), reservation.getEndDate(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");
