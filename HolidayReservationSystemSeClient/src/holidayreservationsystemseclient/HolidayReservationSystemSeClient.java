@@ -304,7 +304,7 @@ public class HolidayReservationSystemSeClient {
             System.out.println();
             System.out.printf("%20s%20s%15s%15s%15s\n", "Reservation Id", "Reservation Date", "Start Date", "End Date", "Total Amount");
             for (PartnerReservationEntity reservation : reservations) {
-                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate().toString(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
+                System.out.printf("%20s%20s%15s%15s%15s\n", reservation.getReservationId(), reservation.getBookingDate(), reservation.getStartDate().toString(), reservation.getEndDate().toString(), reservation.getTotalAmount());
             }
             System.out.println();
             System.out.print("Press any key to continue...: ");

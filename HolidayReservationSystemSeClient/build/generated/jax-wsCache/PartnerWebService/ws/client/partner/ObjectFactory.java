@@ -53,27 +53,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InvalidLoginCredentialException }
+     * Create an instance of {@link CheckOut }
      * 
      */
-    public InvalidLoginCredentialException createInvalidLoginCredentialException() {
-        return new InvalidLoginCredentialException();
-    }
-
-    /**
-     * Create an instance of {@link RoomTypeNotFoundException }
-     * 
-     */
-    public RoomTypeNotFoundException createRoomTypeNotFoundException() {
-        return new RoomTypeNotFoundException();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveAllReservations }
-     * 
-     */
-    public RetrieveAllReservations createRetrieveAllReservations() {
-        return new RetrieveAllReservations();
+    public CheckOut createCheckOut() {
+        return new CheckOut();
     }
 
     /**
@@ -85,35 +69,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RetrieveRoomTypeByName }
+     * Create an instance of {@link SearchAvailableRoom }
      * 
      */
-    public RetrieveRoomTypeByName createRetrieveRoomTypeByName() {
-        return new RetrieveRoomTypeByName();
-    }
-
-    /**
-     * Create an instance of {@link ReserveRoom }
-     * 
-     */
-    public ReserveRoom createReserveRoom() {
-        return new ReserveRoom();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveReservationById }
-     * 
-     */
-    public RetrieveReservationById createRetrieveReservationById() {
-        return new RetrieveReservationById();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveRoomTypeByNameResponse }
-     * 
-     */
-    public RetrieveRoomTypeByNameResponse createRetrieveRoomTypeByNameResponse() {
-        return new RetrieveRoomTypeByNameResponse();
+    public SearchAvailableRoom createSearchAvailableRoom() {
+        return new SearchAvailableRoom();
     }
 
     /**
@@ -125,27 +85,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReserveRoomResponse }
+     * Create an instance of {@link RetrieveAllReservations }
      * 
      */
-    public ReserveRoomResponse createReserveRoomResponse() {
-        return new ReserveRoomResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveReservationByIdResponse }
-     * 
-     */
-    public RetrieveReservationByIdResponse createRetrieveReservationByIdResponse() {
-        return new RetrieveReservationByIdResponse();
-    }
-
-    /**
-     * Create an instance of {@link ReservationNotFoundException }
-     * 
-     */
-    public ReservationNotFoundException createReservationNotFoundException() {
-        return new ReservationNotFoundException();
+    public RetrieveAllReservations createRetrieveAllReservations() {
+        return new RetrieveAllReservations();
     }
 
     /**
@@ -157,14 +101,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RetrieveAllReservationsResponse }
-     * 
-     */
-    public RetrieveAllReservationsResponse createRetrieveAllReservationsResponse() {
-        return new RetrieveAllReservationsResponse();
-    }
-
-    /**
      * Create an instance of {@link RetrieveItemsByReservationId }
      * 
      */
@@ -173,59 +109,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchAvailableRoomResponse }
+     * Create an instance of {@link RetrieveAllReservationsResponse }
      * 
      */
-    public SearchAvailableRoomResponse createSearchAvailableRoomResponse() {
-        return new SearchAvailableRoomResponse();
+    public RetrieveAllReservationsResponse createRetrieveAllReservationsResponse() {
+        return new RetrieveAllReservationsResponse();
     }
 
     /**
-     * Create an instance of {@link PartnerLogin }
+     * Create an instance of {@link RoomTypeEntity }
      * 
      */
-    public PartnerLogin createPartnerLogin() {
-        return new PartnerLogin();
-    }
-
-    /**
-     * Create an instance of {@link CheckOut }
-     * 
-     */
-    public CheckOut createCheckOut() {
-        return new CheckOut();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveItemsByReservationIdResponse }
-     * 
-     */
-    public RetrieveItemsByReservationIdResponse createRetrieveItemsByReservationIdResponse() {
-        return new RetrieveItemsByReservationIdResponse();
-    }
-
-    /**
-     * Create an instance of {@link SearchAvailableRoom }
-     * 
-     */
-    public SearchAvailableRoom createSearchAvailableRoom() {
-        return new SearchAvailableRoom();
-    }
-
-    /**
-     * Create an instance of {@link Date }
-     * 
-     */
-    public Date createDate() {
-        return new Date();
-    }
-
-    /**
-     * Create an instance of {@link PartnerReservationEntity }
-     * 
-     */
-    public PartnerReservationEntity createPartnerReservationEntity() {
-        return new PartnerReservationEntity();
+    public RoomTypeEntity createRoomTypeEntity() {
+        return new RoomTypeEntity();
     }
 
     /**
@@ -237,6 +133,54 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ReservationNotFoundException }
+     * 
+     */
+    public ReservationNotFoundException createReservationNotFoundException() {
+        return new ReservationNotFoundException();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveItemsByReservationIdResponse }
+     * 
+     */
+    public RetrieveItemsByReservationIdResponse createRetrieveItemsByReservationIdResponse() {
+        return new RetrieveItemsByReservationIdResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReserveRoom }
+     * 
+     */
+    public ReserveRoom createReserveRoom() {
+        return new ReserveRoom();
+    }
+
+    /**
+     * Create an instance of {@link RoomTypeNotFoundException }
+     * 
+     */
+    public RoomTypeNotFoundException createRoomTypeNotFoundException() {
+        return new RoomTypeNotFoundException();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveRoomTypeByName }
+     * 
+     */
+    public RetrieveRoomTypeByName createRetrieveRoomTypeByName() {
+        return new RetrieveRoomTypeByName();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveReservationById }
+     * 
+     */
+    public RetrieveReservationById createRetrieveReservationById() {
+        return new RetrieveReservationById();
+    }
+
+    /**
      * Create an instance of {@link ReservationLineItemEntity }
      * 
      */
@@ -245,11 +189,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RoomTypeEntity }
+     * Create an instance of {@link PartnerLogin }
      * 
      */
-    public RoomTypeEntity createRoomTypeEntity() {
-        return new RoomTypeEntity();
+    public PartnerLogin createPartnerLogin() {
+        return new PartnerLogin();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveRoomTypeByNameResponse }
+     * 
+     */
+    public RetrieveRoomTypeByNameResponse createRetrieveRoomTypeByNameResponse() {
+        return new RetrieveRoomTypeByNameResponse();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveReservationByIdResponse }
+     * 
+     */
+    public RetrieveReservationByIdResponse createRetrieveReservationByIdResponse() {
+        return new RetrieveReservationByIdResponse();
+    }
+
+    /**
+     * Create an instance of {@link Date }
+     * 
+     */
+    public Date createDate() {
+        return new Date();
+    }
+
+    /**
+     * Create an instance of {@link ReserveRoomResponse }
+     * 
+     */
+    public ReserveRoomResponse createReserveRoomResponse() {
+        return new ReserveRoomResponse();
+    }
+
+    /**
+     * Create an instance of {@link PartnerReservationEntity }
+     * 
+     */
+    public PartnerReservationEntity createPartnerReservationEntity() {
+        return new PartnerReservationEntity();
+    }
+
+    /**
+     * Create an instance of {@link SearchAvailableRoomResponse }
+     * 
+     */
+    public SearchAvailableRoomResponse createSearchAvailableRoomResponse() {
+        return new SearchAvailableRoomResponse();
+    }
+
+    /**
+     * Create an instance of {@link InvalidLoginCredentialException }
+     * 
+     */
+    public InvalidLoginCredentialException createInvalidLoginCredentialException() {
+        return new InvalidLoginCredentialException();
     }
 
     /**
