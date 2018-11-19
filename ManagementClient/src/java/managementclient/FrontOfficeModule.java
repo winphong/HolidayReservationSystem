@@ -16,6 +16,8 @@ import ejb.session.stateless.EjbTimerSessionBeanRemote;
 import ejb.session.stateless.InventoryControllerRemote;
 import ejb.session.stateless.ReservationEntityControllerRemote;
 import ejb.session.stateless.RoomTypeEntityControllerRemote;
+import entity.OnlineReservationEntity;
+import entity.PartnerReservationEntity;
 import entity.ReservationEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
@@ -288,12 +290,29 @@ public class FrontOfficeModule {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Reservation ID: ");
         Long reservationId = scanner.nextLong();
+        System.out.println("\nPlease select the type of reservation: ");
+        System.out.println("***************************************");
+        System.out.println("  Online Reservation  ");
+        System.out.println("  Partner Reservation  ");
+        System.out.println("  Walkin Reservation  ");
+        System.out.println("***************************************");
+        System.out.println("Type of reservation : ");
+        String typeOfReservation = scanner.next() + scanner.nextLine();
        
         ReservationEntity reservation = reservationEntityControllerRemote.retrieveReservationById(reservationId);
-
+        
         try {
-            if ( roomEntityControllerRemote.checkIn(reservationId) ) {
-                System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestLastName() + " has been successfully checked in");
+            if ( roomEntityControllerRemote.checkIn(reservationId, typeOfReservation) ) {
+                if ( typeOfReservation.equals("Walkin Reservation") ) {
+                    System.out.println(((WalkinReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuestLastName() + " has been successfully checked in");
+                } else if ( typeOfReservation.equals("Partner Reservation") ) {
+                    System.out.println(((PartnerReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getCustomerFirstName()+ " has been successfully checked in");
+                } else if ( typeOfReservation.equals("Online Reservation") ) {
+                    System.out.println(((OnlineReservationEntity) reservationEntityControllerRemote.retrieveReservationById(reservationId)).getGuest().getFirstName() + " has been successfully checked in");
+                } else {
+                    System.out.println("Failure check in");
+                }
+                 
             } else {
                 System.out.println("Not all rooms ready for check in");
             }

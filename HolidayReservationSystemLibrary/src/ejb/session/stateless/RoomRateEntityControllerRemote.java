@@ -17,7 +17,7 @@ import util.exception.RoomRateNotFoundException;
  */
 public interface RoomRateEntityControllerRemote {
 
-    public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException;
+    public RoomRateEntity retrieveRoomRateByName(String name, String roomTypeName) throws RoomRateNotFoundException;
 
     public void disableRoomRate(Long id);
 

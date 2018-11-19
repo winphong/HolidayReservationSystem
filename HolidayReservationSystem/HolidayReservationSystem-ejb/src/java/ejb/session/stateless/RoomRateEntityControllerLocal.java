@@ -14,7 +14,7 @@ import util.exception.RoomRateNotFoundException;
  */
 public interface RoomRateEntityControllerLocal {
     
-     public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException;
+     public RoomRateEntity retrieveRoomRateByName(String name, String roomTypeName) throws RoomRateNotFoundException;
 
     public RoomRateEntity retrieveRoomRateById(Long id) throws RoomRateNotFoundException;
 }

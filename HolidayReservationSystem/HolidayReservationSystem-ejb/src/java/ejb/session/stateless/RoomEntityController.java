@@ -5,12 +5,12 @@
  */
 package ejb.session.stateless;
 
+import entity.OnlineReservationEntity;
+import entity.PartnerReservationEntity;
 import entity.ReservationEntity;
-import entity.ReservationLineItemEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import entity.WalkinReservationEntity;
-import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -254,7 +254,7 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
     }
 */
     @Override
-    public Boolean checkIn(Long reservationId) throws ReservationNotFoundException {
+    public Boolean checkIn(Long reservationId, String typeOfReservation) throws ReservationNotFoundException {
 
         ReservationEntity reservation;
         try {
@@ -274,8 +274,17 @@ public class RoomEntityController implements RoomEntityControllerRemote, RoomEnt
             if (allRoomsReadyForCheckIn.equals(Boolean.TRUE)) {
                 for (RoomEntity room : rooms) {
                     if (room.getIsReady().equals(Boolean.TRUE)) {
-                        room.setGuest(((WalkinReservationEntity) reservation).getGuestFirstName() + ((WalkinReservationEntity) reservation).getGuestLastName());
-                        room.setRoomStatus(RoomStatus.OCCUPIED);
+                        
+                        if ( typeOfReservation.equals("Walkin Reservation") ) {
+                            room.setGuest(((WalkinReservationEntity) reservation).getGuestFirstName() + ((WalkinReservationEntity) reservation).getGuestLastName());
+                            room.setRoomStatus(RoomStatus.OCCUPIED);
+                        } else if ( typeOfReservation.equals("Partner Reservation") ) {
+                            room.setGuest(((PartnerReservationEntity) reservation).getCustomerFirstName() + ((PartnerReservationEntity) reservation).getCustomerFirstName());
+                            room.setRoomStatus(RoomStatus.OCCUPIED);
+                        } else if ( typeOfReservation.equals("Online Reservation") ) {
+                            room.setGuest(((OnlineReservationEntity) reservation).getGuest().getFirstName()+ ((OnlineReservationEntity) reservation).getGuest().getLastName());
+                            room.setRoomStatus(RoomStatus.OCCUPIED);
+                        }
                     }
                 }
                 reservationEntityControllerLocal.retrieveReservationById(reservationId).setIsCheckedIn(Boolean.TRUE);

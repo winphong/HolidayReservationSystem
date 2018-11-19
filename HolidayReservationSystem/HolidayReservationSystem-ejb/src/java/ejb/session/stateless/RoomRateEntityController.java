@@ -64,10 +64,11 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
     }
 
     @Override
-    public RoomRateEntity retrieveRoomRateByName(String name) throws RoomRateNotFoundException {
+    public RoomRateEntity retrieveRoomRateByName(String name, String roomTypeName) throws RoomRateNotFoundException {
 
-        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name = :inName");
+        Query query = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name = :inName AND rr.roomType.name = :inRoomTypeName");
         query.setParameter("inName", name);
+        query.setParameter("inRoomTypeName", roomTypeName);
 
         try {
 
@@ -75,7 +76,7 @@ public class RoomRateEntityController implements RoomRateEntityControllerRemote,
 
         } catch (NoResultException | NonUniqueResultException ex) {
 
-            throw new RoomRateNotFoundException("Room rate " + name + " does not exist!");
+            throw new RoomRateNotFoundException(name + " for " + roomTypeName +  "does not exist!" );
         }
     }
 

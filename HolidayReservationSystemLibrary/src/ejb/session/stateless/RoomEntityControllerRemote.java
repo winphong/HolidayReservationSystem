@@ -31,7 +31,7 @@ public interface RoomEntityControllerRemote {
 
     //public void walkInAllocateRoom(Long reservationId) throws ReservationNotFoundException;
 
-    public Boolean checkIn(Long reservationId) throws ReservationNotFoundException;
+    public Boolean checkIn(Long reservationId, String typeOfReservation) throws ReservationNotFoundException;
 
     public Boolean checkOut(String roomNumber) throws RoomNotFoundException,ReservationNotFoundException;
     

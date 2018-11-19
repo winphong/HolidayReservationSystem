@@ -135,16 +135,11 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
     // If roomType.getReservation == null && roomType.getRoom == null && roomType.getRoomRate == null, delete
     @Override
     public void deleteRoomType(Long id) {
-
+        
+        
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, id);
-        roomType.getRoom().size();
         
-        List <RoomEntity> rooms = roomType.getRoom();
-        roomType.setRoom(null);
-        for (RoomEntity room: rooms){
-            em.remove(room);
-        }
-        
+        // Delete room rate
         roomType.getRoomRate().size();
         List <RoomRateEntity> roomRates = roomType.getRoomRate();
         roomType.setRoomRate(null);
@@ -152,8 +147,28 @@ public class RoomTypeEntityController implements RoomTypeEntityControllerRemote,
             em.remove(roomRate);
         }
         
-        em.remove(roomType);
+        // Settle room type
+        roomType.getRoom().size();
+        List<RoomEntity> rooms = roomType.getRoom();
+        Boolean ableToDelete = Boolean.TRUE;
+        
+        for(RoomEntity room : rooms) {
+            if ( room.getCurrentReservation() != null || room.getNextReservation() != null ) {
+                ableToDelete = Boolean.FALSE;
+            }
+        }
 
+        if ( ableToDelete ) {
+            roomType.setRoom(null);
+            
+            for (RoomEntity room: rooms){
+                em.remove(room);
+            }
+            
+            em.remove(roomType);
+        } else {
+            disableRoomType(id);
+        }
         
         try {
             inventoryControllerLocal.updateAllInventory();
